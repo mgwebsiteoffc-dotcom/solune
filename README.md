@@ -1,7 +1,9 @@
 # Solune — Shopify skincare theme
 
 - **Working name:** Solune
-- **Status:** development foundation; not ready for a Theme Store submission
+- **Author:** Sani Kumar
+- **Company:** Akestech Infotech Pvt Ltd
+- **Status:** development foundation; not yet tested on a Shopify development store or ready for Theme Store submission
 - **Distribution:** Shopify Theme Store submission only; no direct theme sales are planned
 
 Solune is an original, skincare-focused Online Store 2.0 theme with warm mineral colors, editorial typography, accessible shopping flows, and product education built around merchant-supplied facts. Prestige is a quality reference only; no Prestige code, layouts, assets, or branding are used.
@@ -21,14 +23,22 @@ Shopify manages `/agents.md` and its related agent-discovery routes by default. 
 
 ## Development
 
-Install Shopify CLI and authenticate to a Shopify development store, then run:
+Install Shopify CLI, authenticate to your Shopify account, and run:
 
 ```sh
+npm install --global @shopify/cli
+shopify auth login
 shopify theme check
 shopify theme dev --store your-development-store.myshopify.com
 ```
 
-Theme Check is also configured in GitHub Actions. Static JavaScript syntax, CSS parsing, JSON/schema parsing, translation-key, and Liquid-parser checks have been run in this workspace; they do not replace Theme Check or real Shopify storefront testing. Shopify CLI, Theme Check, and Ruby are not available in this environment. A development store is still required to validate Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores.
+To upload a persistent, unpublished preview theme (never make the live theme the test target):
+
+```sh
+shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
+```
+
+Theme Check passed both in GitHub Actions and via Shopify CLI 4.9.4 invoked with `npx` (54 files inspected, no offenses). Static JavaScript syntax, CSS parsing, JSON/schema parsing, translation-key, and Liquid-parser checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
 
 ## Project conventions
 
@@ -42,4 +52,4 @@ See `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, and `SUBMISSION-CHECKLIST.md` f
 
 ## Before submission
 
-The public theme name, author, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. The current GitHub README and Issues URLs are working development documentation/support endpoints, not final merchant-facing support resources. This repository is a development foundation, not an approved or submission-ready theme.
+Author and company metadata now identify Sani Kumar and Akestech Infotech Pvt Ltd. The final public theme name, Shopify Partner account identity, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. The current GitHub README and Issues URLs are development documentation/support endpoints, not final merchant-facing support resources. This repository is a development foundation, not an approved or submission-ready theme.

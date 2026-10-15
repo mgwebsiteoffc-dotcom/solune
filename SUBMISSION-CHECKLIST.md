@@ -1,6 +1,6 @@
 # Shopify Theme Store submission checklist
 
-This project is a development foundation. A checked implementation item means code is present; it does not mean Shopify Theme Check, real-store behavior, Lighthouse results, or Shopify review have passed.
+This project is a development foundation. A checked implementation item means code is present; it does not imply real-store behavior, Lighthouse results, or Shopify review have passed. Theme Check results are recorded separately below.
 
 ## Current implementation
 
@@ -16,7 +16,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [ ] Run Shopify Theme Check in an environment with Shopify CLI/Ruby dependencies.
+- [x] Run Shopify Theme Check in GitHub Actions and Shopify CLI 4.9.4 (`npx`; 54 files inspected with no offenses).
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
@@ -35,7 +35,8 @@ This project is a development foundation. A checked implementation item means co
 
 ### Quality and listing readiness
 
-- [ ] Confirm the public theme name, author/Partner identity, trademark availability, demo-store content, support process, and Theme Store listing assets.
+- [x] Record author and company identity supplied by the owner: Sani Kumar / Akestech Infotech Pvt Ltd.
+- [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets.
 - [ ] Replace the development GitHub README/Issues endpoints with stable merchant-facing documentation and support resources before submission.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.
 - [ ] Validate keyboard/screen-reader behavior, focus order, contrast, reduced motion, form labels/errors, all image ratios/focal points, and realistic long/short content.
