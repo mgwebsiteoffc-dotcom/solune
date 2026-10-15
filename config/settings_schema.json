@@ -497,7 +497,7 @@
         "id": "custom_css",
         "label": "t:labels.custom_css",
         "info": "t:labels.custom_css_info",
-        "default": ""
+        "default": "/* Add custom CSS here. */"
       }
     ]
   },
