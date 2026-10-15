@@ -1,0 +1,13 @@
+{% assign rating_data = product.metafields.reviews.rating.value %}
+{% assign rating_count = product.metafields.reviews.rating_count.value %}
+{% if settings.product_card_show_rating and rating_data != blank and rating_count != blank %}
+  {% assign rating_scale = rating_data.scale_max | default: 5 %}
+  {% if rating_scale > 0 %}
+    {% assign rating_value = rating_data.rating %}
+    {% assign rating_percent = rating_value | times: 100.0 | divided_by: rating_scale %}
+    <div class="product-rating" role="img" aria-label="{{ 'product.rating_summary' | t: rating: rating_value, scale: rating_scale, count: rating_count | escape }}">
+      <span class="product-rating__stars" style="--rating-percent: {{ rating_percent }}%" aria-hidden="true"></span>
+      <span class="product-rating__count" aria-hidden="true">({{ rating_count }})</span>
+    </div>
+  {% endif %}
+{% endif %}

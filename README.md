@@ -10,7 +10,7 @@
 
 Solune is an original, skincare-focused Online Store 2.0 theme with warm mineral colors, editorial typography, accessible shopping flows, and product education built around merchant-supplied facts. Prestige is a quality reference only; no Prestige code, layouts, assets, or branding are used.
 
-The theme editor includes five original theme styles—Solune, Dew, Petal, Grove, and Dusk—with distinct color palettes and coordinated page widths, section spacing, corner radii, and product-card image proportions. Merchants can choose fonts from Shopify's font picker and edit individual colors using the theme palette.
+The theme editor includes five original theme styles—Solune, Dew, Petal, Grove, and Dusk—with distinct color palettes and coordinated page widths, section spacing, swatches, corner radii, and product-card image proportions. Global settings are grouped into Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style. The color panel exposes page/surface, input, overlay, sale, and rating colors; merchants can also control currency codes, motion, swatch shape/size, product-card behavior, and cart details.
 
 The project starts from Shopify Skeleton Theme **v1.0.0** and preserves its MIT license. The MIT notice is retained for the upstream code; the intended commercial distribution channel for this theme remains the Shopify Theme Store. See `UPSTREAM.md` for source provenance and license details.
 
@@ -19,7 +19,7 @@ The project starts from Shopify Skeleton Theme **v1.0.0** and preserves its MIT 
 - Responsive editorial homepage sections, collection merchandising, routines, ingredient storytelling, newsletter signup, and Custom Liquid.
 - Product pages with reorderable blocks and app blocks, separate option selectors with native color/image swatches, variant-aware media and pricing, selling plans, Shop Pay Installments, dynamic checkout, pickup availability, skincare metafields, and related/complementary recommendations.
 - Gift card recipient fields, scheduled delivery, cart property display, a Shopify-hosted QR code, and Apple Wallet support.
-- Collection and search storefront filters, sorting, predictive search, product cards, cart discounts and taxes, selling plans, accelerated checkout, unit pricing, and a responsive cart with variant options.
+- Collection and search storefront filters, sorting, predictive search, configurable product cards, metafield-backed product ratings and sale badges, cart display controls, discounts and taxes, selling plans, accelerated checkout, unit pricing, and a responsive cart with variant options.
 - Shopify's `<shopify-account>` component, Follow on Shop, social media icons, favicon support, country/language selectors, localization-ready UI, product/article structured data, and canonical/social metadata.
 - Product facts are merchant-supplied; the theme must not invent ingredient, efficacy, clinical, or safety claims.
 
@@ -42,7 +42,7 @@ To upload a persistent, unpublished preview theme (never make the live theme the
 shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
 ```
 
-Theme Check passed both in GitHub Actions and via Shopify CLI 4.9.4 invoked with `npx` (54 files inspected, no offenses). Static JavaScript syntax, CSS parsing, JSON/schema parsing, translation-key, and Liquid-parser checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
+Theme Check passed using Shopify CLI via `npx` (56 files inspected, no offenses). Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
 
 ## Project conventions
 

@@ -20,7 +20,7 @@
                 {{ product.featured_media.preview_image | image_url: width: 100 | image_tag: alt: predictive_alt, widths: '60, 100', sizes: '48px', loading: 'lazy' }}
               {% endif %}
               <span>{{ product.title | escape }}</span>
-              <span class="predictive-search-results__price">{{ product.price | money }}</span>
+              <span class="predictive-search-results__price">{% render 'format-money', amount: product.price %}</span>
             </a>
           </li>
         {% endfor %}

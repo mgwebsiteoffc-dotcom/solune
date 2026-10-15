@@ -9,6 +9,8 @@
 
 {% assign card_variant = product.selected_or_first_available_variant %}
 {% assign card_media = product.featured_media.preview_image %}
+{% assign card_show_vendor = show_vendor %}
+{% if settings.product_card_show_vendor %}{% assign card_show_vendor = true %}{% endif %}
 {% capture card_focal_style %}object-position: {{ card_media.presentation.focal_point }};{% endcapture %}
 <article class="product-card">
   <a class="product-card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
@@ -18,25 +20,30 @@
     {% else %}
       <span class="product-card__placeholder">{{ product.title | escape }}</span>
     {% endif %}
-    {% unless product.available %}<span class="product-card__badge">{{ 'general.sold_out' | t }}</span>{% endunless %}
+    {% unless product.available %}
+      <span class="product-card__badge">{{ 'general.sold_out' | t }}</span>
+    {% elsif settings.product_card_show_sale_badge and card_variant.compare_at_price > card_variant.price %}
+      <span class="product-card__badge product-card__badge--sale">{{ 'general.sale' | t }}</span>
+    {% endunless %}
   </a>
   <div class="product-card__content">
-    {% if show_vendor %}<p class="product-card__vendor">{{ product.vendor | escape }}</p>{% endif %}
+    {% if card_show_vendor %}<p class="product-card__vendor">{{ product.vendor | escape }}</p>{% endif %}
     <h3 class="product-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    {% render 'product-rating', product: product %}
     {% if product.metafields.custom.routine_step != blank %}<p class="product-card__meta">{{ product.metafields.custom.routine_step.value | default: product.metafields.custom.routine_step | escape }}</p>{% endif %}
     <div class="product-card__price">
       {% if card_variant.compare_at_price > card_variant.price %}
-        <span class="price--sale">{{ card_variant.price | money }}</span>
-        <s class="price--compare">{{ card_variant.compare_at_price | money }}</s>
+        <span class="price--sale">{% render 'format-money', amount: card_variant.price %}</span>
+        <s class="price--compare">{% render 'format-money', amount: card_variant.compare_at_price %}</s>
         <span class="visually-hidden">{{ 'general.sale' | t }}</span>
       {% else %}
-        <span>{% if product.price_varies %}{{ 'general.from' | t }} {% endif %}{{ product.price_min | money }}{% if product.price_varies %}–{{ product.price_max | money }}{% endif %}</span>
+        <span>{% if product.price_varies %}{{ 'general.from' | t }} {% endif %}{% render 'format-money', amount: product.price_min %}{% if product.price_varies %}–{% render 'format-money', amount: product.price_max %}{% endif %}</span>
       {% endif %}
       {% if card_variant.unit_price_measurement %}
-        <span class="product-card__meta"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{{ card_variant.unit_price | money }} / {{ card_variant.unit_price_measurement.reference_value }}{{ card_variant.unit_price_measurement.reference_unit }}</span>
+        <span class="product-card__meta"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{% render 'format-money', amount: card_variant.unit_price %} / {{ card_variant.unit_price_measurement.reference_value }}{{ card_variant.unit_price_measurement.reference_unit }}</span>
       {% endif %}
     </div>
-    {% if show_quick_add and product.available %}
+    {% if show_quick_add and settings.product_card_enable_quick_add and product.available %}
       {% if product.has_only_default_variant and product.requires_selling_plan == false %}
         {% form 'product', product, class: 'product-card__quick-add-form' %}
           <input type="hidden" name="id" value="{{ card_variant.id }}">

@@ -145,7 +145,7 @@ button.button {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  transition: background-color var(--motion-duration, 160ms) ease, color var(--motion-duration, 160ms) ease, border-color var(--motion-duration, 160ms) ease;
 }
 
 .button:hover,
@@ -198,8 +198,8 @@ textarea {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-control);
   padding: 0.7rem 0.85rem;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--color-input-background, var(--color-background));
+  color: var(--color-input-ink, var(--color-foreground));
 }
 
 input::placeholder,
@@ -440,7 +440,8 @@ label {
   width: min(29rem, calc(100vw - 2rem));
   border: 1px solid var(--color-border);
   padding: 1rem;
-  background: var(--color-background);
+  background: var(--color-overlay-background, var(--color-background));
+  color: var(--color-overlay-ink, var(--color-foreground));
   box-shadow: var(--shadow-soft);
 }
 
@@ -484,7 +485,8 @@ label {
   overflow-y: auto;
   border: 1px solid var(--color-border);
   padding: 1rem;
-  background: var(--color-background);
+  background: var(--color-overlay-background, var(--color-background));
+  color: var(--color-overlay-ink, var(--color-foreground));
   box-shadow: var(--shadow-soft);
 }
 
@@ -654,11 +656,11 @@ shopify-account {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 450ms cubic-bezier(0.2, 0.7, 0.25, 1);
+  transition: transform var(--motion-image-duration, 450ms) cubic-bezier(0.2, 0.7, 0.25, 1);
 }
 
 .product-card:hover .product-card__media img {
-  transform: scale(1.025);
+  transform: scale(var(--product-card-image-scale, 1.025));
 }
 
 .product-card__placeholder {
@@ -683,6 +685,12 @@ shopify-account {
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.product-card__badge--sale {
+  border-color: var(--color-sale);
+  background: var(--color-sale);
+  color: var(--color-sale-ink);
 }
 
 .product-card__content {
@@ -715,6 +723,42 @@ shopify-account {
   line-height: 1.5;
 }
 
+.product-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-rating);
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.product-rating__stars {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.product-rating__stars::before {
+  color: var(--color-border);
+  content: '★★★★★';
+}
+
+.product-rating__stars::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  width: var(--rating-percent, 0%);
+  color: var(--color-rating);
+  content: '★★★★★';
+  white-space: nowrap;
+}
+
+.product-rating__count {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+}
+
 .product-card__price,
 .price-line {
   display: flex;
@@ -732,7 +776,7 @@ shopify-account {
 
 .price--sale,
 .price__sale {
-  color: var(--color-foreground);
+  color: var(--color-sale, var(--color-foreground));
 }
 
 .product-card__quick-add {
@@ -751,7 +795,7 @@ shopify-account {
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+  transition: border-color var(--motion-duration, 160ms) ease, background-color var(--motion-duration, 160ms) ease, color var(--motion-duration, 160ms) ease;
 }
 
 .product-card__quick-add:hover {
@@ -988,7 +1032,7 @@ shopify-account {
   border-bottom: 1px solid currentColor;
   content: '';
   transform: translateY(-0.1rem) rotate(45deg);
-  transition: transform 160ms ease;
+  transition: transform var(--motion-duration, 160ms) ease;
 }
 
 .facet-group[open] summary::after {
@@ -1058,8 +1102,8 @@ shopify-account {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-control, 2px);
   padding: 0.6rem 0.7rem;
-  background: var(--color-surface);
-  color: var(--color-foreground);
+  background: var(--color-input-background, var(--color-surface));
+  color: var(--color-input-ink, var(--color-foreground));
   font-size: 0.84rem;
   font-variant-numeric: tabular-nums;
 }
@@ -1154,7 +1198,8 @@ shopify-account {
   overflow-y: auto;
   border: 1px solid var(--color-border);
   padding: 1rem;
-  background: var(--color-background);
+  background: var(--color-overlay-background, var(--color-background));
+  color: var(--color-overlay-ink, var(--color-foreground));
   box-shadow: var(--shadow-soft);
 }
 
@@ -1380,13 +1425,13 @@ shopify-account {
 .product-option__swatch {
   position: relative;
   display: grid;
-  width: 2.65rem;
-  height: 2.65rem;
+  width: var(--swatch-size, 2.75rem);
+  height: var(--swatch-size, 2.75rem);
   place-items: center;
   overflow: hidden;
   margin: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
+  border: var(--swatch-border-width, 1px) solid var(--color-border);
+  border-radius: var(--swatch-radius, 50%);
   padding: 0.18rem;
   background-color: var(--swatch-color, var(--color-surface));
   background-image: var(--swatch-image, none);
@@ -1411,9 +1456,9 @@ shopify-account {
 
 .product-option__swatch--text {
   width: auto;
-  min-width: 2.65rem;
+  min-width: var(--swatch-size, 2.75rem);
   max-width: 9rem;
-  min-height: 2.65rem;
+  min-height: var(--swatch-size, 2.75rem);
   height: auto;
   border-radius: var(--radius-control);
   padding: 0.55rem 0.8rem;
@@ -1725,7 +1770,7 @@ shopify-account {
   border: 1px solid var(--color-background);
   border-radius: 50%;
   text-decoration: none;
-  transition: background-color 160ms ease, color 160ms ease;
+  transition: background-color var(--motion-duration, 160ms) ease, color var(--motion-duration, 160ms) ease;
 }
 
 .social-icons a:hover {
@@ -1786,11 +1831,11 @@ shopify-account {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 450ms cubic-bezier(0.2, 0.7, 0.25, 1);
+  transition: transform var(--motion-image-duration, 450ms) cubic-bezier(0.2, 0.7, 0.25, 1);
 }
 
 .blog-card:hover .blog-card__image img {
-  transform: scale(1.025);
+  transform: scale(var(--motion-image-scale, 1.025));
 }
 
 .blog-card__content {

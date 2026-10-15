@@ -6,7 +6,7 @@
   {% if cart.item_count == 0 %}
     <div class="rich-text" style="margin-top: 2rem">
       <p>{{ 'cart.empty' | t }}</p>
-      <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'general.continue_shopping' | t }}</a>
+      {% if settings.cart_show_continue_shopping %}<a class="button" href="{{ routes.all_products_collection_url }}">{{ 'general.continue_shopping' | t }}</a>{% endif %}
     </div>
   {% else %}
     {% form 'cart', cart, id: cart_form_id %}
@@ -24,12 +24,13 @@
             <tr>
               <td>
                 <div class="cart-table__product">
-                  {% if item.image %}
+                  {% if settings.cart_show_product_image and item.image %}
                     {% assign cart_image_alt = item.image.alt | default: item.product.title %}
                     {{ item.image | image_url: width: 240 | image_tag: class: 'cart-table__image', alt: cart_image_alt, widths: '120, 180, 240', sizes: '96px', loading: 'lazy' }}
                   {% endif %}
                   <div>
                     <a href="{{ item.url }}">{{ item.title | escape }}</a>
+                    {% if settings.cart_show_vendor %}<p class="product-card__meta">{{ item.product.vendor | escape }}</p>{% endif %}
                     {% unless item.product.has_only_default_variant %}
                       {% for option in item.options_with_values %}
                         {% if option.value != blank %}<p class="product-card__meta">{{ option.name | escape }}: {{ option.value | escape }}</p>{% endif %}
@@ -46,9 +47,9 @@
               </td>
               <td>
                 <span class="cart-table__label">{{ 'cart.price' | t }}</span>
-                {% if item.original_price != item.final_price %}<s class="price--compare">{{ item.original_price | money }}</s> {% endif %}
-                <span>{{ item.final_price | money }}</span>
-                {% if item.unit_price_measurement %}<p class="product-card__meta">{{ item.unit_price | money }} / {{ item.unit_price_measurement.reference_value }}{{ item.unit_price_measurement.reference_unit }}</p>{% endif %}
+                {% if item.original_price != item.final_price %}<s class="price--compare">{% render 'format-money', amount: item.original_price %}</s> {% endif %}
+                <span>{% render 'format-money', amount: item.final_price %}</span>
+                {% if item.unit_price_measurement %}<p class="product-card__meta">{% render 'format-money', amount: item.unit_price %} / {{ item.unit_price_measurement.reference_value }}{{ item.unit_price_measurement.reference_unit }}</p>{% endif %}
               </td>
               <td>
                 <span class="cart-table__label">{{ 'cart.quantity' | t }}</span>
@@ -57,9 +58,9 @@
               </td>
               <td>
                 <span class="cart-table__label">{{ 'cart.total' | t }}</span>
-                {% if item.original_line_price != item.final_line_price %}<s class="price--compare">{{ item.original_line_price | money }}</s> {% endif %}
-                <span>{{ item.final_line_price | money }}</span>
-                {% for discount in item.line_level_discount_allocations %}<p class="product-card__meta">{{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})</p>{% endfor %}
+                {% if item.original_line_price != item.final_line_price %}<s class="price--compare">{% render 'format-money', amount: item.original_line_price %}</s> {% endif %}
+                <span>{% render 'format-money', amount: item.final_line_price %}</span>
+                {% for discount in item.line_level_discount_allocations %}<p class="product-card__meta">{{ discount.discount_application.title | escape }} (−{% render 'format-money', amount: discount.amount %})</p>{% endfor %}
               </td>
             </tr>
           {% endfor %}
@@ -68,19 +69,21 @@
 
       <div class="cart-summary">
         <button class="button button--secondary" type="submit" name="update">{{ 'cart.update' | t }}</button>
-        <div class="field">
-          <label for="CartNote-{{ section.id }}">{{ 'cart.note' | t }}</label>
-          <textarea id="CartNote-{{ section.id }}" name="note" placeholder="{{ 'cart.note_placeholder' | t | escape }}">{{ cart.note | escape }}</textarea>
-        </div>
+        {% if settings.cart_show_note %}
+          <div class="field">
+            <label for="CartNote-{{ section.id }}">{{ 'cart.note' | t }}</label>
+            <textarea id="CartNote-{{ section.id }}" name="note" placeholder="{{ 'cart.note_placeholder' | t | escape }}">{{ cart.note | escape }}</textarea>
+          </div>
+        {% endif %}
         {% for discount_application in cart.cart_level_discount_applications %}
-          <p>{{ discount_application.title | escape }} <span>−{{ discount_application.total_allocated_amount | money }}</span></p>
+          <p>{{ discount_application.title | escape }} <span>−{% render 'format-money', amount: discount_application.total_allocated_amount %}</span></p>
         {% endfor %}
-        {% if cart.total_discount > 0 %}<p>{{ 'cart.discount' | t }} <span>−{{ cart.total_discount | money }}</span></p>{% endif %}
-        <p>{{ 'cart.subtotal' | t }}: {{ cart.original_total_price | money }}</p>
-        {% if cart.total_discount > 0 %}<p>{{ 'cart.total_discount' | t }} <span>−{{ cart.total_discount | money }}</span></p>{% endif %}
-        <p><strong>{{ 'cart.estimated_total' | t }}: {{ cart.total_price | money }}</strong></p>
-        {% if cart.taxes_included %}<p class="product-card__meta">{{ 'cart.taxes_included' | t }}</p>{% endif %}
-        <p class="product-card__meta">{{ 'cart.shipping_at_checkout' | t }}</p>
+        {% if cart.total_discount > 0 %}<p>{{ 'cart.discount' | t }} <span>−{% render 'format-money', amount: cart.total_discount %}</span></p>{% endif %}
+        <p>{{ 'cart.subtotal' | t }}: {% render 'format-money', amount: cart.original_total_price %}</p>
+        {% if cart.total_discount > 0 %}<p>{{ 'cart.total_discount' | t }} <span>−{% render 'format-money', amount: cart.total_discount %}</span></p>{% endif %}
+        <p><strong>{{ 'cart.estimated_total' | t }}: {% render 'format-money', amount: cart.total_price %}</strong></p>
+        {% if settings.cart_show_tax_notice and cart.taxes_included %}<p class="product-card__meta">{{ 'cart.taxes_included' | t }}</p>{% endif %}
+        {% if settings.cart_show_shipping_note %}<p class="product-card__meta">{{ 'cart.shipping_at_checkout' | t }}</p>{% endif %}
         <button class="button" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
         <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
       </div>

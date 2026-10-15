@@ -15,7 +15,7 @@
       <select id="VariantFallback-{{ section_id }}" class="product-variant-fallback" name="id" form="{{ form_id }}" data-variant-select>
         {% for variant in product.variants %}
           <option value="{{ variant.id }}"{% if variant.id == option_picker_variant.id %} selected{% endif %}>
-            {{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} — {{ 'general.sold_out' | t }}{% endunless %}
+            {{ variant.title | escape }} — {% render 'format-money', amount: variant.price %}{% unless variant.available %} — {{ 'general.sold_out' | t }}{% endunless %}
           </option>
         {% endfor %}
       </select>

@@ -6,14 +6,22 @@
     "branding": "Branding",
     "cart": "Cart",
     "collections_grid": "Collections grid",
-    "colors": "Color palette",
+    "colors": "Colors",
     "footer": "Footer",
     "header": "Header",
     "layout": "Layout",
     "page": "Page",
     "password": "Password page",
     "social_media": "Social media",
-    "typography": "Typography"
+    "typography": "Typography",
+    "appearance": "Appearance",
+    "currency_format": "Currency format",
+    "animation": "Animation",
+    "color_swatch": "Color swatch",
+    "product_card": "Product card",
+    "favicon": "Favicon",
+    "custom_css": "Custom CSS",
+    "theme_style": "Theme style"
   },
   "labels": {
     "accent": "Accent",
@@ -69,7 +77,37 @@
     "social_snapchat_link": "Snapchat URL",
     "social_vimeo_link": "Vimeo URL",
     "custom_liquid": "Liquid code",
-    "eyebrow": "Eyebrow"
+    "eyebrow": "Eyebrow",
+    "page_layout": "Page layout",
+    "color_schemes": "Theme palette",
+    "modal_drawer_colors": "Modal and drawer",
+    "product_colors": "Product",
+    "overlay_background": "Overlay background",
+    "overlay_ink": "Overlay text",
+    "input_background": "Input background",
+    "input_ink": "Input text",
+    "sale": "Sale badge",
+    "sale_ink": "Sale badge text",
+    "rating": "Product star rating",
+    "show_currency_code": "Show currency code with prices",
+    "animation_style": "Motion style",
+    "swatch_shape": "Swatch shape",
+    "swatch_size": "Swatch size",
+    "swatch_border_width": "Swatch border width",
+    "product_card_show_vendor": "Show vendor on product cards",
+    "product_card_enable_quick_add": "Enable quick add on product cards",
+    "product_card_show_rating": "Show product ratings",
+    "product_card_show_sale_badge": "Show sale badge",
+    "product_card_hover_effect": "Product image hover effect",
+    "cart_show_product_image": "Show product images in cart",
+    "cart_show_vendor": "Show vendor in cart",
+    "cart_show_note": "Show order note field",
+    "cart_show_tax_notice": "Show tax-included notice",
+    "cart_show_shipping_note": "Show shipping-at-checkout notice",
+    "cart_show_continue_shopping": "Show continue-shopping link when cart is empty",
+    "custom_css": "Custom CSS",
+    "custom_css_info": "Add theme-wide CSS. Use only if you are comfortable editing CSS.",
+    "theme_style_info": "Choose one of the built-in styles with the Theme style control in the editor: Solune, Dew, Petal, Grove, or Dusk."
   },
   "options": {
     "page_width": {
@@ -81,6 +119,20 @@
       "tall": "Tall portrait",
       "portrait": "Portrait",
       "square": "Square"
+    },
+    "animation_style": {
+      "none": "Off",
+      "subtle": "Subtle",
+      "expressive": "Expressive"
+    },
+    "swatch_shape": {
+      "circle": "Circle",
+      "rounded": "Rounded square",
+      "square": "Square"
+    },
+    "product_card_hover_effect": {
+      "none": "None",
+      "zoom": "Subtle zoom"
     }
   },
   "sections": {

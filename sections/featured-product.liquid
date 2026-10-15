@@ -15,7 +15,7 @@
     {% endif %}
   {% endif %}
   {% assign featured_form_id = 'FeaturedProductForm-' | append: section.id %}
-  <section id="FeaturedProduct-{{ section.id }}" class="page-width section-space" data-product-root data-money-format="{{ shop.money_format | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-labelledby="FeaturedProductTitle-{{ section.id }}">
+  <section id="FeaturedProduct-{{ section.id }}" class="page-width section-space" data-product-root data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-labelledby="FeaturedProductTitle-{{ section.id }}">
     <div class="product-layout">
       <div class="product-gallery" role="region" aria-label="{{ 'accessibility.product_gallery' | t }}">
         {% for media in featured_product.media limit: 4 %}
@@ -37,15 +37,17 @@
           {% else %}
             <div class="product-block product-block--{{ block.type }}" {{ block.shopify_attributes }}>
               {% case block.type %}
-                {% when 'title' %}<h2 id="FeaturedProductTitle-{{ section.id }}" class="product-title">{{ featured_product.title | escape }}</h2>
+                {% when 'title' %}
+                  <h2 id="FeaturedProductTitle-{{ section.id }}" class="product-title">{{ featured_product.title | escape }}</h2>
+                  {% render 'product-rating', product: featured_product %}
                 {% when 'price' %}
                   <div class="price-line product-price">
-                    <span class="{% if featured_compare_at_price > featured_price %}price--sale{% endif %}" data-product-price>{{ featured_price | money }}</span>
-                    <s class="price__compare" data-compare-price{% unless featured_compare_at_price > featured_price %} hidden{% endunless %}>{{ featured_compare_at_price | money }}</s>
+                    <span class="{% if featured_compare_at_price > featured_price %}price--sale{% endif %}" data-product-price>{% render 'format-money', amount: featured_price %}</span>
+                    <s class="price__compare" data-compare-price{% unless featured_compare_at_price > featured_price %} hidden{% endunless %}>{% render 'format-money', amount: featured_compare_at_price %}</s>
                   </div>
                   <p class="product-card__meta" data-unit-price{% unless featured_variant.unit_price_measurement %} hidden{% endunless %}>
                     <span class="visually-hidden">{{ 'product.unit_price' | t }} </span>
-                    <span data-unit-price-amount>{{ featured_variant.unit_price | money }}</span>
+                    <span data-unit-price-amount>{% render 'format-money', amount: featured_variant.unit_price %}</span>
                     {% if featured_variant.unit_price_measurement %}/ <span data-unit-price-measure>{{ featured_variant.unit_price_measurement.reference_value }}{{ featured_variant.unit_price_measurement.reference_unit }}</span>{% endif %}
                   </p>
                   {% if cart.taxes_included %}<p class="product-card__meta">{{ 'product.taxes_included' | t }}</p>{% endif %}
@@ -60,7 +62,7 @@
                           <option value="" data-one-time-purchase{% unless featured_product.requires_selling_plan %} selected{% endunless %}{% if featured_product.requires_selling_plan %} disabled{% endif %}>{{ 'product.one_time_purchase' | t }}</option>
                           {% for plan_variant in featured_product.variants %}
                             {% for allocation in plan_variant.selling_plan_allocations %}
-                              <option value="{{ allocation.selling_plan.id }}" data-variant-id="{{ plan_variant.id }}" data-price="{{ allocation.price }}" data-compare-at-price="{{ allocation.compare_at_price | default: 0 }}"{% if plan_variant.id != featured_variant.id %} hidden disabled{% endif %}{% if featured_product.requires_selling_plan and plan_variant.id == featured_variant.id and forloop.first %} selected{% endif %}>{{ allocation.selling_plan.name | escape }} — {{ allocation.price | money }}</option>
+                              <option value="{{ allocation.selling_plan.id }}" data-variant-id="{{ plan_variant.id }}" data-price="{{ allocation.price }}" data-compare-at-price="{{ allocation.compare_at_price | default: 0 }}"{% if plan_variant.id != featured_variant.id %} hidden disabled{% endif %}{% if featured_product.requires_selling_plan and plan_variant.id == featured_variant.id and forloop.first %} selected{% endif %}>{{ allocation.selling_plan.name | escape }} — {% render 'format-money', amount: allocation.price %}</option>
                             {% endfor %}
                           {% endfor %}
                         </select>

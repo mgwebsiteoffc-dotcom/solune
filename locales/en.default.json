@@ -53,6 +53,7 @@
     "how_to_use": "How to use",
     "cautions": "Cautions",
     "unit_price": "Unit price",
+    "rating_summary": "Rated {{ rating }} out of {{ scale }} stars from {{ count }} reviews",
     "taxes_included": "Taxes included.",
     "subscription_unavailable": "Subscription is unavailable for this option."
   },

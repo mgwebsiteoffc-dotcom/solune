@@ -22,6 +22,25 @@
     --radius-card: {{ settings.card_radius }}px;
     --radius-control: {{ settings.control_radius }}px;
     --product-card-aspect: {{ settings.product_card_aspect }};
+    --motion-image-scale: {% if settings.animation_style == 'none' %}1{% else %}1.025{% endif %};
+    --product-card-image-scale: {% if settings.product_card_hover_effect == 'none' %}1{% else %}var(--motion-image-scale, 1.025){% endif %};
+    --swatch-size: {{ settings.swatch_size }}px;
+    --swatch-border-width: {{ settings.swatch_border_width }}px;
+    --swatch-radius: {% case settings.swatch_shape %}{% when 'square' %}0{% when 'rounded' %}var(--radius-control, 2px){% else %}50%{% endcase %};
+    {% case settings.animation_style %}
+      {% when 'none' %}
+        --motion-duration: 0ms;
+        --motion-image-duration: 0ms;
+        --scroll-behavior: auto;
+      {% when 'expressive' %}
+        --motion-duration: 260ms;
+        --motion-image-duration: 600ms;
+        --scroll-behavior: smooth;
+      {% else %}
+        --motion-duration: 160ms;
+        --motion-image-duration: 450ms;
+        --scroll-behavior: smooth;
+    {% endcase %}
     --color-background: {{ settings.color_background }};
     --color-foreground: {{ settings.color_foreground }};
     --color-surface: {{ settings.color_surface }};
@@ -30,5 +49,12 @@
     --color-accent-ink: {{ settings.color_accent_ink }};
     --color-muted: {{ settings.color_muted }};
     --color-border: {{ settings.color_border }};
+    --color-overlay-background: {{ settings.color_overlay_background }};
+    --color-overlay-ink: {{ settings.color_overlay_ink }};
+    --color-input-background: {{ settings.color_input_background }};
+    --color-input-ink: {{ settings.color_input_ink }};
+    --color-sale: {{ settings.color_sale }};
+    --color-sale-ink: {{ settings.color_sale_ink }};
+    --color-rating: {{ settings.color_rating }};
   }
 {% endstyle %}

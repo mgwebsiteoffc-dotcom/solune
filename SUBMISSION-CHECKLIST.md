@@ -6,7 +6,9 @@ This project is a development foundation. A checked implementation item means co
 
 - [x] Start from the official Shopify Skeleton Theme v1.0.0, preserve its license, and document provenance.
 - [x] Build an original, responsive skincare visual system with a curated section library and merchant-facing settings.
-- [x] Add five original theme style presets, a theme color palette, editable corner radii, and product-card image proportions.
+- [x] Add five original theme style presets, a 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
+- [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
+- [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
@@ -19,7 +21,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check in GitHub Actions and Shopify CLI 4.9.4 (`npx`; 54 files inspected with no offenses).
+- [x] Run Shopify Theme Check with Shopify CLI via `npx` (56 files inspected with no offenses).
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 

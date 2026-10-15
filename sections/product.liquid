@@ -14,7 +14,7 @@
 {% endif %}
 {% assign product_form_id = 'ProductForm-' | append: section.id %}
 {% assign pickup_container_id = 'PickupAvailability-' | append: section.id %}
-<section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{{ shop.money_format | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
+<section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
   <div class="product-layout">
     <div class="product-gallery" role="region" aria-label="{{ 'accessibility.product_gallery' | t }}">
       {% for media in product.media %}
@@ -43,16 +43,17 @@
             {% case block.type %}
               {% when 'product_title' %}
                 <h1 class="product-title">{{ product.title | escape }}</h1>
+                {% render 'product-rating', product: product %}
               {% when 'vendor' %}
                 {% if product.vendor != blank %}<p class="product-vendor">{{ product.vendor | escape }}</p>{% endif %}
               {% when 'price' %}
                 <div class="price-line product-price">
-                  <span class="price__sale{% if current_compare_at_price > current_price %} price--sale{% endif %}" data-product-price>{{ current_price | money }}</span>
-                  <s class="price__compare" data-compare-price{% unless current_compare_at_price > current_price %} hidden{% endunless %}>{{ current_compare_at_price | money }}</s>
+                  <span class="price__sale{% if current_compare_at_price > current_price %} price--sale{% endif %}" data-product-price>{% render 'format-money', amount: current_price %}</span>
+                  <s class="price__compare" data-compare-price{% unless current_compare_at_price > current_price %} hidden{% endunless %}>{% render 'format-money', amount: current_compare_at_price %}</s>
                 </div>
                 <p class="product-card__meta" data-unit-price{% unless current_variant.unit_price_measurement %} hidden{% endunless %}>
                   <span class="visually-hidden">{{ 'product.unit_price' | t }} </span>
-                  <span data-unit-price-amount>{{ current_variant.unit_price | money }}</span>
+                  <span data-unit-price-amount>{% render 'format-money', amount: current_variant.unit_price %}</span>
                   {% if current_variant.unit_price_measurement %}/ <span data-unit-price-measure>{{ current_variant.unit_price_measurement.reference_value }}{{ current_variant.unit_price_measurement.reference_unit }}</span>{% endif %}
                 </p>
                 {% if cart.taxes_included %}<p class="product-card__meta">{{ 'product.taxes_included' | t }}</p>{% endif %}
@@ -68,7 +69,7 @@
                       {% for plan_variant in product.variants %}
                         {% for allocation in plan_variant.selling_plan_allocations %}
                           <option value="{{ allocation.selling_plan.id }}" data-variant-id="{{ plan_variant.id }}" data-price="{{ allocation.price }}" data-compare-at-price="{{ allocation.compare_at_price | default: 0 }}"{% if plan_variant.id != current_variant.id %} hidden disabled{% endif %}{% if product.requires_selling_plan and plan_variant.id == current_variant.id and forloop.first %} selected{% endif %}>
-                            {{ allocation.selling_plan.name | escape }} — {{ allocation.price | money }}
+                            {{ allocation.selling_plan.name | escape }} — {% render 'format-money', amount: allocation.price %}
                           </option>
                         {% endfor %}
                       {% endfor %}
