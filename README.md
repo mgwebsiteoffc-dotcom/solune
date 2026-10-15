@@ -3,6 +3,8 @@
 - **Working name:** Solune
 - **Author:** Sani Kumar
 - **Company:** Akestech Infotech Pvt Ltd
+- **Planned Theme Store price:** USD $50 (to be configured in the approved listing; not hardcoded in theme code)
+- **Testing:** unpublished development-store preview; no customer purchase required
 - **Status:** development foundation; not yet tested on a Shopify development store or ready for Theme Store submission
 - **Distribution:** Shopify Theme Store submission only; no direct theme sales are planned
 

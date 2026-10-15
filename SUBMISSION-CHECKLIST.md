@@ -36,6 +36,8 @@ This project is a development foundation. A checked implementation item means co
 ### Quality and listing readiness
 
 - [x] Record author and company identity supplied by the owner: Sani Kumar / Akestech Infotech Pvt Ltd.
+- [x] Record owner's pricing and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test.
+- [ ] Configure the final listing price and confirm Shopify's then-current listing and payout requirements.
 - [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets.
 - [ ] Replace the development GitHub README/Issues endpoints with stable merchant-facing documentation and support resources before submission.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.
