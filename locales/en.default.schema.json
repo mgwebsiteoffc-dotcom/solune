@@ -107,7 +107,12 @@
     "cart_show_continue_shopping": "Show continue-shopping link when cart is empty",
     "custom_css": "Custom CSS",
     "custom_css_info": "Add theme-wide CSS. Use only if you are comfortable editing CSS.",
-    "theme_style_info": "Choose one of the built-in styles with the Theme style control in the editor: Solune, Dew, Petal, Grove, or Dusk."
+    "theme_style_info": "Choose one of the built-in styles with the Theme style control in the editor: Solune, Dew, Petal, Grove, or Dusk.",
+    "cart_drawer_enabled": "Enable the cart drawer",
+    "cart_drawer_free_shipping_enabled": "Show free-shipping progress",
+    "cart_drawer_free_shipping_threshold": "Free-shipping threshold",
+    "cart_drawer_free_shipping_threshold_info": "Enter an amount in your store's currency.",
+    "sticky_add_to_cart": "Show sticky add-to-cart bar on product pages"
   },
   "options": {
     "page_width": {
@@ -169,7 +174,6 @@
     "header": {
       "name": "Header",
       "settings": {
-        "customer_account_menu": "Customer account menu",
         "logo": "Logo image",
         "logo_width": "Logo width",
         "menu": "Main menu"
@@ -259,6 +263,9 @@
     },
     "search": {
       "name": "Search results"
+    },
+    "cart_drawer": {
+      "name": "Cart drawer"
     }
   },
   "blocks": {

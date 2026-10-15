@@ -3,7 +3,7 @@
     "name": "theme_info",
     "theme_name": "Solune",
     "theme_version": "0.1.0",
-    "theme_author": "Sani Kumar, Akestech Infotech Pvt Ltd",
+    "theme_author": "Sani Kumar",
     "theme_documentation_url": "https://github.com/mgwebsiteoffc-dotcom/solune#readme",
     "theme_support_url": "https://github.com/mgwebsiteoffc-dotcom/solune/issues"
   },
@@ -370,6 +370,27 @@
   {
     "name": "t:general.cart",
     "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_enabled",
+        "label": "t:labels.cart_drawer_enabled",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_free_shipping_enabled",
+        "label": "t:labels.cart_drawer_free_shipping_enabled",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "cart_drawer_free_shipping_threshold",
+        "label": "t:labels.cart_drawer_free_shipping_threshold",
+        "info": "t:labels.cart_drawer_free_shipping_threshold_info",
+        "min": 0,
+        "max": 100000,
+        "default": 75
+      },
       {
         "type": "checkbox",
         "id": "cart_show_product_image",

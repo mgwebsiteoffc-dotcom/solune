@@ -52,11 +52,13 @@
         </div>
       </details>
       {% if shop.customer_accounts_enabled %}
-        <shopify-account class="header-actions__account" menu="{{ section.settings.customer_account_menu }}" aria-label="{{ 'general.account' | t }}"></shopify-account>
+        <a class="header-actions__icon-link" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </a>
       {% endif %}
-      <a class="header-actions__icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}, {{ cart.item_count }}">
+      <a class="header-actions__icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}, {{ cart.item_count }}" data-cart-label="{{ 'general.cart' | t | escape }}"{% if settings.cart_drawer_enabled %} data-cart-drawer-open aria-haspopup="dialog" aria-controls="CartDrawer"{% endif %}>
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M5 8.5h14l-1.1 12H6.1L5 8.5Z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9 9V6.3a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        <span class="header-actions__count" aria-hidden="true">{{ cart.item_count }}</span>
+        <span class="header-actions__count" data-cart-count aria-hidden="true">{{ cart.item_count }}</span>
       </a>
     </div>
   </div>
@@ -67,7 +69,6 @@
   "name": "t:sections.header.name",
   "settings": [
     { "type": "link_list", "id": "menu", "label": "t:sections.header.settings.menu", "default": "main-menu" },
-    { "type": "link_list", "id": "customer_account_menu", "label": "t:sections.header.settings.customer_account_menu", "default": "customer-account-main-menu" },
     { "type": "image_picker", "id": "logo", "label": "t:sections.header.settings.logo" },
     { "type": "range", "id": "logo_width", "label": "t:sections.header.settings.logo_width", "min": 80, "max": 260, "step": 10, "unit": "px", "default": 160 }
   ],

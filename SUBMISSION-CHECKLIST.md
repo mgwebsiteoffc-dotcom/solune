@@ -9,6 +9,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Add five original theme style presets, a 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
 - [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
+- [x] Add a native AJAX cart drawer with quantity adjustment/removal, cart totals, optional free-shipping progress, and a cart-page fallback.
+- [x] Add a scroll-aware PDP sticky add-to-cart bar synchronized with variant price and availability.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
@@ -16,12 +18,12 @@ This project is a development foundation. A checked implementation item means co
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
 - [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes/quantities, and accelerated cart checkout.
-- [x] Implement account component, Follow on Shop, country/language localization, payment icons, social media icon settings, and favicon support.
+- [x] Implement customer account navigation, Follow on Shop, country/language localization, payment icons, social media icon settings, and favicon support.
 - [x] Implement canonical/social metadata and Shopify Product/Article structured data without replacing Shopify-managed `/agents.md` content.
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check with Shopify CLI via `npx` (56 files inspected with no offenses).
+- [x] Run Shopify Theme Check with Shopify CLI via `npx` (57 files inspected with no offenses).
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
@@ -35,8 +37,12 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test pickup availability for available/unavailable locations and multiple variants.
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types.
 - [ ] Test line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
-- [ ] Test account component, Follow on Shop, country/language selectors, and payment/social icons on eligible shops.
+- [ ] Test AJAX cart drawer add/change/remove flows, free-shipping progress, section refresh, keyboard dismissal, and cart-page fallback.
+- [ ] Test sticky PDP add-to-cart visibility, variant price/availability synchronization, and submission from the external form-associated button.
+- [ ] Test customer account navigation, Follow on Shop, country/language selectors, and payment/social icons on eligible shops.
 - [ ] Test app blocks and Custom Liquid insertion points; confirm the core theme works without apps.
+- [ ] Finish the page-by-page PDP, collection, cart, blog/SEO, contact, and mobile design audit in a real development-store preview.
+- [ ] Complete and verify the requested 100+ meaningful, working CRO controls across relevant theme sections; do not count duplicate or inert settings.
 
 ### Quality and listing readiness
 

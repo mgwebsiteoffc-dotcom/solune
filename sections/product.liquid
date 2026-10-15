@@ -150,6 +150,17 @@
       {% endif %}
     </div>
   </div>
+  {% if section.settings.sticky_add_to_cart %}
+    <div class="product-sticky-bar" data-product-sticky-bar hidden>
+      <div class="product-sticky-bar__details">
+        <span class="product-sticky-bar__title">{{ product.title | escape }}</span>
+        <span class="product-sticky-bar__price" data-sticky-product-price>{% render 'format-money', amount: current_price %}</span>
+      </div>
+      <button class="button product-sticky-bar__button" type="submit" form="{{ product_form_id }}" name="add" data-sticky-add-to-cart data-add-label="{{ 'product.add_to_cart' | t | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" data-plan-unavailable-label="{{ 'product.subscription_unavailable' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>
+        {% if current_variant.available %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'general.sold_out' | t }}{% endif %}
+      </button>
+    </div>
+  {% endif %}
   <script type="application/json" data-product-variants>{{ product.variants | json }}</script>
 </section>
 
@@ -157,6 +168,12 @@
 {
   "name": "t:sections.product.name",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "sticky_add_to_cart",
+      "label": "t:labels.sticky_add_to_cart",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "show_selling_plans",

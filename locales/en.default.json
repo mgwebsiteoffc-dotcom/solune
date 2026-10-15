@@ -7,7 +7,8 @@
     "open_submenu": "Open submenu for {{ title }}",
     "product_gallery": "Product images",
     "pagination": "Pagination",
-    "announcement": "Store announcement"
+    "announcement": "Store announcement",
+    "close": "Close"
   },
   "general": {
     "search": "Search",
@@ -76,7 +77,15 @@
     "shipping_at_checkout": "Shipping and taxes are calculated at checkout.",
     "total_discount": "Total savings",
     "estimated_total": "Estimated total",
-    "taxes_included": "Taxes are included in the prices."
+    "taxes_included": "Taxes are included in the prices.",
+    "view_cart": "View bag",
+    "added_to_cart": "Added to your bag.",
+    "free_shipping_unlocked": "You've unlocked free shipping.",
+    "free_shipping_remaining": "You're {{ amount }} away from free shipping.",
+    "decrease_quantity": "Decrease quantity for {{ title }}",
+    "increase_quantity": "Increase quantity for {{ title }}",
+    "remove_item": "Remove {{ title }}",
+    "update_error": "Your bag couldn't be updated. Please try again."
   },
   "collection": {
     "filter": "Filter",

@@ -17,10 +17,10 @@ The project starts from Shopify Skeleton Theme **v1.0.0** and preserves its MIT 
 ## Current foundation
 
 - Responsive editorial homepage sections, collection merchandising, routines, ingredient storytelling, newsletter signup, and Custom Liquid.
-- Product pages with reorderable blocks and app blocks, separate option selectors with native color/image swatches, variant-aware media and pricing, selling plans, Shop Pay Installments, dynamic checkout, pickup availability, skincare metafields, and related/complementary recommendations.
+- Product pages with reorderable blocks and app blocks, separate option selectors with native color/image swatches, variant-aware media and pricing, a scroll-aware sticky add-to-cart bar, selling plans, Shop Pay Installments, dynamic checkout, pickup availability, skincare metafields, and related/complementary recommendations.
 - Gift card recipient fields, scheduled delivery, cart property display, a Shopify-hosted QR code, and Apple Wallet support.
-- Collection and search storefront filters, sorting, predictive search, configurable product cards, metafield-backed product ratings and sale badges, cart display controls, discounts and taxes, selling plans, accelerated checkout, unit pricing, and a responsive cart with variant options.
-- Shopify's `<shopify-account>` component, Follow on Shop, social media icons, favicon support, country/language selectors, localization-ready UI, product/article structured data, and canonical/social metadata.
+- Collection and search storefront filters, sorting, predictive search, configurable product cards, metafield-backed product ratings and sale badges, an AJAX cart drawer with quantity controls, free-shipping progress, discounts and taxes, accelerated checkout, and a responsive cart page.
+- Customer account navigation, Follow on Shop, social media icons, favicon support, country/language selectors, localization-ready UI, product/article structured data, and canonical/social metadata.
 - Product facts are merchant-supplied; the theme must not invent ingredient, efficacy, clinical, or safety claims.
 
 Shopify manages `/agents.md` and its related agent-discovery routes by default. Solune doesn't override that managed content, so Shopify can keep its commerce protocol and endpoint details in sync with the store. The theme focuses on accurate product metadata, structured data, semantic content, and usable storefront search.
@@ -42,7 +42,7 @@ To upload a persistent, unpublished preview theme (never make the live theme the
 shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
 ```
 
-Theme Check passed using Shopify CLI via `npx` (56 files inspected, no offenses). Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
+Theme Check passed using Shopify CLI via `npx` (57 files inspected, no offenses). Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
 
 ## Project conventions
 
@@ -56,4 +56,4 @@ See `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, and `SUBMISSION-CHECKLIST.md` f
 
 ## Before submission
 
-Author and company metadata now identify Sani Kumar and Akestech Infotech Pvt Ltd. The final public theme name, Shopify Partner account identity, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. The current GitHub README and Issues URLs are development documentation/support endpoints, not final merchant-facing support resources. This repository is a development foundation, not an approved or submission-ready theme.
+The Shopify theme author field is set to Sani Kumar to respect Shopify's 25-character limit; this README records Akestech Infotech Pvt Ltd as the company. The final public theme name, Shopify Partner account identity, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. The current GitHub README and Issues URLs are development documentation/support endpoints, not final merchant-facing support resources. This repository is a development foundation, not an approved or submission-ready theme.

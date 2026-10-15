@@ -56,7 +56,10 @@
     "cart_show_tax_notice": true,
     "cart_show_shipping_note": true,
     "cart_show_continue_shopping": true,
-    "custom_css": ""
+    "custom_css": "",
+    "cart_drawer_enabled": true,
+    "cart_drawer_free_shipping_enabled": false,
+    "cart_drawer_free_shipping_threshold": 75
   },
   "presets": {
     "Solune": {
@@ -108,7 +111,10 @@
       "product_card_enable_quick_add": true,
       "product_card_show_rating": true,
       "product_card_show_sale_badge": true,
-      "product_card_hover_effect": "zoom"
+      "product_card_hover_effect": "zoom",
+      "cart_drawer_enabled": true,
+      "cart_drawer_free_shipping_enabled": false,
+      "cart_drawer_free_shipping_threshold": 75
     },
     "Dew": {
       "colors": {
@@ -159,7 +165,10 @@
       "product_card_enable_quick_add": true,
       "product_card_show_rating": true,
       "product_card_show_sale_badge": true,
-      "product_card_hover_effect": "zoom"
+      "product_card_hover_effect": "zoom",
+      "cart_drawer_enabled": true,
+      "cart_drawer_free_shipping_enabled": false,
+      "cart_drawer_free_shipping_threshold": 75
     },
     "Petal": {
       "colors": {
@@ -210,7 +219,10 @@
       "product_card_enable_quick_add": true,
       "product_card_show_rating": true,
       "product_card_show_sale_badge": true,
-      "product_card_hover_effect": "zoom"
+      "product_card_hover_effect": "zoom",
+      "cart_drawer_enabled": true,
+      "cart_drawer_free_shipping_enabled": false,
+      "cart_drawer_free_shipping_threshold": 75
     },
     "Grove": {
       "colors": {
@@ -261,7 +273,10 @@
       "product_card_enable_quick_add": true,
       "product_card_show_rating": true,
       "product_card_show_sale_badge": true,
-      "product_card_hover_effect": "zoom"
+      "product_card_hover_effect": "zoom",
+      "cart_drawer_enabled": true,
+      "cart_drawer_free_shipping_enabled": false,
+      "cart_drawer_free_shipping_threshold": 75
     },
     "Dusk": {
       "colors": {
@@ -312,7 +327,10 @@
       "product_card_enable_quick_add": true,
       "product_card_show_rating": true,
       "product_card_show_sale_badge": true,
-      "product_card_hover_effect": "zoom"
+      "product_card_hover_effect": "zoom",
+      "cart_drawer_enabled": true,
+      "cart_drawer_free_shipping_enabled": false,
+      "cart_drawer_free_shipping_threshold": 75
     }
   }
 }

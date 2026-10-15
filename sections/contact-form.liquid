@@ -5,7 +5,7 @@
     <h1 id="ContactTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h1>
     {% if section.settings.body != blank %}<div class="section-intro__body rich-text">{{ section.settings.body }}</div>{% endif %}
   </div>
-  <div class="contact-form" style="max-width: 42rem; margin-top: 2.5rem">
+  <div class="contact-form">
     {% form 'contact', id: contact_form_id %}
       {% if form.posted_successfully? %}<p class="form-status" role="status">{{ 'contact.success' | t }}</p>{% endif %}
       {% if form.errors %}<div class="form-status" role="alert">{{ form.errors | default_errors }}</div>{% endif %}

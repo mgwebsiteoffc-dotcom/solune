@@ -191,6 +191,18 @@
           ? addButton.dataset.addLabel
           : addButton.dataset.soldOutLabel;
     }
+    const stickyButton = root.querySelector('[data-sticky-add-to-cart]');
+    const stickyPrice = root.querySelector('[data-sticky-product-price]');
+    if (stickyButton) {
+      stickyButton.disabled = !variant.available || planUnavailable;
+      stickyButton.textContent = planUnavailable
+        ? stickyButton.dataset.planUnavailableLabel
+        : variant.available
+          ? stickyButton.dataset.addLabel
+          : stickyButton.dataset.soldOutLabel;
+    }
+    const displayedPrice = root.querySelector('[data-product-price]');
+    if (stickyPrice && displayedPrice) stickyPrice.textContent = displayedPrice.textContent;
     const paymentButton = root.querySelector('.shopify-payment-button');
     if (paymentButton) paymentButton.hidden = !variant.available || planUnavailable;
 
@@ -339,8 +351,37 @@
     toggles.forEach(updateGiftCardRecipient);
   };
 
+  const initializeStickyProductBars = (scope = document) => {
+    const bars = [];
+    if (scope.matches?.('[data-product-sticky-bar]')) bars.push(scope);
+    bars.push(...scope.querySelectorAll('[data-product-sticky-bar]'));
+    bars.forEach((bar) => {
+      if (bar.dataset.stickyInitialized === 'true') return;
+      const root = bar.closest('[data-product-root]');
+      const primaryButton = root?.querySelector('[data-add-to-cart]');
+      if (!root || !primaryButton) return;
+      bar.dataset.stickyInitialized = 'true';
+      let scheduled = false;
+      const updateVisibility = () => {
+        scheduled = false;
+        const bounds = primaryButton.getBoundingClientRect();
+        const buttonIsVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+        bar.hidden = buttonIsVisible || window.scrollY < 240;
+      };
+      const scheduleVisibilityUpdate = () => {
+        if (scheduled) return;
+        scheduled = true;
+        window.requestAnimationFrame(updateVisibility);
+      };
+      window.addEventListener('scroll', scheduleVisibilityUpdate, { passive: true });
+      window.addEventListener('resize', scheduleVisibilityUpdate);
+      updateVisibility();
+    });
+  };
+
   initializeProducts();
   initializeGiftCardRecipients();
+  initializeStickyProductBars();
 
   const loadRecommendations = async (element) => {
     const url = element.dataset.url;
@@ -384,6 +425,7 @@
   document.addEventListener('shopify:section:load', (event) => {
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
+    initializeStickyProductBars(event.target);
     observeRecommendations(event.target);
   });
 })();

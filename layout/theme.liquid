@@ -14,11 +14,13 @@
   <body>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
     {% sections 'header-group' %}
+    {% section 'cart-drawer' %}
     <main id="MainContent" class="site-main" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
     {% sections 'footer-group' %}
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {% if request.page_type == 'product' %}<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>{% endif %}
     <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
   </body>
