@@ -1,0 +1,60 @@
+<section class="page-width section-space--small blog-page" aria-labelledby="BlogTitle-{{ section.id }}">
+  <header class="blog-page__header">
+    <p class="eyebrow">{{ 'sections.page.eyebrow' | t }}</p>
+    <h1 id="BlogTitle-{{ section.id }}" class="section-heading">{{ blog.title | escape }}</h1>
+  </header>
+
+  {% paginate blog.articles by section.settings.articles_per_page %}
+    <div class="blog-grid">
+      {% for article in blog.articles %}
+        <article class="blog-card">
+          <a class="blog-card__image" href="{{ article.url }}"{% if article.image == blank %} aria-hidden="true" tabindex="-1"{% endif %}>
+            {% if article.image %}
+              {% assign article_image_alt = article.image.alt | default: article.title %}
+              {% capture article_focal_style %}object-position: {{ article.image.presentation.focal_point }};{% endcapture %}
+              {{ article.image | image_url: width: 1000 | image_tag: alt: article_image_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 990px) 31vw, (min-width: 680px) 48vw, 100vw', loading: 'lazy', style: article_focal_style }}
+            {% endif %}
+          </a>
+          <div class="blog-card__content">
+            {% if section.settings.show_date or section.settings.show_author %}
+              {% assign article_date = article.published_at | time_tag: format: 'date' %}
+              <p class="eyebrow blog-card__meta">
+                {% if section.settings.show_date %}{{ article_date }}{% endif %}
+                {% if section.settings.show_date and section.settings.show_author %}<span aria-hidden="true"> · </span>{% endif %}
+                {% if section.settings.show_author %}{{ article.author | escape }}{% endif %}
+              </p>
+            {% endif %}
+            <h2 class="editorial-title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+            {% if section.settings.show_excerpt %}
+              <p class="section-intro__body">{{ article.excerpt_or_content | strip_html | truncatewords: section.settings.excerpt_words }}</p>
+              <a class="button button--text" href="{{ article.url }}">{{ 'general.read_more' | t }} <span class="visually-hidden">{{ article.title | escape }}</span></a>
+            {% endif %}
+          </div>
+        </article>
+      {% else %}
+        <p>{{ 'blog.no_articles' | t }}</p>
+      {% endfor %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+        {% if paginate.previous %}<a href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{% endif %}
+        <span>{{ 'general.page_of' | t: current: paginate.current_page, total: paginate.pages }}</span>
+        {% if paginate.next %}<a href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{% endif %}
+      </nav>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "t:general.blog",
+  "settings": [
+    { "type": "range", "id": "articles_per_page", "label": "t:labels.articles_per_page", "min": 4, "max": 24, "step": 4, "default": 8 },
+    { "type": "checkbox", "id": "show_excerpt", "label": "t:labels.show_article_excerpt", "default": true },
+    { "type": "range", "id": "excerpt_words", "label": "t:labels.excerpt_words", "min": 10, "max": 60, "step": 5, "default": 25 },
+    { "type": "checkbox", "id": "show_date", "label": "t:labels.show_article_date", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "t:labels.show_article_author", "default": true }
+  ]
+}
+{% endschema %}

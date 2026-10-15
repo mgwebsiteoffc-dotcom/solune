@@ -1,0 +1,77 @@
+{% assign comment_form_id = 'ArticleCommentForm-' | append: section.id %}
+<section class="page-width section-space--small article-page" aria-labelledby="ArticleTitle-{{ section.id }}">
+  <article class="article-page__content">
+    {% if article.image %}
+      {% assign article_image_alt = article.image.alt | default: article.title %}
+      {% capture article_focal_style %}object-position: {{ article.image.presentation.focal_point }};{% endcapture %}
+      <figure class="article-page__image">
+        {{ article.image | image_url: width: 1800 | image_tag: alt: article_image_alt, widths: '480, 640, 800, 1000, 1200, 1600, 1800', sizes: '(min-width: 990px) 72vw, 100vw', loading: 'eager', style: article_focal_style }}
+      </figure>
+    {% endif %}
+
+    {% if section.settings.show_date or section.settings.show_author %}
+      {% assign article_date = article.published_at | time_tag: format: 'date' %}
+      <p class="eyebrow article-page__meta">
+        {% if section.settings.show_date %}{{ article_date }}{% endif %}
+        {% if section.settings.show_date and section.settings.show_author %}<span aria-hidden="true"> · </span>{% endif %}
+        {% if section.settings.show_author %}{{ article.author | escape }}{% endif %}
+      </p>
+    {% endif %}
+
+    <h1 id="ArticleTitle-{{ section.id }}" class="section-heading">{{ article.title | escape }}</h1>
+    <div class="rich-text article-page__body">{{ article.content }}</div>
+  </article>
+
+  {% if section.settings.show_comments and blog.comments_enabled? %}
+    <section class="article-comments" aria-labelledby="ArticleCommentsTitle-{{ section.id }}">
+      <h2 id="ArticleCommentsTitle-{{ section.id }}" class="editorial-title">{{ 'blog.article_comments' | t }}</h2>
+      {% paginate article.comments by 10 %}
+        <ol class="article-comments__list">
+          {% for comment in article.comments %}
+            <li class="article-comments__item">
+              <p><strong>{{ comment.author | escape }}</strong> <span class="product-card__meta">{{ comment.created_at | time_tag: format: 'date' }}</span></p>
+              <div class="rich-text">{{ comment.content }}</div>
+            </li>
+          {% endfor %}
+        </ol>
+        {% if paginate.pages > 1 %}
+          <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+            {% if paginate.previous %}<a href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{% endif %}
+            <span>{{ 'general.page_of' | t: current: paginate.current_page, total: paginate.pages }}</span>
+            {% if paginate.next %}<a href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{% endif %}
+          </nav>
+        {% endif %}
+      {% endpaginate %}
+
+      {% form 'new_comment', article, id: comment_form_id %}
+        <h3>{{ 'blog.comment_form_title' | t }}</h3>
+        {% if form.errors %}<div class="form-status" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+        {% if form.posted_successfully? %}<p class="form-status" role="status">{{ 'blog.comment_submitted' | t }}</p>{% endif %}
+        <div class="field">
+          <label for="CommentName-{{ section.id }}">{{ 'blog.comment_form_name' | t }}</label>
+          <input id="CommentName-{{ section.id }}" type="text" name="comment[author]" value="{{ form.author | escape }}" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="CommentEmail-{{ section.id }}">{{ 'blog.comment_form_email' | t }}</label>
+          <input id="CommentEmail-{{ section.id }}" type="email" name="comment[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="CommentBody-{{ section.id }}">{{ 'blog.comment_form_body' | t }}</label>
+          <textarea id="CommentBody-{{ section.id }}" name="comment[body]" required>{{ form.body | escape }}</textarea>
+        </div>
+        <button class="button" type="submit">{{ 'blog.comment_form_submit' | t }}</button>
+      {% endform %}
+    </section>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:general.article",
+  "settings": [
+    { "type": "checkbox", "id": "show_date", "label": "t:labels.show_article_date", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "t:labels.show_article_author", "default": true },
+    { "type": "checkbox", "id": "show_comments", "label": "t:labels.show_article_comments", "default": true }
+  ]
+}
+{% endschema %}

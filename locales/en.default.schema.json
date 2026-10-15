@@ -1,0 +1,218 @@
+{
+  "general": {
+    "404": "Not found",
+    "article": "Article",
+    "blog": "Blog",
+    "branding": "Branding",
+    "cart": "Cart",
+    "collections_grid": "Collections grid",
+    "colors": "Color palette",
+    "footer": "Footer",
+    "header": "Header",
+    "layout": "Layout",
+    "page": "Page",
+    "password": "Password page",
+    "social_media": "Social media",
+    "typography": "Typography"
+  },
+  "labels": {
+    "accent": "Accent",
+    "accent_ink": "Accent text",
+    "articles_per_page": "Articles per page",
+    "body_font": "Body font",
+    "body_text": "Body text",
+    "border": "Borders",
+    "canvas": "Canvas",
+    "excerpt_words": "Excerpt length in words",
+    "favicon": "Favicon",
+    "display_font": "Display font",
+    "ink": "Primary text",
+    "muted": "Muted text",
+    "newsletter_body": "Newsletter introduction",
+    "newsletter_heading": "Newsletter heading",
+    "page_margin": "Page margin",
+    "page_width": "Maximum page width",
+    "products_per_page": "Products per page",
+    "products_to_show": "Products to show",
+    "section_spacing": "Section spacing",
+    "show_article_author": "Show article author",
+    "show_article_comments": "Show article comments",
+    "show_article_date": "Show publication date",
+    "show_article_excerpt": "Show article excerpt",
+    "show_country_selector": "Show country/region selector",
+    "show_description": "Show collection description",
+    "show_dynamic_checkout": "Show dynamic checkout button",
+    "show_gift_card_recipient": "Show gift card recipient form",
+    "show_filters": "Show filters",
+    "show_follow_on_shop": "Show Follow on Shop button",
+    "show_language_selector": "Show language selector",
+    "show_newsletter": "Show newsletter signup",
+    "show_payment_icons": "Show payment icons",
+    "show_payment_terms": "Show Shop Pay Installments information",
+    "show_pickup_availability": "Show pickup availability",
+    "show_quick_add": "Show quick add",
+    "show_selling_plans": "Show subscription options",
+    "show_sort": "Show sorting",
+    "show_vendor": "Show vendor",
+    "surface": "Surface",
+    "surface_ink": "Surface text",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_tiktok_link": "TikTok URL",
+    "social_youtube_link": "YouTube URL",
+    "social_pinterest_link": "Pinterest URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_linkedin_link": "LinkedIn URL",
+    "social_snapchat_link": "Snapchat URL",
+    "social_vimeo_link": "Vimeo URL",
+    "custom_liquid": "Liquid code",
+    "eyebrow": "Eyebrow"
+  },
+  "options": {
+    "page_width": {
+      "narrow": "Narrow",
+      "standard": "Standard",
+      "wide": "Wide"
+    }
+  },
+  "sections": {
+    "announcement": {
+      "name": "Announcement bar",
+      "settings": {
+        "link": "Link",
+        "text": "Message"
+      }
+    },
+    "featured_collection": {
+      "name": "Featured collection",
+      "settings": {
+        "collection": "Collection",
+        "heading": "Heading",
+        "products_to_show": "Products to show",
+        "show_all_link": "Show view-all link",
+        "show_quick_add": "Show quick add"
+      }
+    },
+    "featured_product": {
+      "name": "Featured product",
+      "settings": {
+        "product": "Product"
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "settings": {
+        "footer_note": "Footer note",
+        "menu": "Footer menu"
+      }
+    },
+    "header": {
+      "name": "Header",
+      "settings": {
+        "customer_account_menu": "Customer account menu",
+        "logo": "Logo image",
+        "logo_width": "Logo width",
+        "menu": "Main menu"
+      }
+    },
+    "hero": {
+      "name": "Editorial hero",
+      "settings": {
+        "body": "Body copy",
+        "button_label": "Button label",
+        "button_link": "Button link",
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "image": "Desktop image",
+        "mobile_image": "Mobile image",
+        "secondary_button_label": "Secondary button label",
+        "secondary_button_link": "Secondary button link"
+      }
+    },
+    "ingredient_story": {
+      "name": "Ingredient story",
+      "settings": {
+        "body": "Body copy",
+        "button_label": "Button label",
+        "button_link": "Button link",
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "image": "Image",
+        "ingredient_name": "Ingredient or formula name"
+      }
+    },
+    "newsletter": {
+      "name": "Newsletter signup",
+      "settings": {
+        "body": "Introduction",
+        "heading": "Heading"
+      }
+    },
+    "pickup_availability": {
+      "name": "Pickup availability"
+    },
+    "predictive_search": {
+      "name": "Predictive search"
+    },
+    "product": {
+      "name": "Product details"
+    },
+    "collection": {
+      "name": "Collection products"
+    },
+    "contact": {
+      "name": "Contact form",
+      "settings": {
+        "body": "Introduction",
+        "heading": "Heading"
+      }
+    },
+    "custom_liquid": {
+      "name": "Custom Liquid",
+      "settings": {
+        "liquid": "Liquid code"
+      }
+    },
+    "recommendations": {
+      "name": "Product recommendations",
+      "settings": {
+        "complementary": "Complementary products",
+        "heading": "Heading",
+        "intent": "Recommendation type",
+        "related": "Related products"
+      }
+    },
+    "routine_steps": {
+      "name": "Routine steps",
+      "blocks": {
+        "step": "Routine step"
+      },
+      "settings": {
+        "body": "Introduction",
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "step_body": "Step description",
+        "step_link": "Step link",
+        "step_link_label": "Step link label",
+        "step_title": "Step title"
+      }
+    },
+    "search": {
+      "name": "Search results"
+    }
+  },
+  "blocks": {
+    "buy_buttons": "Buy buttons",
+    "custom_liquid": "Custom Liquid",
+    "description": "Description",
+    "ingredients": "Ingredient details",
+    "price": "Price",
+    "product_title": "Title",
+    "product_vendor": "Vendor",
+    "quantity_selector": "Quantity selector",
+    "skin_profile": "Skin profile",
+    "text": "Text",
+    "usage": "How to use",
+    "variant_picker": "Variant picker"
+  }
+}

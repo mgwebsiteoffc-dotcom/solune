@@ -1,0 +1,21 @@
+{% if section.settings.liquid != blank %}
+  <section class="page-width section-space--small custom-liquid">
+    {{ section.settings.liquid }}
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.custom_liquid.name",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "liquid",
+      "label": "t:sections.custom_liquid.settings.liquid"
+    }
+  ],
+  "presets": [
+    { "name": "t:sections.custom_liquid.name" }
+  ]
+}
+{% endschema %}

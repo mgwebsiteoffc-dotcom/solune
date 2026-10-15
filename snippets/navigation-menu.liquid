@@ -1,0 +1,41 @@
+{% doc %}
+  Renders an accessible Shopify menu with up to three levels of links.
+  @param {linklist} links
+  @param {string} [class]
+{% enddoc %}
+
+<ul class="primary-nav__list {{ class }}">
+  {% for link in links %}
+    <li class="primary-nav__item">
+      <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {% if link.links != blank %}
+        <details class="primary-nav__disclosure">
+          <summary>
+            <span class="visually-hidden">{{ 'accessibility.open_submenu' | t: title: link.title }}</span>
+            <span aria-hidden="true">+</span>
+          </summary>
+          <ul class="primary-nav__submenu">
+            {% for child_link in link.links %}
+              <li>
+                <a href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title | escape }}</a>
+                {% if child_link.links != blank %}
+                  <details class="primary-nav__nested-disclosure">
+                    <summary>
+                      <span class="visually-hidden">{{ 'accessibility.open_submenu' | t: title: child_link.title }}</span>
+                      <span aria-hidden="true">+</span>
+                    </summary>
+                    <ul class="primary-nav__submenu primary-nav__submenu--nested">
+                      {% for grandchild_link in child_link.links %}
+                        <li><a href="{{ grandchild_link.url }}"{% if grandchild_link.current %} aria-current="page"{% endif %}>{{ grandchild_link.title | escape }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </details>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </details>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

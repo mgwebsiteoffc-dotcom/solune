@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if settings.favicon != blank %}<link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">{% endif %}
+    {% render 'css-variables' %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {% render 'meta-tags' %}
+    {{ content_for_header }}
+  </head>
+  <body>
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    {% sections 'header-group' %}
+    <main id="MainContent" class="site-main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% sections 'footer-group' %}
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    {% if request.page_type == 'product' %}<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>{% endif %}
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+{% assign recommendation_title = section.settings.heading %}
+<section id="ProductRecommendations-{{ section.id }}" class="product-recommendations" data-product-recommendations data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&amp;product_id={{ product.id }}&amp;limit={{ section.settings.products_to_show }}&amp;intent={{ section.settings.intent }}" aria-labelledby="RecommendationsTitle-{{ section.id }}"{% if recommendations.performed and recommendations.products_count == 0 %} hidden{% endif %}>
+  {% if recommendations.performed and recommendations.products_count > 0 %}
+    <div class="page-width section-space--small">
+      <div class="section-intro">
+        <div class="section-intro__copy">
+          <p class="eyebrow">{{ 'sections.recommendations.eyebrow' | t }}</p>
+          <h2 id="RecommendationsTitle-{{ section.id }}" class="section-heading">{{ recommendation_title | escape }}</h2>
+        </div>
+      </div>
+      <div class="product-grid">
+        {% for recommended_product in recommendations.products %}
+          {% render 'product-card', product: recommended_product, show_vendor: section.settings.show_vendor, show_quick_add: false, loading: 'lazy' %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.recommendations.name",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:sections.recommendations.settings.heading", "default": "Complete the ritual" },
+    { "type": "select", "id": "intent", "label": "t:sections.recommendations.settings.intent", "default": "related", "options": [
+      { "value": "related", "label": "t:sections.recommendations.settings.related" },
+      { "value": "complementary", "label": "t:sections.recommendations.settings.complementary" }
+    ]},
+    { "type": "range", "id": "products_to_show", "label": "t:labels.products_to_show", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false }
+  ],
+  "presets": [{ "name": "t:sections.recommendations.name" }]
+}
+{% endschema %}

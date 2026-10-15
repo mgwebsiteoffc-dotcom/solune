@@ -1,0 +1,99 @@
+{% doc %}
+  Renders separate, accessible product option selectors with native swatch support.
+  @param {product} product
+  @param {string} section_id
+  @param {string} form_id
+{% enddoc %}
+
+{% assign option_picker_variant = product.selected_or_first_available_variant %}
+{% if product.has_only_default_variant %}
+  <input type="hidden" name="id" value="{{ option_picker_variant.id }}" form="{{ form_id }}" data-variant-select>
+{% else %}
+  {% unless product.requires_selling_plan %}
+    <div class="field product-variant-fallback__wrapper">
+      <label class="product-variant-fallback__label" for="VariantFallback-{{ section_id }}">{{ 'product.variant' | t }}</label>
+      <select id="VariantFallback-{{ section_id }}" class="product-variant-fallback" name="id" form="{{ form_id }}" data-variant-select>
+        {% for variant in product.variants %}
+          <option value="{{ variant.id }}"{% if variant.id == option_picker_variant.id %} selected{% endif %}>
+            {{ variant.title | escape }} — {{ variant.price | money }}{% unless variant.available %} — {{ 'general.sold_out' | t }}{% endunless %}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  {% else %}
+    <input type="hidden" name="id" value="{{ option_picker_variant.id }}" form="{{ form_id }}" data-variant-select>
+    <noscript><p class="product-card__meta">{{ 'product.no_js_variant_note' | t }}</p></noscript>
+  {% endunless %}
+
+  <div class="product-options--interactive">
+    {% for option in product.options_with_values %}
+      {% assign option_has_swatches = false %}
+      {% for option_value in option.values %}
+        {% if option_value.swatch != blank %}{% assign option_has_swatches = true %}{% endif %}
+      {% endfor %}
+
+      {% if option_has_swatches %}
+        <fieldset class="product-option-group product-option-group--swatches" data-product-option-group data-option-index="{{ option.position | minus: 1 }}">
+          <legend>
+            {{ option.name | escape }}:
+            <span data-option-current-value data-option-index="{{ option.position | minus: 1 }}">{{ option.selected_value | escape }}</span>
+          </legend>
+          <div class="product-option__swatches">
+            {% for option_value in option.values %}
+              {% assign option_swatch_id = 'Option-' | append: section_id | append: '-' | append: option.position | append: '-' | append: forloop.index %}
+              {% assign option_has_swatch_visual = false %}
+              {% if option_value.swatch.image != blank or option_value.swatch.color != blank %}{% assign option_has_swatch_visual = true %}{% endif %}
+              {% capture option_swatch_style %}
+                {% if option_value.swatch.color != blank %}--swatch-color: {{ option_value.swatch.color }};{% endif %}
+                {% if option_value.swatch.image != blank %}--swatch-image: url('{{ option_value.swatch.image | image_url: width: 100 }}');{% endif %}
+              {% endcapture %}
+              <input
+                class="visually-hidden product-option__radio"
+                type="radio"
+                id="{{ option_swatch_id }}"
+                name="Option-{{ section_id }}-{{ option.position }}"
+                value="{{ option_value.name | escape }}"
+                data-product-option
+                data-option-index="{{ option.position | minus: 1 }}"
+                data-option-value-id="{{ option_value.id }}"
+                data-option-base-label="{{ option_value.name | escape }}"
+                data-option-available="{{ option_value.available }}"
+                {% if option_value.selected %}checked{% endif %}
+              >
+              <label
+                class="product-option__swatch{% unless option_has_swatch_visual %} product-option__swatch--text{% endunless %}"
+                for="{{ option_swatch_id }}"
+                {% if option_has_swatch_visual %}style="{{ option_swatch_style | strip | escape }}"{% endif %}
+                title="{{ option_value.name | escape }}"
+              >
+                {% if option_has_swatch_visual %}
+                  <span class="product-option__swatch-visual" aria-hidden="true"></span>
+                  <span class="visually-hidden">{{ option_value.name | escape }}{% unless option_value.available %}, {{ 'general.sold_out' | t }}{% endunless %}</span>
+                {% else %}
+                  <span>{{ option_value.name | escape }}</span>
+                {% endif %}
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+      {% else %}
+        <div class="field product-option-group" data-product-option-group data-option-index="{{ option.position | minus: 1 }}">
+          <label for="Option-{{ section_id }}-{{ option.position }}">
+            {{ option.name | escape }}:
+            <span data-option-current-value data-option-index="{{ option.position | minus: 1 }}">{{ option.selected_value | escape }}</span>
+          </label>
+          <select id="Option-{{ section_id }}-{{ option.position }}" data-product-option data-option-index="{{ option.position | minus: 1 }}">
+            {% for option_value in option.values %}
+              <option
+                value="{{ option_value.name | escape }}"
+                data-option-base-label="{{ option_value.name | escape }}"
+                data-option-available="{{ option_value.available }}"
+                {% if option_value.selected %}selected{% endif %}
+              >{{ option_value.name | escape }}{% unless option_value.available %} — {{ 'general.sold_out' | t }}{% endunless %}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

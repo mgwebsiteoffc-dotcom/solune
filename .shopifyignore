@@ -1,0 +1,7 @@
+# Development-only documentation and source-control files
+README.md
+AGENTS.md
+UPSTREAM.md
+METAFIELDS.md
+SUBMISSION-CHECKLIST.md
+.github/

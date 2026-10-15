@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "collection",
+      "settings": {}
+    },
+    "custom_liquid": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": ["main", "custom_liquid"]
+}

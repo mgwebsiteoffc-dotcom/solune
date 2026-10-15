@@ -1,0 +1,67 @@
+<section class="page-width section-space--small search-page" aria-labelledby="SearchTitle-{{ section.id }}">
+  <p class="eyebrow">{{ 'general.search' | t }}</p>
+  <h1 id="SearchTitle-{{ section.id }}" class="section-heading">{{ 'search.title' | t }}</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+    <label class="visually-hidden" for="SearchPageInput-{{ section.id }}">{{ 'general.search' | t }}</label>
+    <input id="SearchPageInput-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t | escape }}">
+    <input type="hidden" name="options[prefix]" value="last">
+    <input type="hidden" name="type" value="product,collection,page,article">
+    <button class="button" type="submit">{{ 'search.submit' | t }}</button>
+  </form>
+
+  {% if search.performed %}
+    <p class="search-page__count">
+      {% if search.results_count == 1 %}
+        {{ 'search.result_count_one' | t: terms: search.terms, count: search.results_count }}
+      {% else %}
+        {{ 'search.result_count_other' | t: terms: search.terms, count: search.results_count }}
+      {% endif %}
+    </p>
+    {% if search.filters.size > 0 %}
+      {% render 'facets', filters: search.filters, action: routes.search_url, section_id: section.id, search_terms: search.terms %}
+    {% endif %}
+    {% paginate search.results by 16 %}
+      {% if search.results_count > 0 %}
+        <div class="product-grid search-page__results">
+          {% for result in search.results %}
+            {% if result.object_type == 'product' %}
+              {% render 'product-card', product: result, show_vendor: false, show_quick_add: true, loading: 'lazy' %}
+            {% else %}
+              {% assign result_type_key = 'search.' | append: result.object_type %}
+              <article class="product-card search-result-card">
+                {% if result.image %}
+                  {% assign result_image_alt = result.image.alt | default: result.title %}
+                  {% render 'image', image: result.image, class: 'product-card__media', alt: result_image_alt, loading: 'lazy' %}
+                {% else %}
+                  <div class="product-card__media product-card__placeholder" aria-hidden="true"></div>
+                {% endif %}
+                <div class="product-card__content">
+                  <p class="eyebrow">{{ result_type_key | t }}</p>
+                  <h2 class="product-card__title"><a href="{{ result.url }}">{{ result.title | escape }}</a></h2>
+                  {% if result.content != blank %}<p class="product-card__meta">{{ result.content | strip_html | truncatewords: 20 | escape }}</p>{% endif %}
+                </div>
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if paginate.pages > 1 %}
+          <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+            {% if paginate.previous %}<a href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{% endif %}
+            <span>{{ 'general.page_of' | t: current: paginate.current_page, total: paginate.pages }}</span>
+            {% if paginate.next %}<a href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{% endif %}
+          </nav>
+        {% endif %}
+      {% else %}
+        <p>{{ 'search.no_results' | t }}</p>
+      {% endif %}
+    {% endpaginate %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.search.name",
+  "settings": [],
+  "presets": [{ "name": "t:sections.search.name" }]
+}
+{% endschema %}

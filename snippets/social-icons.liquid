@@ -1,0 +1,34 @@
+{% assign has_social_links = false %}
+{% if settings.social_facebook_link != blank or settings.social_instagram_link != blank or settings.social_tiktok_link != blank or settings.social_youtube_link != blank or settings.social_pinterest_link != blank or settings.social_twitter_link != blank or settings.social_linkedin_link != blank or settings.social_snapchat_link != blank or settings.social_vimeo_link != blank %}{% assign has_social_links = true %}{% endif %}
+
+{% if has_social_links %}
+  <ul class="social-icons" role="list" aria-label="{{ 'social.follow_us' | t }}">
+    {% if settings.social_instagram_link != blank %}
+      <li><a href="{{ settings.social_instagram_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.instagram' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.8" cy="6.5" r="1.1" fill="currentColor"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_facebook_link != blank %}
+      <li><a href="{{ settings.social_facebook_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.facebook' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8h3.4Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_tiktok_link != blank %}
+      <li><a href="{{ settings.social_tiktok_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.tiktok' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.4 3c.3 2.3 1.6 3.8 3.8 4v3.1a8.1 8.1 0 0 1-3.8-1.2v6.4c0 3.3-2.7 5.7-6 5.7a5.6 5.6 0 0 1-5.7-5.5c0-3.3 3-6 6.5-5.6v3.2c-1.7-.5-3.3.6-3.3 2.3a2.4 2.4 0 0 0 2.5 2.4c1.8 0 2.8-1.2 2.8-3.3V3h3.2Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_youtube_link != blank %}
+      <li><a href="{{ settings.social_youtube_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.youtube' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21.3 7.1a2.8 2.8 0 0 0-2-2C17.5 4.6 12 4.6 12 4.6s-5.5 0-7.3.5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.2 12a29 29 0 0 0 .5 4.9 2.8 2.8 0 0 0 2 2c1.8.5 7.3.5 7.3.5s5.5 0 7.3-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-4.9 29 29 0 0 0-.5-4.9ZM10 15.3V8.7l5.7 3.3-5.7 3.3Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_pinterest_link != blank %}
+      <li><a href="{{ settings.social_pinterest_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.pinterest' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7.2 3h9.6a4.2 4.2 0 0 1 4.2 4.2v9.6a4.2 4.2 0 0 1-4.2 4.2H7.2A4.2 4.2 0 0 1 3 16.8V7.2A4.2 4.2 0 0 1 7.2 3Zm2.5 3.4v11.2h2.5v-3.4h2.2c2.6 0 4-1.4 4-3.9s-1.4-3.9-4-3.9H9.7Zm2.5 2.1h2c1.1 0 1.7.6 1.7 1.8s-.6 1.8-1.7 1.8h-2V8.5Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_twitter_link != blank %}
+      <li><a href="{{ settings.social_twitter_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.x' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.9 3H22l-6.8 7.8L23.2 21h-6.3l-5-6.5L6.2 21H3l7.3-8.4L2.8 3h6.5l4.5 6 5.1-6Zm-1.1 16h1.7L8.2 4.9H6.4L17.8 19Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_linkedin_link != blank %}
+      <li><a href="{{ settings.social_linkedin_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.linkedin' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5.2 7.6a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3.5 9h3.4v11.5H3.5V9Zm5.5 0h3.2v1.6h.1a3.5 3.5 0 0 1 3.2-1.8c3.4 0 4 2.2 4 5v6.7h-3.4v-5.9c0-1.4 0-3.1-1.9-3.1s-2.1 1.5-2.1 3v6h-3.4V9Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_snapchat_link != blank %}
+      <li><a href="{{ settings.social_snapchat_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.snapchat' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3c-2 0-3.4 1.3-3.4 3.4 0 .7.1 1.5.2 2.2-.5.4-1.2.6-1.9.6-.4 0-.7-.1-1-.2l-.5 1.2c.7.3 1.2.4 1.7.4.7 0 1.2-.2 1.8-.6.1.4.1.8.1 1.1-.3 1.7-1.4 3.2-3.8 4.4-.4.2-.3.6.1.8.6.3 1.3.5 2.1.5.3 1.1.6 1.4 1.5 1.1.5.8 1.1 1.1 1.9.6.4-.2.8-.3 1.2-.3s.8.1 1.2.3c.8.5 1.4.2 1.9-.6.9.3 1.2 0 1.5-1.1.8 0 1.5-.2 2.1-.5.4-.2.5-.6.1-.8-2.4-1.2-3.5-2.7-3.8-4.4 0-.3 0-.7.1-1.1.6.4 1.1.6 1.8.6.5 0 1-.1 1.7-.4l-.5-1.2c-.3.1-.6.2-1 .2-.7 0-1.4-.2-1.9-.6.1-.7.2-1.5.2-2.2C15.4 4.3 14 3 12 3Z"/></svg></a></li>
+    {% endif %}
+    {% if settings.social_vimeo_link != blank %}
+      <li><a href="{{ settings.social_vimeo_link | escape }}" target="_blank" rel="noopener noreferrer nofollow" aria-label="{{ 'social.vimeo' | t }}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3.5 6.5h4.2l3.2 8.7 4.5-8.7h4.1l-6.4 12.7H8.9L3.5 6.5Z"/></svg></a></li>
+    {% endif %}
+  </ul>
+{% endif %}

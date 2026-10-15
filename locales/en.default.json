@@ -1,0 +1,200 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "main_navigation": "Main navigation",
+    "footer_navigation": "Footer navigation",
+    "open_menu": "Open menu",
+    "open_submenu": "Open submenu for {{ title }}",
+    "product_gallery": "Product images",
+    "pagination": "Pagination",
+    "announcement": "Store announcement"
+  },
+  "general": {
+    "search": "Search",
+    "account": "Account",
+    "cart": "Bag",
+    "menu": "Menu",
+    "view_all": "View all",
+    "read_more": "Read more",
+    "continue_shopping": "Continue shopping",
+    "from": "From",
+    "sale": "On sale",
+    "sold_out": "Sold out",
+    "newsletter_success": "Thanks for subscribing.",
+    "no_image": "Add an image in the theme editor",
+    "previous": "Previous",
+    "next": "Next",
+    "page_of": "Page {{ current }} of {{ total }}"
+  },
+  "product": {
+    "add_to_cart": "Add to bag",
+    "choose_options": "Choose options",
+    "quantity": "Quantity",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "available_options": "Available product options",
+    "variant": "Variant",
+    "no_js_variant_note": "JavaScript is needed to change options for this subscription product. The selected option will be added.",
+    "gift_card_send_to_recipient": "Send this gift card to someone else",
+    "gift_card_recipient_email": "Recipient email",
+    "gift_card_recipient_name": "Recipient name (optional)",
+    "gift_card_recipient_message": "Message (optional)",
+    "gift_card_send_on": "Send date (optional)",
+    "gift_card_send_on_help": "Choose a date within the next 90 days, or leave blank to send it now.",
+    "one_time_purchase": "One-time purchase",
+    "purchase_options": "Purchase options",
+    "ingredients": "Ingredients and formula",
+    "inci_list": "Full ingredient list",
+    "formula_notes": "Formula notes",
+    "skin_profile": "Skin profile",
+    "skin_types": "Skin types",
+    "skin_concerns": "Skin concerns",
+    "texture": "Texture",
+    "how_to_use": "How to use",
+    "cautions": "Cautions",
+    "unit_price": "Unit price",
+    "taxes_included": "Taxes included.",
+    "subscription_unavailable": "Subscription is unavailable for this option."
+  },
+  "cart": {
+    "title": "Your bag",
+    "empty": "Your bag is currently empty.",
+    "remove": "Remove",
+    "update": "Update bag",
+    "checkout": "Continue to checkout",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "note": "Order note",
+    "note_placeholder": "Add a note to your order",
+    "quantity": "Quantity",
+    "quantity_for": "Quantity for {{ title }}",
+    "product": "Product",
+    "price": "Price",
+    "total": "Total",
+    "selling_plan": "Subscription",
+    "shipping_at_checkout": "Shipping and taxes are calculated at checkout.",
+    "total_discount": "Total savings",
+    "estimated_total": "Estimated total",
+    "taxes_included": "Taxes are included in the prices."
+  },
+  "collection": {
+    "filter": "Filter",
+    "sort_by": "Sort by",
+    "apply": "Apply",
+    "clear": "Clear all",
+    "product_count_one": "{{ count }} product",
+    "product_count_other": "{{ count }} products",
+    "no_products": "No products found. Try changing your filters.",
+    "from_price": "Minimum price",
+    "to_price": "Maximum price"
+  },
+  "collections": {
+    "title": "Explore all collections"
+  },
+  "newsletter": {
+    "eyebrow": "THE SOLUNE LETTER",
+    "email": "Email address",
+    "submit": "Sign up",
+    "consent": "By subscribing, you agree to receive marketing emails. You can unsubscribe at any time."
+  },
+  "contact": {
+    "eyebrow": "WE'RE HERE TO HELP",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "message": "Message",
+    "submit": "Send message",
+    "success": "Thanks for reaching out. We’ll be in touch soon."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search products, ingredients, or articles",
+    "submit": "Search",
+    "no_results": "No results found. Try another search.",
+    "result_count_one": "{{ count }} result for “{{ terms }}”",
+    "result_count_other": "{{ count }} results for “{{ terms }}”",
+    "products": "Products",
+    "collections": "Collections",
+    "pages": "Pages",
+    "articles": "Articles",
+    "product": "Product",
+    "collection": "Collection",
+    "page": "Page",
+    "article": "Article",
+    "view_all": "View all results for “{{ terms }}”",
+    "suggestion_one": "1 suggestion available. Use the arrow keys to navigate.",
+    "suggestions_many": "[count] suggestions available. Use the arrow keys to navigate.",
+    "no_suggestions": "No suggestions found. Press Enter to view search results."
+  },
+  "footer": {
+    "country": "Country/region",
+    "language": "Language",
+    "update_preferences": "Update preferences",
+    "payment_methods": "Accepted payment methods"
+  },
+  "sections": {
+    "featured_collection": {
+      "choose_collection": "Choose a collection in this section's settings to show products here."
+    },
+    "collections": {
+      "eyebrow": "EXPLORE THE FORMULAS"
+    },
+    "page": {
+      "eyebrow": "THE JOURNAL"
+    },
+    "recommendations": {
+      "eyebrow": "BUILD YOUR ROUTINE"
+    },
+    "featured_product": {
+      "eyebrow": "A CLOSER LOOK",
+      "choose_product": "Choose a product in this section's settings to feature."
+    }
+  },
+  "pickup_availability": {
+    "available_at": "Available for pickup at {{ location_name }}",
+    "unavailable_at": "Pickup is unavailable at {{ location_name }}",
+    "unavailable": "Pickup is not available at this location.",
+    "view_locations": "View pickup locations"
+  },
+  "404": {
+    "title": "Page not found",
+    "not_found": "The page you are looking for may have moved or no longer exists.",
+    "back_to_shopping": "Continue shopping"
+  },
+  "blog": {
+    "article_comments": "Comments",
+    "comment_form_title": "Leave a comment",
+    "comment_submitted": "Your comment has been submitted.",
+    "comment_form_name": "Name",
+    "comment_form_email": "Email",
+    "comment_form_body": "Comment",
+    "comment_form_submit": "Post comment",
+    "no_articles": "There are no articles to show yet."
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "card": "Gift card",
+    "qr_code": "QR code for this gift card",
+    "expired": "This gift card has expired",
+    "expires_on": "Expires on {{ expires_on }}",
+    "send_on": "This gift card is scheduled to be sent on {{ send_on }}.",
+    "use_at_checkout": "Use this gift card at checkout"
+  },
+  "social": {
+    "follow_us": "Follow us",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "youtube": "YouTube",
+    "pinterest": "Pinterest",
+    "x": "X",
+    "linkedin": "LinkedIn",
+    "snapchat": "Snapchat",
+    "vimeo": "Vimeo"
+  },
+  "password": {
+    "title": "Opening soon",
+    "password": "Store password",
+    "enter": "Enter"
+  }
+}

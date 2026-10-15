@@ -1,0 +1,139 @@
+{% assign featured_product = section.settings.product %}
+{% if featured_product != blank %}
+  {% assign featured_variant = featured_product.selected_or_first_available_variant %}
+  {% assign featured_price = featured_variant.price %}
+  {% assign featured_compare_at_price = featured_variant.compare_at_price %}
+  {% if featured_product.requires_selling_plan and featured_variant.selling_plan_allocations.size > 0 %}
+    {% assign initial_selling_plan = featured_variant.selling_plan_allocations.first %}
+    {% assign featured_price = initial_selling_plan.price %}
+    {% if initial_selling_plan.compare_at_price > initial_selling_plan.price %}
+      {% assign featured_compare_at_price = initial_selling_plan.compare_at_price %}
+    {% elsif featured_variant.compare_at_price > featured_variant.price %}
+      {% assign featured_compare_at_price = featured_variant.compare_at_price %}
+    {% else %}
+      {% assign featured_compare_at_price = featured_variant.price %}
+    {% endif %}
+  {% endif %}
+  {% assign featured_form_id = 'FeaturedProductForm-' | append: section.id %}
+  <section id="FeaturedProduct-{{ section.id }}" class="page-width section-space" data-product-root data-money-format="{{ shop.money_format | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-labelledby="FeaturedProductTitle-{{ section.id }}">
+    <div class="product-layout">
+      <div class="product-gallery" role="region" aria-label="{{ 'accessibility.product_gallery' | t }}">
+        {% for media in featured_product.media limit: 4 %}
+          <div class="product-gallery__media" data-media-id="{{ media.id }}">
+            {% if media.media_type == 'image' %}
+              {% assign media_alt = media.alt | default: featured_product.title %}
+              {% capture media_focal_style %}object-position: {{ media.preview_image.presentation.focal_point }};{% endcapture %}
+              {{ media.preview_image | image_url: width: 1400 | image_tag: alt: media_alt, widths: '360, 480, 640, 800, 1000, 1200, 1400', sizes: '(min-width: 990px) 54vw, 100vw', loading: 'lazy', style: media_focal_style }}
+            {% else %}
+              {{ media | media_tag: image_size: '1000x', controls: true }}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="product-information">
+        {% for block in section.blocks %}
+          {% if block.type == '@app' %}
+            <div class="product-block" {{ block.shopify_attributes }}>{% render block %}</div>
+          {% else %}
+            <div class="product-block product-block--{{ block.type }}" {{ block.shopify_attributes }}>
+              {% case block.type %}
+                {% when 'title' %}<h2 id="FeaturedProductTitle-{{ section.id }}" class="product-title">{{ featured_product.title | escape }}</h2>
+                {% when 'price' %}
+                  <div class="price-line product-price">
+                    <span class="{% if featured_compare_at_price > featured_price %}price--sale{% endif %}" data-product-price>{{ featured_price | money }}</span>
+                    <s class="price__compare" data-compare-price{% unless featured_compare_at_price > featured_price %} hidden{% endunless %}>{{ featured_compare_at_price | money }}</s>
+                  </div>
+                  <p class="product-card__meta" data-unit-price{% unless featured_variant.unit_price_measurement %} hidden{% endunless %}>
+                    <span class="visually-hidden">{{ 'product.unit_price' | t }} </span>
+                    <span data-unit-price-amount>{{ featured_variant.unit_price | money }}</span>
+                    {% if featured_variant.unit_price_measurement %}/ <span data-unit-price-measure>{{ featured_variant.unit_price_measurement.reference_value }}{{ featured_variant.unit_price_measurement.reference_unit }}</span>{% endif %}
+                  </p>
+                  {% if cart.taxes_included %}<p class="product-card__meta">{{ 'product.taxes_included' | t }}</p>{% endif %}
+                {% when 'description' %}<div class="rich-text">{{ featured_product.description }}</div>
+                {% when 'variant_picker' %}
+                  {% render 'product-variant-picker', product: featured_product, section_id: section.id, form_id: featured_form_id %}
+                  {% if featured_product.selling_plan_groups.size > 0 %}
+                    {% if section.settings.show_selling_plans or featured_product.requires_selling_plan %}
+                      <div class="field product-selling-plans">
+                        <label for="FeaturedSellingPlan-{{ section.id }}">{{ 'product.purchase_options' | t }}</label>
+                        <select id="FeaturedSellingPlan-{{ section.id }}" name="selling_plan" form="{{ featured_form_id }}" data-selling-plan-select data-requires-selling-plan="{{ featured_product.requires_selling_plan }}"{% if featured_product.requires_selling_plan %} required{% endif %}>
+                          <option value="" data-one-time-purchase{% unless featured_product.requires_selling_plan %} selected{% endunless %}{% if featured_product.requires_selling_plan %} disabled{% endif %}>{{ 'product.one_time_purchase' | t }}</option>
+                          {% for plan_variant in featured_product.variants %}
+                            {% for allocation in plan_variant.selling_plan_allocations %}
+                              <option value="{{ allocation.selling_plan.id }}" data-variant-id="{{ plan_variant.id }}" data-price="{{ allocation.price }}" data-compare-at-price="{{ allocation.compare_at_price | default: 0 }}"{% if plan_variant.id != featured_variant.id %} hidden disabled{% endif %}{% if featured_product.requires_selling_plan and plan_variant.id == featured_variant.id and forloop.first %} selected{% endif %}>{{ allocation.selling_plan.name | escape }} — {{ allocation.price | money }}</option>
+                            {% endfor %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% when 'buy_buttons' %}
+                  {% form 'product', featured_product, id: featured_form_id, class: 'product-form' %}
+                    {% if featured_product.gift_card? and block.settings.show_gift_card_recipient %}
+                      {% render 'gift-card-recipient-form', product: featured_product, form: form, section: section %}
+                    {% endif %}
+                    <button class="button" type="submit" name="add" data-add-to-cart data-add-label="{{ 'product.add_to_cart' | t | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" data-plan-unavailable-label="{{ 'product.subscription_unavailable' | t | escape }}"{% unless featured_variant.available %} disabled{% endunless %}>{% if featured_variant.available %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'general.sold_out' | t }}{% endif %}</button>
+                    {% unless featured_product.gift_card? %}
+                      {% if block.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
+                      {% if section.settings.show_payment_terms %}{{ form | payment_terms }}{% endif %}
+                    {% endunless %}
+                  {% endform %}
+                {% when 'text' %}<div class="rich-text">{{ block.settings.text }}</div>
+                {% when 'custom_liquid' %}{{ block.settings.liquid }}
+              {% endcase %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <script type="application/json" data-product-variants>{{ featured_product.variants | json }}</script>
+  </section>
+{% else %}
+  <section class="page-width section-space--small">
+    <p class="eyebrow">{{ 'sections.featured_product.eyebrow' | t }}</p>
+    <p>{{ 'sections.featured_product.choose_product' | t }}</p>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.featured_product.name",
+  "settings": [
+    { "type": "product", "id": "product", "label": "t:sections.featured_product.settings.product" },
+    { "type": "checkbox", "id": "show_selling_plans", "label": "t:labels.show_selling_plans", "default": true },
+    { "type": "checkbox", "id": "show_payment_terms", "label": "t:labels.show_payment_terms", "default": true }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "title", "name": "t:blocks.product_title", "limit": 1 },
+    { "type": "price", "name": "t:blocks.price", "limit": 1 },
+    { "type": "variant_picker", "name": "t:blocks.variant_picker", "limit": 1 },
+    { "type": "description", "name": "t:blocks.description", "limit": 1 },
+    {
+      "type": "buy_buttons",
+      "name": "t:blocks.buy_buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "t:labels.show_dynamic_checkout", "default": true },
+        { "type": "checkbox", "id": "show_gift_card_recipient", "label": "t:labels.show_gift_card_recipient", "default": true }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:blocks.text",
+      "settings": [ { "type": "richtext", "id": "text", "label": "t:labels.body_text", "default": "<p>Share a verified product detail.</p>" } ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "t:blocks.custom_liquid",
+      "settings": [ { "type": "liquid", "id": "liquid", "label": "t:labels.custom_liquid" } ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_product.name",
+      "blocks": [ { "type": "title" }, { "type": "price" }, { "type": "variant_picker" }, { "type": "buy_buttons" } ]
+    }
+  ]
+}
+{% endschema %}

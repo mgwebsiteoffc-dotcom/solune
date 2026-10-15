@@ -1,0 +1,77 @@
+{% doc %}
+  Collects the optional recipient and scheduled-delivery details for gift cards.
+  @param {product} product
+  @param {form} form
+  @param {section} section
+{% enddoc %}
+
+{% assign gift_card_recipient_checked = false %}
+{% if form.errors != blank %}{% assign gift_card_recipient_checked = true %}{% endif %}
+{% if form.email != blank or form.name != blank or form.message != blank %}{% assign gift_card_recipient_checked = true %}{% endif %}
+
+<div class="gift-card-recipient" data-gift-card-recipient>
+  <input
+    class="gift-card-recipient__toggle"
+    type="checkbox"
+    id="GiftCardRecipientToggle-{{ section.id }}"
+    name="properties[__shopify_send_gift_card_to_recipient]"
+    value="true"
+    data-gift-card-recipient-toggle
+    aria-controls="GiftCardRecipientFields-{{ section.id }}"
+    {% if gift_card_recipient_checked %}checked{% endif %}
+  >
+  <label for="GiftCardRecipientToggle-{{ section.id }}">{{ 'product.gift_card_send_to_recipient' | t }}</label>
+
+  <div class="gift-card-recipient__fields" id="GiftCardRecipientFields-{{ section.id }}" data-gift-card-recipient-fields>
+    <div class="field">
+      <label for="GiftCardRecipientEmail-{{ section.id }}">{{ 'product.gift_card_recipient_email' | t }}</label>
+      <input
+        id="GiftCardRecipientEmail-{{ section.id }}"
+        type="email"
+        name="properties[Recipient email]"
+        value="{{ form.email | escape }}"
+        autocomplete="email"
+        maxlength="255"
+        {% if gift_card_recipient_checked %}required{% endif %}
+      >
+    </div>
+
+    <div class="field">
+      <label for="GiftCardRecipientName-{{ section.id }}">{{ 'product.gift_card_recipient_name' | t }}</label>
+      <input
+        id="GiftCardRecipientName-{{ section.id }}"
+        type="text"
+        name="properties[Recipient name]"
+        value="{{ form.name | escape }}"
+        autocomplete="name"
+        maxlength="255"
+      >
+    </div>
+
+    <div class="field">
+      <label for="GiftCardRecipientMessage-{{ section.id }}">{{ 'product.gift_card_recipient_message' | t }}</label>
+      <textarea
+        id="GiftCardRecipientMessage-{{ section.id }}"
+        name="properties[Message]"
+        maxlength="200"
+      >{{ form.message | escape }}</textarea>
+    </div>
+
+    <div class="field">
+      <label for="GiftCardRecipientSendOn-{{ section.id }}">{{ 'product.gift_card_send_on' | t }}</label>
+      <input
+        id="GiftCardRecipientSendOn-{{ section.id }}"
+        type="date"
+        name="properties[Send on]"
+        data-gift-card-send-on
+      >
+      <p class="product-card__meta">{{ 'product.gift_card_send_on_help' | t }}</p>
+    </div>
+
+    <input type="hidden" name="properties[__shopify_offset]" value="" data-gift-card-timezone disabled>
+  </div>
+
+  {% if form.errors %}
+    <div class="form-status" role="alert">{{ form.errors | default_errors }}</div>
+  {% endif %}
+</div>

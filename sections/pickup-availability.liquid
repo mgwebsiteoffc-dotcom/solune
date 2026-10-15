@@ -1,0 +1,44 @@
+{% assign pickup_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true %}
+{% if pickup_availabilities.size > 0 %}
+  {% assign primary_pickup = pickup_availabilities.first %}
+  {% for pickup in pickup_availabilities %}
+    {% if pickup.available %}
+      {% assign primary_pickup = pickup %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  <div class="pickup-availability">
+    <p class="pickup-availability__summary">
+      {% if primary_pickup.available %}
+        <span>{{ 'pickup_availability.available_at' | t: location_name: primary_pickup.location.name }}</span>
+        <span class="product-card__meta">{{ primary_pickup.pick_up_time | escape }}</span>
+      {% else %}
+        <span>{{ 'pickup_availability.unavailable_at' | t: location_name: primary_pickup.location.name }}</span>
+      {% endif %}
+    </p>
+    <details class="pickup-availability__details">
+      <summary>{{ 'pickup_availability.view_locations' | t }}</summary>
+      <ul class="pickup-availability__locations" role="list">
+        {% for pickup in pickup_availabilities %}
+          <li class="pickup-availability__location">
+            <h3>{{ pickup.location.name | escape }}</h3>
+            {% if pickup.available %}
+              <p>{{ pickup.pick_up_time | escape }}</p>
+            {% else %}
+              <p>{{ 'pickup_availability.unavailable' | t }}</p>
+            {% endif %}
+            <address>{{ pickup.location.address | format_address }}</address>
+            {% if pickup.location.phone != blank %}<p><a href="tel:{{ pickup.location.phone | remove: ' ' | escape }}">{{ pickup.location.phone | escape }}</a></p>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </details>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.pickup_availability.name",
+  "settings": []
+}
+{% endschema %}

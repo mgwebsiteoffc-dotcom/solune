@@ -1,0 +1,41 @@
+{% assign story_image = section.settings.image %}
+<section class="page-width section-space">
+  <div class="ingredient-story" aria-labelledby="IngredientStoryTitle-{{ section.id }}">
+    <div class="ingredient-story__visual{% if story_image == blank %} hero__visual--placeholder{% endif %}">
+      {% if story_image != blank %}
+        {% assign story_alt = story_image.alt | default: section.settings.heading %}
+        {% capture story_focal_style %}object-position: {{ story_image.presentation.focal_point }};{% endcapture %}
+        {{ story_image | image_url: width: 1600 | image_tag: alt: story_alt, widths: '480, 640, 800, 1000, 1200, 1600', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'lazy', style: story_focal_style }}
+      {% else %}
+        <span class="visually-hidden">{{ 'general.no_image' | t }}</span>
+      {% endif %}
+    </div>
+    <div class="ingredient-story__copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      {% if section.settings.ingredient_name != blank %}<p class="kicker">{{ section.settings.ingredient_name | escape }}</p>{% endif %}
+      <h2 id="IngredientStoryTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.body != blank %}<div class="section-intro__body rich-text">{{ section.settings.body }}</div>{% endif %}
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <p><a class="button button--secondary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.ingredient_story.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.ingredient_story.settings.eyebrow", "default": "FORMULA NOTES" },
+    { "type": "text", "id": "ingredient_name", "label": "t:sections.ingredient_story.settings.ingredient_name", "default": "A closer look" },
+    { "type": "text", "id": "heading", "label": "t:sections.ingredient_story.settings.heading", "default": "Thoughtful ingredients, clearly explained." },
+    { "type": "richtext", "id": "body", "label": "t:sections.ingredient_story.settings.body", "default": "<p>Use this space to share verified sourcing, formulation, or ingredient information in your brand's own words.</p>" },
+    { "type": "image_picker", "id": "image", "label": "t:sections.ingredient_story.settings.image" },
+    { "type": "text", "id": "button_label", "label": "t:sections.ingredient_story.settings.button_label", "default": "Explore the ingredients" },
+    { "type": "url", "id": "button_link", "label": "t:sections.ingredient_story.settings.button_link" }
+  ],
+  "presets": [
+    { "name": "t:sections.ingredient_story.name" }
+  ]
+}
+{% endschema %}

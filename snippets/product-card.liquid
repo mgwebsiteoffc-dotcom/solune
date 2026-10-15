@@ -1,0 +1,50 @@
+{% doc %}
+  Renders a skincare product card with responsive media and a safe quick-add
+  for products with one purchasable variant and no required selling plan.
+  @param {product} product
+  @param {boolean} [show_vendor]
+  @param {boolean} [show_quick_add]
+  @param {string} [loading]
+{% enddoc %}
+
+{% assign card_variant = product.selected_or_first_available_variant %}
+{% assign card_media = product.featured_media.preview_image %}
+{% capture card_focal_style %}object-position: {{ card_media.presentation.focal_point }};{% endcapture %}
+<article class="product-card">
+  <a class="product-card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {% if card_media != blank %}
+      {% assign card_alt = product.featured_media.alt | default: product.title %}
+      {{ card_media | image_url: width: 1000 | image_tag: alt: card_alt, widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 990px) 22vw, (min-width: 680px) 45vw, 48vw', loading: loading | default: 'lazy', style: card_focal_style }}
+    {% else %}
+      <span class="product-card__placeholder">{{ product.title | escape }}</span>
+    {% endif %}
+    {% unless product.available %}<span class="product-card__badge">{{ 'general.sold_out' | t }}</span>{% endunless %}
+  </a>
+  <div class="product-card__content">
+    {% if show_vendor %}<p class="product-card__vendor">{{ product.vendor | escape }}</p>{% endif %}
+    <h3 class="product-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    {% if product.metafields.custom.routine_step != blank %}<p class="product-card__meta">{{ product.metafields.custom.routine_step.value | default: product.metafields.custom.routine_step | escape }}</p>{% endif %}
+    <div class="product-card__price">
+      {% if card_variant.compare_at_price > card_variant.price %}
+        <span class="price--sale">{{ card_variant.price | money }}</span>
+        <s class="price--compare">{{ card_variant.compare_at_price | money }}</s>
+        <span class="visually-hidden">{{ 'general.sale' | t }}</span>
+      {% else %}
+        <span>{% if product.price_varies %}{{ 'general.from' | t }} {% endif %}{{ product.price_min | money }}{% if product.price_varies %}–{{ product.price_max | money }}{% endif %}</span>
+      {% endif %}
+      {% if card_variant.unit_price_measurement %}
+        <span class="product-card__meta"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{{ card_variant.unit_price | money }} / {{ card_variant.unit_price_measurement.reference_value }}{{ card_variant.unit_price_measurement.reference_unit }}</span>
+      {% endif %}
+    </div>
+    {% if show_quick_add and product.available %}
+      {% if product.has_only_default_variant and product.requires_selling_plan == false %}
+        {% form 'product', product, class: 'product-card__quick-add-form' %}
+          <input type="hidden" name="id" value="{{ card_variant.id }}">
+          <button class="product-card__quick-add" type="submit" name="add">{{ 'product.add_to_cart' | t }}</button>
+        {% endform %}
+      {% else %}
+        <a class="product-card__quick-add" href="{{ product.url }}">{{ 'product.choose_options' | t }}</a>
+      {% endif %}
+    {% endif %}
+  </div>
+</article>

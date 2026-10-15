@@ -1,0 +1,29 @@
+{% if section.settings.message != blank %}
+  <div class="announcement-bar" role="region" aria-label="{{ 'accessibility.announcement' | t }}">
+    {% if section.settings.link != blank %}
+      <a href="{{ section.settings.link }}">{{ section.settings.message | escape }}</a>
+    {% else %}
+      {{ section.settings.message | escape }}
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.announcement.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "t:sections.announcement.settings.text",
+      "default": "A considered ritual for every day."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.announcement.settings.link"
+    }
+  ],
+  "presets": [{ "name": "t:sections.announcement.name" }]
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+<section class="page-width section-space--small" aria-labelledby="CollectionsTitle-{{ section.id }}">
+  <p class="eyebrow">{{ 'sections.collections.eyebrow' | t }}</p>
+  <h1 id="CollectionsTitle-{{ section.id }}" class="section-heading">{{ 'collections.title' | t }}</h1>
+  <div class="product-grid" style="margin-top: 2.5rem">
+    {% for collection in collections %}
+      {% unless collection.handle == 'frontpage' %}
+        <article class="product-card">
+          <a class="product-card__media" href="{{ collection.url }}">
+            {% if collection.featured_image %}
+              {% assign collection_alt = collection.featured_image.alt | default: collection.title %}
+              {% capture collection_focal_style %}object-position: {{ collection.featured_image.presentation.focal_point }};{% endcapture %}
+              {{ collection.featured_image | image_url: width: 1000 | image_tag: alt: collection_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', style: collection_focal_style }}
+            {% else %}<span class="product-card__placeholder">{{ collection.title | escape }}</span>{% endif %}
+          </a>
+          <div class="product-card__content">
+            <h2 class="product-card__title"><a href="{{ collection.url }}">{{ collection.title | escape }}</a></h2>
+            {% if collection.description != blank %}<p class="product-card__meta">{{ collection.description | strip_html | truncatewords: 18 }}</p>{% endif %}
+          </div>
+        </article>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:general.collections_grid",
+  "settings": [],
+  "presets": [{ "name": "t:general.collections_grid" }]
+}
+{% endschema %}

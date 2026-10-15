@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "blocks": {
+        "vendor": { "type": "vendor" },
+        "title": { "type": "product_title" },
+        "price": { "type": "price" },
+        "variant_picker": { "type": "variant_picker" },
+        "quantity": { "type": "quantity_selector" },
+        "buy_buttons": { "type": "buy_buttons" },
+        "description": { "type": "description" },
+        "ingredients": { "type": "ingredients" },
+        "skin_profile": { "type": "skin_profile" },
+        "usage": { "type": "usage" }
+      },
+      "block_order": ["vendor", "title", "price", "variant_picker", "quantity", "buy_buttons", "description", "ingredients", "skin_profile", "usage"],
+      "settings": {}
+    },
+    "related": {
+      "type": "product-recommendations",
+      "settings": { "heading": "Complete the ritual", "intent": "related" }
+    },
+    "complementary": {
+      "type": "product-recommendations",
+      "settings": { "heading": "Pairs well with", "intent": "complementary" }
+    }
+  },
+  "order": ["main", "related", "complementary"]
+}

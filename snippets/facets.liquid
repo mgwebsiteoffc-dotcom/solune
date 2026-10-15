@@ -1,0 +1,57 @@
+{% doc %}
+  Renders Shopify storefront filters for a collection or search result page.
+  @param {array} filters
+  @param {string} action
+  @param {string} section_id
+  @param {string} [search_terms]
+  @param {string} [sort_by]
+{% enddoc %}
+
+<form class="facets" action="{{ action }}" method="get">
+  {% if search_terms != blank %}
+    <input type="hidden" name="q" value="{{ search_terms | escape }}">
+    <input type="hidden" name="type" value="product,collection,page,article">
+  {% endif %}
+  {% if sort_by != blank %}<input type="hidden" name="sort_by" value="{{ sort_by | escape }}">{% endif %}
+  <h2 class="visually-hidden">{{ 'collection.filter' | t }}</h2>
+  {% for filter in filters %}
+    <details class="facet-group" open>
+      <summary>{{ filter.label | escape }}{% if filter.active_values.size > 0 %} ({{ filter.active_values.size }}){% endif %}</summary>
+      <div class="facet-values">
+        {% case filter.type %}
+          {% when 'boolean' %}
+            <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.index }}-true">
+              <input id="Filter-{{ section_id }}-{{ forloop.index }}-true" type="checkbox" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value }}"{% if filter.true_value.active %} checked{% endif %}{% if filter.true_value.count == 0 and filter.true_value.active == false %} disabled{% endif %}>
+              <span>{{ filter.true_value.label | escape }} ({{ filter.true_value.count }})</span>
+            </label>
+            <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.index }}-false">
+              <input id="Filter-{{ section_id }}-{{ forloop.index }}-false" type="checkbox" name="{{ filter.false_value.param_name }}" value="{{ filter.false_value.value }}"{% if filter.false_value.active %} checked{% endif %}{% if filter.false_value.count == 0 and filter.false_value.active == false %} disabled{% endif %}>
+              <span>{{ filter.false_value.label | escape }} ({{ filter.false_value.count }})</span>
+            </label>
+          {% when 'list' %}
+            {% for filter_value in filter.values %}
+              <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}">
+                <input id="Filter-{{ section_id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value | escape }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}>
+                <span>{{ filter_value.label | escape }} ({{ filter_value.count }})</span>
+              </label>
+            {% endfor %}
+          {% when 'price_range' %}
+            <div class="facet-price-range">
+              <div class="field">
+                <label for="Filter-{{ section_id }}-{{ forloop.index }}-min">{{ 'collection.from_price' | t }}</label>
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-min" type="number" name="{{ filter.min_value.param_name }}" min="0" step="any"{% if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="0">
+              </div>
+              <div class="field">
+                <label for="Filter-{{ section_id }}-{{ forloop.index }}-max">{{ 'collection.to_price' | t }}</label>
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-max" type="number" name="{{ filter.max_value.param_name }}" min="0" step="any"{% if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+              </div>
+            </div>
+        {% endcase %}
+      </div>
+    </details>
+  {% endfor %}
+  <div class="facet-actions">
+    <button class="button button--secondary" type="submit">{{ 'collection.apply' | t }}</button>
+    <a class="button button--text" href="{{ action }}{% if search_terms != blank %}?q={{ search_terms | url_encode }}&amp;type=product,collection,page,article{% if sort_by != blank %}&amp;sort_by={{ sort_by | url_encode }}{% endif %}{% elsif sort_by != blank %}?sort_by={{ sort_by | url_encode }}{% endif %}">{{ 'collection.clear' | t }}</a>
+  </div>
+</form>

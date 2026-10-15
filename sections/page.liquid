@@ -1,0 +1,13 @@
+<section class="page-width section-space--small" aria-labelledby="PageTitle-{{ section.id }}">
+  <p class="eyebrow">{{ 'sections.page.eyebrow' | t }}</p>
+  <h1 id="PageTitle-{{ section.id }}" class="section-heading">{{ page.title | escape }}</h1>
+  <div class="rich-text" style="margin-top: 2rem">{{ page.content }}</div>
+</section>
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": [],
+  "presets": [{ "name": "t:general.page" }]
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+{% doc %}
+  Renders a responsive, Shopify-CDN image with optional link wrapping.
+  @param {image} image
+  @param {string} [class]
+  @param {string} [alt]
+  @param {string} [url]
+  @param {string} [sizes]
+  @param {string} [widths]
+  @param {string} [loading]
+  @param {string} [fetchpriority]
+{% enddoc %}
+
+{% if image != blank %}
+  {% assign image_alt = alt | default: image.alt | default: '' %}
+  {% assign image_loading = loading | default: 'lazy' %}
+  {% assign image_widths = widths | default: '320, 480, 640, 800, 1000, 1200, 1600' %}
+  {% assign image_sizes = sizes | default: '100vw' %}
+  {% capture image_focal_style %}object-position: {{ image.presentation.focal_point }};{% endcapture %}
+  {% if url != blank %}
+    <a class="media-frame {{ class }}" href="{{ url }}">
+      {{ image | image_url: width: 1600 | image_tag: alt: image_alt, widths: image_widths, sizes: image_sizes, loading: image_loading, fetchpriority: fetchpriority, style: image_focal_style }}
+    </a>
+  {% else %}
+    <div class="media-frame {{ class }}">
+      {{ image | image_url: width: 1600 | image_tag: alt: image_alt, widths: image_widths, sizes: image_sizes, loading: image_loading, fetchpriority: fetchpriority, style: image_focal_style }}
+    </div>
+  {% endif %}
+{% endif %}

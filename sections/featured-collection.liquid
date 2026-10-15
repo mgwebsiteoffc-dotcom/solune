@@ -1,0 +1,39 @@
+<section class="page-width section-space" aria-labelledby="FeaturedCollectionTitle-{{ section.id }}">
+  <div class="section-intro">
+    <div class="section-intro__copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="FeaturedCollectionTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
+    </div>
+    {% if section.settings.collection != blank and section.settings.show_all_link %}
+      <a class="button button--text" href="{{ section.settings.collection.url }}">{{ 'general.view_all' | t }}</a>
+    {% endif %}
+  </div>
+
+  {% if section.settings.collection != blank and section.settings.collection.products_count > 0 %}
+    <div class="product-grid">
+      {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+        {% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_quick_add: section.settings.show_quick_add, loading: 'lazy' %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="section-intro__body">{{ 'sections.featured_collection.choose_collection' | t }}</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:labels.eyebrow", "default": "THE FORMULA EDIT" },
+    { "type": "text", "id": "heading", "label": "t:sections.featured_collection.settings.heading", "default": "The daily essentials" },
+    { "type": "collection", "id": "collection", "label": "t:sections.featured_collection.settings.collection" },
+    { "type": "range", "id": "products_to_show", "label": "t:sections.featured_collection.settings.products_to_show", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false },
+    { "type": "checkbox", "id": "show_quick_add", "label": "t:sections.featured_collection.settings.show_quick_add", "default": true },
+    { "type": "checkbox", "id": "show_all_link", "label": "t:sections.featured_collection.settings.show_all_link", "default": true }
+  ],
+  "presets": [
+    { "name": "t:sections.featured_collection.name" }
+  ]
+}
+{% endschema %}

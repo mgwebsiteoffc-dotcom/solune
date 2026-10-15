@@ -1,0 +1,76 @@
+<header class="site-header">
+  <div class="site-header__inner">
+    <details class="mobile-menu">
+      <summary aria-label="{{ 'accessibility.open_menu' | t }}">
+        <span aria-hidden="true">☰</span>
+        <span class="visually-hidden">{{ 'general.menu' | t }}</span>
+      </summary>
+      <div class="mobile-menu__panel">
+        <nav aria-label="{{ 'accessibility.main_navigation' | t }}">
+          {% if section.settings.menu != blank %}
+            {% render 'navigation-menu', links: section.settings.menu.links, class: 'primary-nav__list--mobile' %}
+          {% endif %}
+        </nav>
+      </div>
+    </details>
+
+    <a class="site-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {% if section.settings.logo != blank %}
+        {% assign logo_alt = section.settings.logo.alt | default: shop.name %}
+        {% capture logo_style %}width: {{ section.settings.logo_width }}px; height: auto;{% endcapture %}
+        {{ section.settings.logo | image_url: width: 600 | image_tag: alt: logo_alt, widths: '120, 180, 240, 360, 480, 600', sizes: '(max-width: 680px) 130px, 180px', style: logo_style }}
+      {% else %}
+        <span class="site-brand__wordmark">{{ shop.name | escape }}</span>
+      {% endif %}
+    </a>
+
+    <nav class="primary-nav" aria-label="{{ 'accessibility.main_navigation' | t }}">
+      {% if section.settings.menu != blank %}
+        {% render 'navigation-menu', links: section.settings.menu.links %}
+      {% endif %}
+    </nav>
+
+    <div class="header-actions">
+      <details class="header-search-disclosure">
+        <summary class="header-actions__icon-link" aria-label="{{ 'general.search' | t }}">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m16 16 4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </summary>
+        <div class="header-search__panel">
+          <predictive-search data-endpoint="{{ routes.predictive_search_url }}" data-section-id="predictive-search">
+            <form action="{{ routes.search_url }}" method="get" role="search">
+              <label for="HeaderSearch-{{ section.id }}">{{ 'general.search' | t }}</label>
+              <div class="header-search__input-row">
+                <input id="HeaderSearch-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t | escape }}" role="combobox" aria-expanded="false" aria-owns="PredictiveSearchResults-{{ section.id }}" aria-controls="PredictiveSearchResults-{{ section.id }}" aria-haspopup="listbox" aria-autocomplete="list" autocomplete="off">
+                <input type="hidden" name="options[prefix]" value="last">
+                <input type="hidden" name="type" value="product,collection,page,article">
+                <button class="button button--secondary" type="submit">{{ 'search.submit' | t }}</button>
+              </div>
+              <div id="PredictiveSearchResults-{{ section.id }}" class="predictive-search-results" data-predictive-results hidden tabindex="-1"></div>
+              <p class="visually-hidden" data-predictive-status role="status" aria-live="polite" data-suggestion-one="{{ 'search.suggestion_one' | t | escape }}" data-suggestions-many="{{ 'search.suggestions_many' | t: count: '[count]' | escape }}" data-no-suggestions="{{ 'search.no_suggestions' | t | escape }}"></p>
+            </form>
+          </predictive-search>
+        </div>
+      </details>
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account class="header-actions__account" menu="{{ section.settings.customer_account_menu }}" aria-label="{{ 'general.account' | t }}"></shopify-account>
+      {% endif %}
+      <a class="header-actions__icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}, {{ cart.item_count }}">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M5 8.5h14l-1.1 12H6.1L5 8.5Z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9 9V6.3a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span class="header-actions__count" aria-hidden="true">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "t:sections.header.settings.menu", "default": "main-menu" },
+    { "type": "link_list", "id": "customer_account_menu", "label": "t:sections.header.settings.customer_account_menu", "default": "customer-account-main-menu" },
+    { "type": "image_picker", "id": "logo", "label": "t:sections.header.settings.logo" },
+    { "type": "range", "id": "logo_width", "label": "t:sections.header.settings.logo_width", "min": 80, "max": 260, "step": 10, "unit": "px", "default": 160 }
+  ],
+  "presets": [{ "name": "t:sections.header.name" }]
+}
+{% endschema %}

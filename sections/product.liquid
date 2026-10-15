@@ -1,0 +1,232 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign current_price = current_variant.price %}
+{% assign current_compare_at_price = current_variant.compare_at_price %}
+{% if product.requires_selling_plan and current_variant.selling_plan_allocations.size > 0 %}
+  {% assign initial_selling_plan = current_variant.selling_plan_allocations.first %}
+  {% assign current_price = initial_selling_plan.price %}
+  {% if initial_selling_plan.compare_at_price > initial_selling_plan.price %}
+    {% assign current_compare_at_price = initial_selling_plan.compare_at_price %}
+  {% elsif current_variant.compare_at_price > current_variant.price %}
+    {% assign current_compare_at_price = current_variant.compare_at_price %}
+  {% else %}
+    {% assign current_compare_at_price = current_variant.price %}
+  {% endif %}
+{% endif %}
+{% assign product_form_id = 'ProductForm-' | append: section.id %}
+{% assign pickup_container_id = 'PickupAvailability-' | append: section.id %}
+<section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{{ shop.money_format | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
+  <div class="product-layout">
+    <div class="product-gallery" role="region" aria-label="{{ 'accessibility.product_gallery' | t }}">
+      {% for media in product.media %}
+        {% assign media_loading = 'lazy' %}
+        {% if forloop.first %}{% assign media_loading = 'eager' %}{% endif %}
+        <div class="product-gallery__media" id="ProductMedia-{{ section.id }}-{{ media.id }}" data-media-id="{{ media.id }}">
+          {% if media.media_type == 'image' %}
+            {% assign media_alt = media.alt | default: product.title %}
+            {% capture media_focal_style %}object-position: {{ media.preview_image.presentation.focal_point }};{% endcapture %}
+            {{ media.preview_image | image_url: width: 1800 | image_tag: alt: media_alt, widths: '360, 480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 990px) 54vw, 100vw', loading: media_loading, style: media_focal_style }}
+          {% else %}
+            {{ media | media_tag: image_size: '1200x', controls: true }}
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="product-gallery__media product-card__placeholder">{{ 'general.no_image' | t }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="product-information">
+      {% for block in section.blocks %}
+        {% if block.type == '@app' %}
+          <div class="product-block" {{ block.shopify_attributes }}>{% render block %}</div>
+        {% else %}
+          <div class="product-block product-block--{{ block.type }}" {{ block.shopify_attributes }}>
+            {% case block.type %}
+              {% when 'product_title' %}
+                <h1 class="product-title">{{ product.title | escape }}</h1>
+              {% when 'vendor' %}
+                {% if product.vendor != blank %}<p class="product-vendor">{{ product.vendor | escape }}</p>{% endif %}
+              {% when 'price' %}
+                <div class="price-line product-price">
+                  <span class="price__sale{% if current_compare_at_price > current_price %} price--sale{% endif %}" data-product-price>{{ current_price | money }}</span>
+                  <s class="price__compare" data-compare-price{% unless current_compare_at_price > current_price %} hidden{% endunless %}>{{ current_compare_at_price | money }}</s>
+                </div>
+                <p class="product-card__meta" data-unit-price{% unless current_variant.unit_price_measurement %} hidden{% endunless %}>
+                  <span class="visually-hidden">{{ 'product.unit_price' | t }} </span>
+                  <span data-unit-price-amount>{{ current_variant.unit_price | money }}</span>
+                  {% if current_variant.unit_price_measurement %}/ <span data-unit-price-measure>{{ current_variant.unit_price_measurement.reference_value }}{{ current_variant.unit_price_measurement.reference_unit }}</span>{% endif %}
+                </p>
+                {% if cart.taxes_included %}<p class="product-card__meta">{{ 'product.taxes_included' | t }}</p>{% endif %}
+                <p class="product-status" data-variant-status role="status" aria-live="polite" data-available="{{ 'product.available' | t | escape }}" data-unavailable="{{ 'product.unavailable' | t | escape }}" data-plan-unavailable="{{ 'product.subscription_unavailable' | t | escape }}">{% if current_variant.available %}{{ 'product.available' | t }}{% else %}{{ 'product.unavailable' | t }}{% endif %}</p>
+              {% when 'variant_picker' %}
+                {% render 'product-variant-picker', product: product, section_id: section.id, form_id: product_form_id %}
+                {% if product.selling_plan_groups.size > 0 %}
+                  {% if section.settings.show_selling_plans or product.requires_selling_plan %}
+                    <div class="field product-selling-plans">
+                    <label for="SellingPlan-{{ section.id }}">{{ 'product.purchase_options' | t }}</label>
+                    <select id="SellingPlan-{{ section.id }}" name="selling_plan" form="{{ product_form_id }}" data-selling-plan-select data-requires-selling-plan="{{ product.requires_selling_plan }}"{% if product.requires_selling_plan %} required{% endif %}>
+                      <option value="" data-one-time-purchase{% if product.requires_selling_plan == false %} selected{% endif %}{% if product.requires_selling_plan %} disabled{% endif %}>{{ 'product.one_time_purchase' | t }}</option>
+                      {% for plan_variant in product.variants %}
+                        {% for allocation in plan_variant.selling_plan_allocations %}
+                          <option value="{{ allocation.selling_plan.id }}" data-variant-id="{{ plan_variant.id }}" data-price="{{ allocation.price }}" data-compare-at-price="{{ allocation.compare_at_price | default: 0 }}"{% if plan_variant.id != current_variant.id %} hidden disabled{% endif %}{% if product.requires_selling_plan and plan_variant.id == current_variant.id and forloop.first %} selected{% endif %}>
+                            {{ allocation.selling_plan.name | escape }} — {{ allocation.price | money }}
+                          </option>
+                        {% endfor %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                  {% endif %}
+                {% endif %}
+              {% when 'quantity_selector' %}
+                <div class="field">
+                  <label for="Quantity-{{ section.id }}">{{ 'product.quantity' | t }}</label>
+                  <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" form="{{ product_form_id }}">
+                </div>
+              {% when 'buy_buttons' %}
+                {% form 'product', product, id: product_form_id, class: 'product-form' %}
+                  {% if product.gift_card? and block.settings.show_gift_card_recipient %}
+                    {% render 'gift-card-recipient-form', product: product, form: form, section: section %}
+                  {% endif %}
+                  <button class="button" type="submit" name="add" data-add-to-cart data-add-label="{{ 'product.add_to_cart' | t | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" data-plan-unavailable-label="{{ 'product.subscription_unavailable' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>
+                    {% if current_variant.available %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'general.sold_out' | t }}{% endif %}
+                  </button>
+                  {% unless product.gift_card? %}
+                    {% if block.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
+                    {% if section.settings.show_payment_terms %}{{ form | payment_terms }}{% endif %}
+                  {% endunless %}
+                {% endform %}
+              {% when 'description' %}
+                {% if product.description != blank %}
+                  <div class="rich-text">{{ product.description }}</div>
+                {% endif %}
+              {% when 'ingredients' %}
+                {% if product.metafields.custom.key_ingredients != blank or product.metafields.custom.inci_list != blank or product.metafields.custom.formula_notes != blank %}
+                  <details class="product-accordion">
+                    <summary>{{ 'product.ingredients' | t }}</summary>
+                    <div class="product-accordion__content">
+                      {% if product.metafields.custom.key_ingredients != blank %}{{ product.metafields.custom.key_ingredients | metafield_tag }}{% endif %}
+                      {% if product.metafields.custom.inci_list != blank %}<h3>{{ 'product.inci_list' | t }}</h3>{{ product.metafields.custom.inci_list | metafield_tag }}{% endif %}
+                      {% if product.metafields.custom.formula_notes != blank %}<h3>{{ 'product.formula_notes' | t }}</h3>{{ product.metafields.custom.formula_notes | metafield_tag }}{% endif %}
+                    </div>
+                  </details>
+                {% endif %}
+              {% when 'skin_profile' %}
+                {% if product.metafields.custom.skin_types != blank or product.metafields.custom.skin_concerns != blank or product.metafields.custom.texture != blank %}
+                  <details class="product-accordion">
+                    <summary>{{ 'product.skin_profile' | t }}</summary>
+                    <div class="product-accordion__content">
+                      {% if product.metafields.custom.skin_types != blank %}
+                        <h3>{{ 'product.skin_types' | t }}</h3>
+                        <ul>{% for skin_type in product.metafields.custom.skin_types.value %}<li>{{ skin_type | escape }}</li>{% endfor %}</ul>
+                      {% endif %}
+                      {% if product.metafields.custom.skin_concerns != blank %}
+                        <h3>{{ 'product.skin_concerns' | t }}</h3>
+                        <ul>{% for concern in product.metafields.custom.skin_concerns.value %}<li>{{ concern | escape }}</li>{% endfor %}</ul>
+                      {% endif %}
+                      {% if product.metafields.custom.texture != blank %}<p><strong>{{ 'product.texture' | t }}:</strong> {{ product.metafields.custom.texture.value | default: product.metafields.custom.texture | escape }}</p>{% endif %}
+                    </div>
+                  </details>
+                {% endif %}
+              {% when 'usage' %}
+                {% if product.metafields.custom.how_to_use != blank or product.metafields.custom.cautions != blank %}
+                  <details class="product-accordion">
+                    <summary>{{ 'product.how_to_use' | t }}</summary>
+                    <div class="product-accordion__content">
+                      {% if product.metafields.custom.how_to_use != blank %}{{ product.metafields.custom.how_to_use | metafield_tag }}{% endif %}
+                      {% if product.metafields.custom.cautions != blank %}<h3>{{ 'product.cautions' | t }}</h3>{{ product.metafields.custom.cautions | metafield_tag }}{% endif %}
+                    </div>
+                  </details>
+                {% endif %}
+              {% when 'text' %}
+                {% if block.settings.text != blank %}<div class="rich-text">{{ block.settings.text }}</div>{% endif %}
+              {% when 'custom_liquid' %}
+                {{ block.settings.liquid }}
+            {% endcase %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if section.settings.show_pickup_availability %}
+        <div id="{{ pickup_container_id }}" class="pickup-availability-container" data-store-availability-container data-variant-id="{{ current_variant.id }}" data-product-title="{{ product.title | escape }}" data-has-only-default-variant="{{ product.has_only_default_variant }}" data-base-url="{{ shop.url }}{{ routes.root_url }}" aria-live="polite"></div>
+      {% endif %}
+    </div>
+  </div>
+  <script type="application/json" data-product-variants>{{ product.variants | json }}</script>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.product.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_selling_plans",
+      "label": "t:labels.show_selling_plans",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_terms",
+      "label": "t:labels.show_payment_terms",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pickup_availability",
+      "label": "t:labels.show_pickup_availability",
+      "default": true
+    }
+  ],
+  "max_blocks": 20,
+  "blocks": [
+    { "type": "@app" },
+    { "type": "product_title", "name": "t:blocks.product_title", "limit": 1 },
+    { "type": "vendor", "name": "t:blocks.product_vendor", "limit": 1 },
+    { "type": "price", "name": "t:blocks.price", "limit": 1 },
+    { "type": "variant_picker", "name": "t:blocks.variant_picker", "limit": 1 },
+    { "type": "quantity_selector", "name": "t:blocks.quantity_selector", "limit": 1 },
+    {
+      "type": "buy_buttons",
+      "name": "t:blocks.buy_buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "t:labels.show_dynamic_checkout", "default": true },
+        { "type": "checkbox", "id": "show_gift_card_recipient", "label": "t:labels.show_gift_card_recipient", "default": true }
+      ]
+    },
+    { "type": "description", "name": "t:blocks.description", "limit": 1 },
+    { "type": "ingredients", "name": "t:blocks.ingredients", "limit": 1 },
+    { "type": "skin_profile", "name": "t:blocks.skin_profile", "limit": 1 },
+    { "type": "usage", "name": "t:blocks.usage", "limit": 1 },
+    {
+      "type": "text",
+      "name": "t:blocks.text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "t:labels.body_text", "default": "<p>Share a verified product detail or helpful note.</p>" }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "t:blocks.custom_liquid",
+      "settings": [
+        { "type": "liquid", "id": "liquid", "label": "t:labels.custom_liquid" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product.name",
+      "blocks": [
+        { "type": "vendor" },
+        { "type": "product_title" },
+        { "type": "price" },
+        { "type": "variant_picker" },
+        { "type": "quantity_selector" },
+        { "type": "buy_buttons" },
+        { "type": "description" },
+        { "type": "ingredients" },
+        { "type": "skin_profile" },
+        { "type": "usage" }
+      ]
+    }
+  ]
+}
+{% endschema %}

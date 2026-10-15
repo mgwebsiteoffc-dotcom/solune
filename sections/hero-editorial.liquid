@@ -1,0 +1,50 @@
+{% assign hero_image = section.settings.image %}
+{% assign hero_alt = hero_image.alt | default: section.settings.heading | strip_html %}
+<section class="hero" aria-labelledby="HeroTitle-{{ section.id }}">
+  <div class="hero__copy">
+    {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+    <h1 id="HeroTitle-{{ section.id }}" class="hero__title">{{ section.settings.heading | escape | newline_to_br }}</h1>
+    {% if section.settings.body != blank %}<div class="hero__body rich-text">{{ section.settings.body }}</div>{% endif %}
+    <div class="hero__actions">
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a class="button" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+      {% endif %}
+      {% if section.settings.secondary_button_label != blank and section.settings.secondary_button_link != blank %}
+        <a class="button button--text" href="{{ section.settings.secondary_button_link }}">{{ section.settings.secondary_button_label | escape }}</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero__visual{% if hero_image == blank %} hero__visual--placeholder{% endif %}" aria-hidden="{% if hero_image == blank %}true{% else %}false{% endif %}">
+    {% if hero_image != blank %}
+      <picture>
+        {% if section.settings.mobile_image != blank %}
+          <source media="(max-width: 680px)" srcset="{{ section.settings.mobile_image | image_url: width: 1000 }}">
+        {% endif %}
+        {% capture focal_style %}object-position: {{ hero_image.presentation.focal_point }};{% endcapture %}
+        {{ hero_image | image_url: width: 2400 | image_tag: alt: hero_alt, widths: '640, 800, 1000, 1200, 1600, 2000, 2400', sizes: '(min-width: 990px) 52vw, 100vw', loading: 'eager', fetchpriority: 'high', style: focal_style }}
+      </picture>
+    {% else %}
+      <span class="visually-hidden">{{ 'general.no_image' | t }}</span>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.hero.settings.eyebrow", "default": "SKINCARE, IN ITS ELEMENT" },
+    { "type": "text", "id": "heading", "label": "t:sections.hero.settings.heading", "default": "Your skin, met with care." },
+    { "type": "richtext", "id": "body", "label": "t:sections.hero.settings.body", "default": "<p>Thoughtful formulas and small rituals for the skin you live in.</p>" },
+    { "type": "image_picker", "id": "image", "label": "t:sections.hero.settings.image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "t:sections.hero.settings.mobile_image" },
+    { "type": "text", "id": "button_label", "label": "t:sections.hero.settings.button_label", "default": "Explore the ritual" },
+    { "type": "url", "id": "button_link", "label": "t:sections.hero.settings.button_link" },
+    { "type": "text", "id": "secondary_button_label", "label": "t:sections.hero.settings.secondary_button_label" },
+    { "type": "url", "id": "secondary_button_link", "label": "t:sections.hero.settings.secondary_button_link" }
+  ],
+  "presets": [
+    { "name": "t:sections.hero.name" }
+  ]
+}
+{% endschema %}

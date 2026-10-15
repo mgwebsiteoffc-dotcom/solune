@@ -1,0 +1,42 @@
+{% assign contact_form_id = 'ContactForm-' | append: section.id %}
+<section class="page-width section-space--small" aria-labelledby="ContactTitle-{{ section.id }}">
+  <div class="section-intro__copy">
+    <p class="eyebrow">{{ 'contact.eyebrow' | t }}</p>
+    <h1 id="ContactTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h1>
+    {% if section.settings.body != blank %}<div class="section-intro__body rich-text">{{ section.settings.body }}</div>{% endif %}
+  </div>
+  <div class="contact-form" style="max-width: 42rem; margin-top: 2.5rem">
+    {% form 'contact', id: contact_form_id %}
+      {% if form.posted_successfully? %}<p class="form-status" role="status">{{ 'contact.success' | t }}</p>{% endif %}
+      {% if form.errors %}<div class="form-status" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+      <div class="field">
+        <label for="ContactName-{{ section.id }}">{{ 'contact.name' | t }}</label>
+        <input id="ContactName-{{ section.id }}" type="text" name="contact[name]" value="{{ form.name | escape }}" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="ContactEmail-{{ section.id }}">{{ 'contact.email' | t }}</label>
+        <input id="ContactEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" autocomplete="email" autocorrect="off" autocapitalize="off" required>
+      </div>
+      <div class="field">
+        <label for="ContactPhone-{{ section.id }}">{{ 'contact.phone' | t }}</label>
+        <input id="ContactPhone-{{ section.id }}" type="tel" name="contact[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="ContactMessage-{{ section.id }}">{{ 'contact.message' | t }}</label>
+        <textarea id="ContactMessage-{{ section.id }}" name="contact[body]" required>{{ form.body | escape }}</textarea>
+      </div>
+      <p><button class="button" type="submit">{{ 'contact.submit' | t }}</button></p>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.contact.name",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:sections.contact.settings.heading", "default": "How can we help?" },
+    { "type": "richtext", "id": "body", "label": "t:sections.contact.settings.body", "default": "<p>Send us a note and the store team will get back to you.</p>" }
+  ],
+  "presets": [{ "name": "t:sections.contact.name" }]
+}
+{% endschema %}

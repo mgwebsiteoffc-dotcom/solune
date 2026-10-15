@@ -1,0 +1,155 @@
+{% assign footer_newsletter_id = 'FooterNewsletter-' | append: section.id %}
+{% assign footer_localization_id = 'FooterLocalization-' | append: section.id %}
+{% assign show_footer_country_selector = false %}
+{% assign show_footer_language_selector = false %}
+{% assign show_footer_follow_on_shop = false %}
+{% if section.settings.show_country_selector and localization.available_countries.size > 1 %}{% assign show_footer_country_selector = true %}{% endif %}
+{% if section.settings.show_language_selector and localization.available_languages.size > 1 %}{% assign show_footer_language_selector = true %}{% endif %}
+{% if section.settings.show_follow_on_shop %}{% assign show_footer_follow_on_shop = true %}{% endif %}
+<footer class="site-footer">
+  <div class="page-width">
+    <div class="site-footer__top">
+      <div>
+        <a class="site-footer__brand" href="{{ routes.root_url }}">{{ shop.name | escape }}</a>
+        {% if section.settings.footer_note != blank %}
+          <p class="section-intro__body">{{ section.settings.footer_note | escape }}</p>
+        {% endif %}
+        {% render 'social-icons' %}
+      </div>
+
+      <nav aria-label="{{ 'accessibility.footer_navigation' | t }}">
+        {% if section.settings.menu != blank %}
+          <ul class="site-footer__menu">
+            {% for link in section.settings.menu.links %}
+              <li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </nav>
+
+      {% if section.settings.show_newsletter %}
+        <div class="site-footer__newsletter">
+          <div>
+            <p class="eyebrow">{{ section.settings.newsletter_heading | escape }}</p>
+            {% if section.settings.newsletter_body != blank %}<p>{{ section.settings.newsletter_body | escape }}</p>{% endif %}
+          </div>
+          {% form 'customer', id: footer_newsletter_id, class: 'newsletter-form' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="field">
+              <label class="visually-hidden" for="FooterEmail-{{ section.id }}">{{ 'newsletter.email' | t }}</label>
+              <div class="newsletter-form__row">
+                <input id="FooterEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" autocomplete="email" autocorrect="off" autocapitalize="off" required placeholder="{{ 'newsletter.email' | t | escape }}">
+                <button class="button button--secondary" type="submit" name="commit">{{ 'newsletter.submit' | t }}</button>
+              </div>
+            </div>
+            {% if form.posted_successfully? %}<p class="form-status" role="status">{{ 'general.newsletter_success' | t }}</p>{% endif %}
+            {% if form.errors %}<div class="form-status" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+            <p class="product-card__meta">{{ 'newsletter.consent' | t }}</p>
+          {% endform %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</span>
+      {% if show_footer_country_selector or show_footer_language_selector or show_footer_follow_on_shop %}
+        <div class="site-footer__localization">
+          {% if show_footer_country_selector or show_footer_language_selector %}
+            {% form 'localization', id: footer_localization_id %}
+              {% if show_footer_country_selector %}
+                <div class="field">
+                  <label for="FooterCountry-{{ section.id }}">{{ 'footer.country' | t }}</label>
+                  <select id="FooterCountry-{{ section.id }}" name="country_code">
+                    {{ localization.country_option_tags }}
+                  </select>
+                </div>
+              {% endif %}
+              {% if show_footer_language_selector %}
+                <div class="field">
+                  <label for="FooterLanguage-{{ section.id }}">{{ 'footer.language' | t }}</label>
+                  <select id="FooterLanguage-{{ section.id }}" name="locale_code">
+                    {{ localization.language_option_tags }}
+                  </select>
+                </div>
+              {% endif %}
+              <button class="button button--text" type="submit">{{ 'footer.update_preferences' | t }}</button>
+            {% endform %}
+          {% endif %}
+          {% if show_footer_follow_on_shop %}
+            <div class="follow-on-shop">{{ shop | login_button: action: 'follow' }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if section.settings.show_payment_icons %}
+        <ul class="payment-icons" role="list" aria-label="{{ 'footer.payment_methods' | t }}">
+          {% for type in shop.enabled_payment_types %}
+            <li>{{ type | payment_type_svg_tag }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.footer.settings.menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "footer_note",
+      "label": "t:sections.footer.settings.footer_note",
+      "default": "A considered ritual for every day."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "t:labels.show_newsletter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "t:labels.newsletter_heading",
+      "default": "Notes for your ritual"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_body",
+      "label": "t:labels.newsletter_body",
+      "default": "Thoughtful skincare, product notes, and studio updates."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "t:labels.show_country_selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_selector",
+      "label": "t:labels.show_language_selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_follow_on_shop",
+      "label": "t:labels.show_follow_on_shop",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:sections.footer.name" }]
+}
+{% endschema %}

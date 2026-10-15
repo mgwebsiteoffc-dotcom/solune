@@ -1,0 +1,89 @@
+{% assign collection_hero_image = collection.image | default: collection.featured_image %}
+<section aria-labelledby="CollectionTitle-{{ section.id }}">
+  <div class="page-width collection-header">
+    <div>
+      <p class="eyebrow">{% if collection.products_count == 1 %}{{ 'collection.product_count_one' | t: count: collection.products_count }}{% else %}{{ 'collection.product_count_other' | t: count: collection.products_count }}{% endif %}</p>
+      <h1 id="CollectionTitle-{{ section.id }}" class="section-heading">{{ collection.title | escape }}</h1>
+      {% if section.settings.show_description and collection.description != blank %}
+        <div class="collection-header__description rich-text">{{ collection.description }}</div>
+      {% endif %}
+    </div>
+    {% if collection.image != blank or collection.featured_image != blank %}
+      <div class="collection-header__image">
+        {% assign collection_image_alt = collection_hero_image.alt | default: collection.title %}
+        {% capture collection_focal_style %}object-position: {{ collection_hero_image.presentation.focal_point }};{% endcapture %}
+        {{ collection_hero_image | image_url: width: 1400 | image_tag: alt: collection_image_alt, widths: '360, 480, 640, 800, 1000, 1200, 1400', sizes: '(min-width: 990px) 34vw, 100vw', loading: 'eager', style: collection_focal_style }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="page-width">
+    {% if section.settings.show_sort %}
+      <div class="collection-toolbar">
+        <form action="{{ collection.url }}" method="get">
+          {% for filter in collection.filters %}
+            {% if filter.type == 'price_range' %}
+              {% if filter.min_value.value %}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
+              {% if filter.max_value.value %}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
+            {% elsif filter.type == 'boolean' %}
+              {% if filter.true_value.active %}<input type="hidden" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value | escape }}">{% endif %}
+              {% if filter.false_value.active %}<input type="hidden" name="{{ filter.false_value.param_name }}" value="{{ filter.false_value.value | escape }}">{% endif %}
+            {% else %}
+              {% for filter_value in filter.active_values %}
+                <input type="hidden" name="{{ filter_value.param_name }}" value="{{ filter_value.value | escape }}">
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          <label for="SortBy-{{ section.id }}">{{ 'collection.sort_by' | t }}</label>
+          <select id="SortBy-{{ section.id }}" name="sort_by" data-auto-submit>
+            {% for sort_option in collection.sort_options %}
+              <option value="{{ sort_option.value | escape }}"{% if sort_option.value == collection.sort_by %} selected{% endif %}>{{ sort_option.name | escape }}</option>
+            {% endfor %}
+          </select>
+          <noscript><button class="button button--secondary" type="submit">{{ 'collection.apply' | t }}</button></noscript>
+        </form>
+      </div>
+    {% endif %}
+
+    <div class="collection-layout">
+      {% if section.settings.show_filters and collection.filters.size > 0 %}
+        {% render 'facets', filters: collection.filters, action: collection.url, section_id: section.id, sort_by: collection.sort_by %}
+      {% endif %}
+      <div>
+        {% paginate collection.products by section.settings.products_per_page %}
+          {% if collection.products.size > 0 %}
+            <div class="product-grid">
+              {% for product in collection.products %}
+                {% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_quick_add: section.settings.show_quick_add, loading: 'lazy' %}
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>{{ 'collection.no_products' | t }}</p>
+          {% endif %}
+          {% if paginate.pages > 1 %}
+            <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+              {% if paginate.previous %}<a href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{% endif %}
+              <span>{{ 'general.page_of' | t: current: paginate.current_page, total: paginate.pages }}</span>
+              {% if paginate.next %}<a href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{% endif %}
+            </nav>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.collection.name",
+  "settings": [
+    { "type": "checkbox", "id": "show_description", "label": "t:labels.show_description", "default": true },
+    { "type": "checkbox", "id": "show_filters", "label": "t:labels.show_filters", "default": true },
+    { "type": "checkbox", "id": "show_sort", "label": "t:labels.show_sort", "default": true },
+    { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false },
+    { "type": "checkbox", "id": "show_quick_add", "label": "t:labels.show_quick_add", "default": true },
+    { "type": "range", "id": "products_per_page", "label": "t:labels.products_per_page", "min": 8, "max": 40, "step": 4, "default": 16 }
+  ],
+  "presets": [{ "name": "t:sections.collection.name" }]
+}
+{% endschema %}

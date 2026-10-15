@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-editorial",
+      "settings": {}
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {}
+    },
+    "ingredient": {
+      "type": "ingredient-story",
+      "settings": {}
+    },
+    "routine": {
+      "type": "routine-steps",
+      "blocks": {
+        "cleanse": { "type": "step", "settings": { "title": "Cleanse", "body": "Begin with a gentle cleanse." } },
+        "treat": { "type": "step", "settings": { "title": "Treat", "body": "Layer the formula that fits your routine." } },
+        "moisturize": { "type": "step", "settings": { "title": "Moisturize", "body": "Finish with a moisturizer selected for your preferences." } }
+      },
+      "block_order": ["cleanse", "treat", "moisturize"],
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "featured", "ingredient", "routine", "newsletter"]
+}
