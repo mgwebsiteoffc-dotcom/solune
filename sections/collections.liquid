@@ -9,7 +9,7 @@
             {% if collection.featured_image %}
               {% assign collection_alt = collection.featured_image.alt | default: collection.title %}
               {% capture collection_focal_style %}object-position: {{ collection.featured_image.presentation.focal_point }};{% endcapture %}
-              {{ collection.featured_image | image_url: width: 1000 | image_tag: alt: collection_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', style: collection_focal_style }}
+              {{ collection.featured_image | image_url: width: 1000 | image_tag: alt: collection_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 1101px) 25vw, (min-width: 1025px) 30vw, 46vw', loading: 'lazy', style: collection_focal_style }}
             {% else %}<span class="product-card__placeholder">{{ collection.title | escape }}</span>{% endif %}
           </a>
           <div class="product-card__content">

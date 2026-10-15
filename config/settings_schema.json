@@ -38,51 +38,65 @@
     "name": "t:general.colors",
     "settings": [
       {
+        "type": "color_palette",
+        "id": "colors",
+        "default": {
+          "canvas": "#F4F1E9",
+          "ink": "#20342C",
+          "surface": "#EAE6DC",
+          "surface_ink": "#20342C",
+          "accent": "#C8D78F",
+          "accent_ink": "#20342C",
+          "muted": "#59635D",
+          "border": "#7E847A"
+        }
+      },
+      {
         "type": "color",
         "id": "color_background",
-        "default": "#F4F1E9",
+        "default": "{{ settings.colors.canvas }}",
         "label": "t:labels.canvas"
       },
       {
         "type": "color",
         "id": "color_foreground",
-        "default": "#20342C",
+        "default": "{{ settings.colors.ink }}",
         "label": "t:labels.ink"
       },
       {
         "type": "color",
         "id": "color_surface",
-        "default": "#EAE6DC",
+        "default": "{{ settings.colors.surface }}",
         "label": "t:labels.surface"
       },
       {
         "type": "color",
         "id": "color_surface_ink",
-        "default": "#20342C",
+        "default": "{{ settings.colors.surface_ink }}",
         "label": "t:labels.surface_ink"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "default": "#C8D78F",
+        "default": "{{ settings.colors.accent }}",
         "label": "t:labels.accent"
       },
       {
         "type": "color",
         "id": "color_accent_ink",
-        "default": "#20342C",
+        "default": "{{ settings.colors.accent_ink }}",
         "label": "t:labels.accent_ink"
       },
       {
         "type": "color",
         "id": "color_muted",
-        "default": "#59635D",
+        "default": "{{ settings.colors.muted }}",
         "label": "t:labels.muted"
       },
       {
         "type": "color",
         "id": "color_border",
-        "default": "#7E847A",
+        "default": "{{ settings.colors.border }}",
         "label": "t:labels.border"
       }
     ]
@@ -134,6 +148,37 @@
         "step": 8,
         "unit": "px",
         "default": 96
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "t:labels.card_radius",
+        "min": 0,
+        "max": 20,
+        "step": 2,
+        "unit": "px",
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "control_radius",
+        "label": "t:labels.control_radius",
+        "min": 0,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "default": 2
+      },
+      {
+        "type": "select",
+        "id": "product_card_aspect",
+        "label": "t:labels.product_card_aspect",
+        "options": [
+          { "value": "0.72", "label": "t:options.product_card_aspect.tall" },
+          { "value": "0.82", "label": "t:options.product_card_aspect.portrait" },
+          { "value": "1", "label": "t:options.product_card_aspect.square" }
+        ],
+        "default": "0.82"
       }
     ]
   }

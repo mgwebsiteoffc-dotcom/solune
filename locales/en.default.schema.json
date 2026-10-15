@@ -21,6 +21,9 @@
     "articles_per_page": "Articles per page",
     "body_font": "Body font",
     "body_text": "Body text",
+    "card_radius": "Card corner radius",
+    "control_radius": "Button and field corner radius",
+    "product_card_aspect": "Product card image shape",
     "border": "Borders",
     "canvas": "Canvas",
     "excerpt_words": "Excerpt length in words",
@@ -73,6 +76,11 @@
       "narrow": "Narrow",
       "standard": "Standard",
       "wide": "Wide"
+    },
+    "product_card_aspect": {
+      "tall": "Tall portrait",
+      "portrait": "Portrait",
+      "square": "Square"
     }
   },
   "sections": {

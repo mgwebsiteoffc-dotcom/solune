@@ -10,6 +10,8 @@
 
 Solune is an original, skincare-focused Online Store 2.0 theme with warm mineral colors, editorial typography, accessible shopping flows, and product education built around merchant-supplied facts. Prestige is a quality reference only; no Prestige code, layouts, assets, or branding are used.
 
+The theme editor includes five original theme styles—Solune, Dew, Petal, Grove, and Dusk—with distinct color palettes and coordinated page widths, section spacing, corner radii, and product-card image proportions. Merchants can choose fonts from Shopify's font picker and edit individual colors using the theme palette.
+
 The project starts from Shopify Skeleton Theme **v1.0.0** and preserves its MIT license. The MIT notice is retained for the upstream code; the intended commercial distribution channel for this theme remains the Shopify Theme Store. See `UPSTREAM.md` for source provenance and license details.
 
 ## Current foundation

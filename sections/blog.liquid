@@ -12,7 +12,7 @@
             {% if article.image %}
               {% assign article_image_alt = article.image.alt | default: article.title %}
               {% capture article_focal_style %}object-position: {{ article.image.presentation.focal_point }};{% endcapture %}
-              {{ article.image | image_url: width: 1000 | image_tag: alt: article_image_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 990px) 31vw, (min-width: 680px) 48vw, 100vw', loading: 'lazy', style: article_focal_style }}
+              {{ article.image | image_url: width: 1000 | image_tag: alt: article_image_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 1025px) 31vw, (min-width: 681px) 46vw, 90vw', loading: 'lazy', style: article_focal_style }}
             {% endif %}
           </a>
           <div class="blog-card__content">

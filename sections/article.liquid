@@ -5,7 +5,7 @@
       {% assign article_image_alt = article.image.alt | default: article.title %}
       {% capture article_focal_style %}object-position: {{ article.image.presentation.focal_point }};{% endcapture %}
       <figure class="article-page__image">
-        {{ article.image | image_url: width: 1800 | image_tag: alt: article_image_alt, widths: '480, 640, 800, 1000, 1200, 1600, 1800', sizes: '(min-width: 990px) 72vw, 100vw', loading: 'eager', style: article_focal_style }}
+        {{ article.image | image_url: width: 1800 | image_tag: alt: article_image_alt, widths: '480, 640, 800, 1000, 1200, 1600, 1800', sizes: '(min-width: 1025px) 58rem, 92vw', loading: 'eager', style: article_focal_style }}
       </figure>
     {% endif %}
 

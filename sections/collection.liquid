@@ -12,7 +12,7 @@
       <div class="collection-header__image">
         {% assign collection_image_alt = collection_hero_image.alt | default: collection.title %}
         {% capture collection_focal_style %}object-position: {{ collection_hero_image.presentation.focal_point }};{% endcapture %}
-        {{ collection_hero_image | image_url: width: 1400 | image_tag: alt: collection_image_alt, widths: '360, 480, 640, 800, 1000, 1200, 1400', sizes: '(min-width: 990px) 34vw, 100vw', loading: 'eager', style: collection_focal_style }}
+        {{ collection_hero_image | image_url: width: 1400 | image_tag: alt: collection_image_alt, widths: '360, 480, 640, 800, 1000, 1200, 1400', sizes: '(min-width: 1025px) 34vw, (min-width: 681px) 38vw, 90vw', loading: 'eager', style: collection_focal_style }}
       </div>
     {% endif %}
   </div>

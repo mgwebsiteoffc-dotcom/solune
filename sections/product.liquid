@@ -24,7 +24,7 @@
           {% if media.media_type == 'image' %}
             {% assign media_alt = media.alt | default: product.title %}
             {% capture media_focal_style %}object-position: {{ media.preview_image.presentation.focal_point }};{% endcapture %}
-            {{ media.preview_image | image_url: width: 1800 | image_tag: alt: media_alt, widths: '360, 480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 990px) 54vw, 100vw', loading: media_loading, style: media_focal_style }}
+            {{ media.preview_image | image_url: width: 1800 | image_tag: alt: media_alt, widths: '360, 480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 1025px) 54vw, (min-width: 681px) 50vw, 100vw', loading: media_loading, style: media_focal_style }}
           {% else %}
             {{ media | media_tag: image_size: '1200x', controls: true }}
           {% endif %}

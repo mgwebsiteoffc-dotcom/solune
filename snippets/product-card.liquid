@@ -14,7 +14,7 @@
   <a class="product-card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
     {% if card_media != blank %}
       {% assign card_alt = product.featured_media.alt | default: product.title %}
-      {{ card_media | image_url: width: 1000 | image_tag: alt: card_alt, widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 990px) 22vw, (min-width: 680px) 45vw, 48vw', loading: loading | default: 'lazy', style: card_focal_style }}
+      {{ card_media | image_url: width: 1000 | image_tag: alt: card_alt, widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 1101px) 22vw, (min-width: 1025px) 30vw, 46vw', loading: loading | default: 'lazy', style: card_focal_style }}
     {% else %}
       <span class="product-card__placeholder">{{ product.title | escape }}</span>
     {% endif %}
