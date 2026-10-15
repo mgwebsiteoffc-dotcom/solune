@@ -84,7 +84,7 @@
               {% when 'buy_buttons' %}
                 {% form 'product', product, id: product_form_id, class: 'product-form' %}
                   {% if product.gift_card? and block.settings.show_gift_card_recipient %}
-                    {% render 'gift-card-recipient-form', product: product, form: form, section: section %}
+                    {% render 'gift-card-recipient-form', form: form, section: section %}
                   {% endif %}
                   <button class="button" type="submit" name="add" data-add-to-cart data-add-label="{{ 'product.add_to_cart' | t | escape }}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" data-plan-unavailable-label="{{ 'product.subscription_unavailable' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>
                     {% if current_variant.available %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'general.sold_out' | t }}{% endif %}
