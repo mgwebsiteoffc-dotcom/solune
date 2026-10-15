@@ -849,20 +849,32 @@ shopify-account {
 
 .newsletter-section {
   display: grid;
-  grid-template-columns: 1fr minmax(16rem, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.9fr);
   align-items: center;
-  gap: 3rem;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-block: clamp(2.5rem, 4vw, 4rem);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
 
 .newsletter-form__row {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: end;
+  gap: 0.75rem;
 }
 
 .newsletter-form__row input {
-  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.newsletter-form__row .button {
+  width: auto;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.newsletter-section > * {
   min-width: 0;
 }
 
@@ -927,13 +939,20 @@ shopify-account {
 
 .collection-layout {
   display: grid;
-  grid-template-columns: minmax(12rem, 0.24fr) 1fr;
+  grid-template-columns: minmax(12rem, 0.24fr) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 4rem);
   padding-bottom: var(--section-spacing, 96px);
 }
 
+.collection-layout > * {
+  min-width: 0;
+}
+
 .facets {
   align-self: start;
+  min-width: 0;
+  container-name: facets;
+  container-type: inline-size;
 }
 
 .facets > h2 {
@@ -946,9 +965,40 @@ shopify-account {
 }
 
 .facet-group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   cursor: pointer;
+  list-style: none;
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+.facet-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.facet-group summary::after {
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  flex: 0 0 auto;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  content: '';
+  transform: translateY(-0.1rem) rotate(45deg);
+  transition: transform 160ms ease;
+}
+
+.facet-group[open] summary::after {
+  transform: translateY(0.1rem) rotate(225deg);
+}
+
+.facet-group summary:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 4px;
 }
 
 .facet-values {
@@ -967,9 +1017,12 @@ shopify-account {
 
 .facet-value input {
   width: 1rem;
+  height: 1rem;
   min-height: 1rem;
-  flex: 0 0 auto;
+  flex: 0 0 1rem;
   margin: 0.1rem 0 0;
+  border-radius: 2px;
+  padding: 0;
   accent-color: var(--color-foreground);
 }
 
@@ -979,20 +1032,66 @@ shopify-account {
 
 .facet-price-range {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.facet-price-range .field {
+  min-width: 0;
+  gap: 0.35rem;
 }
 
 .facet-price-range label {
-  font-size: 0.72rem;
+  min-height: 1em;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.facet-price-range input[type='number'] {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control, 2px);
+  padding: 0.6rem 0.7rem;
+  background: var(--color-surface);
+  color: var(--color-foreground);
+  font-size: 0.84rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@container facets (max-width: 14rem) {
+  .facet-price-range {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .facet-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1rem;
+}
+
+.facet-actions .button {
+  min-height: 2.75rem;
+  white-space: nowrap;
+}
+
+.facet-actions .button--secondary {
+  border-color: var(--color-foreground);
+  padding: 0.7rem 1rem;
+  background: transparent;
+  color: var(--color-foreground);
+}
+
+.facet-actions .button--text {
+  margin-inline-start: auto;
 }
 
 .pagination {
@@ -1484,7 +1583,7 @@ shopify-account {
 
 /* Footer */
 .site-footer {
-  padding-block: clamp(3.5rem, 7vw, 6.5rem) 1.5rem;
+  padding-block: clamp(3rem, 5vw, 5rem) 1.5rem;
   background: var(--color-foreground);
   color: var(--color-background);
 }
@@ -1496,9 +1595,13 @@ shopify-account {
 
 .site-footer__top {
   display: grid;
-  grid-template-columns: 1fr 0.7fr 0.8fr;
-  gap: 3rem;
+  grid-template-columns: minmax(12rem, 1fr) minmax(8rem, 0.7fr) minmax(17rem, 0.9fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
   padding-bottom: 3rem;
+}
+
+.site-footer__top > * {
+  min-width: 0;
 }
 
 .site-footer__brand {
@@ -1983,8 +2086,12 @@ shopify-account {
   }
 
   .newsletter-form__row {
-    align-items: stretch;
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .newsletter-form__row .button {
+    width: 100%;
+    min-width: 0;
   }
 
   .collection-toolbar,
@@ -2248,7 +2355,12 @@ shopify-account {
 
 @media (min-width: 860px) and (max-width: 1024px) {
   .newsletter-form__row {
-    flex-direction: row;
+    grid-template-columns: minmax(0, 1fr) max-content;
+  }
+
+  .newsletter-form__row .button {
+    width: auto;
+    min-width: max-content;
   }
 }
 

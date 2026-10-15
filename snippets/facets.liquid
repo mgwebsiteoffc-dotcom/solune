@@ -39,11 +39,11 @@
             <div class="facet-price-range">
               <div class="field">
                 <label for="Filter-{{ section_id }}-{{ forloop.index }}-min">{{ 'collection.from_price' | t }}</label>
-                <input id="Filter-{{ section_id }}-{{ forloop.index }}-min" type="number" name="{{ filter.min_value.param_name }}" min="0" step="any"{% if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="0">
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-min" type="number" inputmode="decimal" name="{{ filter.min_value.param_name }}" min="0" step="any"{% if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="0">
               </div>
               <div class="field">
                 <label for="Filter-{{ section_id }}-{{ forloop.index }}-max">{{ 'collection.to_price' | t }}</label>
-                <input id="Filter-{{ section_id }}-{{ forloop.index }}-max" type="number" name="{{ filter.max_value.param_name }}" min="0" step="any"{% if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-max" type="number" inputmode="decimal" name="{{ filter.max_value.param_name }}" min="0" step="any"{% if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
               </div>
             </div>
         {% endcase %}

@@ -8,6 +8,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Build an original, responsive skincare visual system with a curated section library and merchant-facing settings.
 - [x] Add five original theme style presets, a theme color palette, editable corner radii, and product-card image proportions.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
+- [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.

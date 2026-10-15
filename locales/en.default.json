@@ -85,8 +85,8 @@
     "product_count_one": "{{ count }} product",
     "product_count_other": "{{ count }} products",
     "no_products": "No products found. Try changing your filters.",
-    "from_price": "Minimum price",
-    "to_price": "Maximum price"
+    "from_price": "From price",
+    "to_price": "To price"
   },
   "collections": {
     "title": "Explore all collections"
