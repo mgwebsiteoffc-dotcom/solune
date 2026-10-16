@@ -8,7 +8,6 @@
           "settings": {
             "media_layout": "grid",
             "media_ratio": "natural",
-            "media_grid_columns": 2,
             "media_grid_gap": 8,
             "mobile_gallery_layout": "slider",
             "mobile_gallery_controls": "dots",

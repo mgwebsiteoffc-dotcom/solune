@@ -1,0 +1,26 @@
+{% doc %}
+  Renders linked thumbnail navigation for the product media carousel.
+  @param {product} product
+  @param {string} section_id
+  @param {string} placement - left or bottom
+{% enddoc %}
+
+<div class="product-gallery__thumbnails product-gallery__thumbnails--{{ placement }}" role="group" aria-label="{{ 'accessibility.product_gallery' | t | escape }}">
+  {% for media in product.media %}
+    {% assign thumbnail_alt = media.alt | default: product.title %}
+    <a
+      class="product-gallery__thumbnail"
+      href="#ProductMedia-{{ section_id }}-{{ media.id }}"
+      data-gallery-thumb="{{ forloop.index0 }}"
+      aria-label="{{ 'product.gallery_go_to_media' | t: index: forloop.index | escape }}"
+      {% if forloop.first %}aria-current="true"{% endif %}
+    >
+      {{ media.preview_image | image_url: width: 160 | image_tag: alt: thumbnail_alt, widths: '80, 120, 160', loading: 'lazy' }}
+      {% if media.media_type == 'video' or media.media_type == 'external_video' %}
+        <span class="product-gallery__thumbnail-badge" aria-hidden="true">▶</span>
+      {% elsif media.media_type == 'model' %}
+        <span class="product-gallery__thumbnail-badge" aria-hidden="true">3D</span>
+      {% endif %}
+    </a>
+  {% endfor %}
+</div>

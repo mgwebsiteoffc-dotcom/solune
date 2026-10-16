@@ -79,15 +79,16 @@
     });
   };
 
-  const updateGalleryDots = (gallery) => {
-    const controls = gallery.parentElement?.querySelector('[data-gallery-controls]');
-    if (!controls || gallery.clientWidth === 0) return;
-    const dots = [...controls.querySelectorAll('[data-gallery-dot]')];
-    if (dots.length === 0) return;
-    const activeIndex = Math.max(0, Math.min(dots.length - 1, Math.round(gallery.scrollLeft / gallery.clientWidth)));
-    dots.forEach((dot, index) => {
-      if (index === activeIndex) dot.setAttribute('aria-current', 'true');
-      else dot.removeAttribute('aria-current');
+  const updateGalleryControls = (gallery) => {
+    const container = gallery.closest('.product-gallery-container');
+    if (!container || gallery.clientWidth === 0) return;
+    const controls = [...container.querySelectorAll('[data-gallery-dot], [data-gallery-thumb]')];
+    if (controls.length === 0) return;
+    const activeIndex = Math.max(0, Math.round(gallery.scrollLeft / gallery.clientWidth));
+    controls.forEach((control) => {
+      const controlIndex = Number(control.dataset.galleryDot ?? control.dataset.galleryThumb);
+      if (controlIndex === activeIndex) control.setAttribute('aria-current', 'true');
+      else control.removeAttribute('aria-current');
     });
   };
 
@@ -98,17 +99,20 @@
     galleries.forEach((gallery) => {
       if (gallery.dataset.galleryInitialized === 'true') return;
       gallery.dataset.galleryInitialized = 'true';
-      if (gallery.dataset.mobileLayout !== 'slider') return;
+      const container = gallery.closest('.product-gallery-container');
+      const desktopCarouselLayouts = ['thumbnails_left', 'thumbnails_bottom', 'dots_carousel'];
+      const hasDesktopCarousel = desktopCarouselLayouts.includes(container?.dataset.desktopLayout);
+      if (gallery.dataset.mobileLayout !== 'slider' && !hasDesktopCarousel) return;
 
       let animationFrame = 0;
       gallery.addEventListener('scroll', () => {
         if (animationFrame) return;
         animationFrame = window.requestAnimationFrame(() => {
           animationFrame = 0;
-          updateGalleryDots(gallery);
+          updateGalleryControls(gallery);
         });
       }, { passive: true });
-      updateGalleryDots(gallery);
+      updateGalleryControls(gallery);
     });
   };
 
@@ -400,12 +404,13 @@
       return;
     }
 
-    const dot = event.target.closest?.('[data-gallery-dot]');
-    if (!dot) return;
-    const gallery = dot.closest('.product-gallery-container')?.querySelector('[data-product-gallery]');
-    const targetIndex = dot.dataset.galleryDot;
+    const galleryControl = event.target.closest?.('[data-gallery-dot], [data-gallery-thumb]');
+    if (!galleryControl) return;
+    const gallery = galleryControl.closest('.product-gallery-container')?.querySelector('[data-product-gallery]');
+    const targetIndex = galleryControl.dataset.galleryDot ?? galleryControl.dataset.galleryThumb;
     const media = gallery?.querySelector(`[data-gallery-index="${targetIndex}"]`);
     if (media) {
+      event.preventDefault();
       media.scrollIntoView({
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         block: 'nearest',

@@ -16,7 +16,6 @@
 {% assign pickup_container_id = 'PickupAvailability-' | append: section.id %}
 {% assign product_media_block = section.blocks | where: 'type', 'product_media' | first %}
 {% assign product_media_layout = 'grid' %}
-{% assign product_media_columns = 2 %}
 {% assign product_media_gap = 8 %}
 {% assign product_media_ratio = 'natural' %}
 {% assign product_mobile_layout = 'slider' %}
@@ -27,7 +26,6 @@
 {% assign product_video_loop = true %}
 {% if product_media_block != blank %}
   {% assign product_media_layout = product_media_block.settings.media_layout %}
-  {% assign product_media_columns = product_media_block.settings.media_grid_columns %}
   {% assign product_media_gap = product_media_block.settings.media_grid_gap %}
   {% assign product_media_ratio = product_media_block.settings.media_ratio %}
   {% assign product_mobile_layout = product_media_block.settings.mobile_gallery_layout %}
@@ -37,17 +35,30 @@
   {% assign product_video_autoplay = product_media_block.settings.video_autoplay %}
   {% assign product_video_loop = product_media_block.settings.video_loop %}
 {% endif %}
+{% assign product_gallery_has_thumbnails = false %}
+{% if product.media.size > 1 %}
+  {% assign product_gallery_has_thumbnails = true %}
+{% endif %}
+{% assign show_gallery_dots = false %}
+{% if product_media_layout == 'dots_carousel' %}
+  {% assign show_gallery_dots = true %}
+{% elsif product_mobile_layout == 'slider' and product_mobile_controls == 'dots' %}
+  {% assign show_gallery_dots = true %}
+{% endif %}
 <section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
   <div class="product-layout" style="--product-info-width: {{ section.settings.product_info_width }}%;">
-    <div class="product-gallery-container" {% if product_media_block != blank %}{{ product_media_block.shopify_attributes }}{% endif %}>
+    <div class="product-gallery-container" data-desktop-layout="{{ product_media_layout }}" data-mobile-layout="{{ product_mobile_layout }}" data-mobile-controls="{{ product_mobile_controls }}" data-has-thumbnails="{{ product_gallery_has_thumbnails }}" {% if product_media_block != blank %}{{ product_media_block.shopify_attributes }}{% endif %}>
+      {% if product_media_layout == 'thumbnails_left' and product.media.size > 1 %}
+        {% render 'product-gallery-thumbnails', product: product, section_id: section.id, placement: 'left' %}
+      {% endif %}
       <div
-        class="product-gallery{% if product_media_layout == 'stacked' %} product-gallery--stacked{% endif %}{% if product_mobile_layout == 'slider' %} product-gallery--mobile-slider{% endif %}"
+        class="product-gallery{% if product_media_layout == 'stacked' %} product-gallery--grid-one{% elsif product_media_layout == 'grid_two' %} product-gallery--grid-two{% elsif product_media_layout == 'grid' %} product-gallery--grid-featured{% else %} product-gallery--carousel{% endif %}{% if product_mobile_layout == 'slider' %} product-gallery--mobile-slider{% endif %}"
         role="region"
         aria-label="{{ 'accessibility.product_gallery' | t }}"
         data-product-gallery
         data-mobile-layout="{{ product_mobile_layout }}"
         data-media-ratio="{{ product_media_ratio }}"
-        style="--media-grid-columns: {{ product_media_columns }}; --media-grid-gap: {{ product_media_gap }}px; --media-image-zoom: {{ product_image_zoom_level }};"
+        style="--media-grid-gap: {{ product_media_gap }}px; --media-image-zoom: {{ product_image_zoom_level }};"
       >
       {% for media in product.media %}
         {% assign media_loading = 'lazy' %}
@@ -101,10 +112,13 @@
         </div>
       {% endfor %}
       </div>
-      {% if product_mobile_layout == 'slider' and product_mobile_controls == 'dots' and product.media.size > 1 %}
-        <div class="product-gallery__controls" data-gallery-controls role="group" aria-label="{{ 'accessibility.product_gallery' | t | escape }}">
+      {% if product_media_layout == 'thumbnails_bottom' and product.media.size > 1 %}
+        {% render 'product-gallery-thumbnails', product: product, section_id: section.id, placement: 'bottom' %}
+      {% endif %}
+      {% if show_gallery_dots and product.media.size > 1 %}
+        <div class="product-gallery__controls product-gallery__controls--dots" data-gallery-controls role="group" aria-label="{{ 'accessibility.product_gallery' | t | escape }}">
           {% for media in product.media %}
-            <button class="product-gallery__dot" type="button" data-gallery-dot="{{ forloop.index0 }}" aria-label="{{ 'product.gallery_go_to_media' | t: index: forloop.index | escape }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+            <a class="product-gallery__dot" href="#ProductMedia-{{ section.id }}-{{ media.id }}" data-gallery-dot="{{ forloop.index0 }}" aria-label="{{ 'product.gallery_go_to_media' | t: index: forloop.index | escape }}"{% if forloop.first %} aria-current="true"{% endif %}></a>
           {% endfor %}
         </div>
       {% endif %}
@@ -293,8 +307,12 @@
           "id": "media_layout",
           "label": "t:labels.product_media_layout",
           "options": [
-            { "value": "grid", "label": "t:options.product_media_layout.grid" },
-            { "value": "stacked", "label": "t:options.product_media_layout.stacked" }
+            { "value": "stacked", "label": "t:options.product_media_layout.grid_one" },
+            { "value": "grid_two", "label": "t:options.product_media_layout.grid_two" },
+            { "value": "grid", "label": "t:options.product_media_layout.grid_featured" },
+            { "value": "thumbnails_left", "label": "t:options.product_media_layout.thumbnails_left" },
+            { "value": "thumbnails_bottom", "label": "t:options.product_media_layout.thumbnails_bottom" },
+            { "value": "dots_carousel", "label": "t:options.product_media_layout.dots_carousel" }
           ],
           "default": "grid"
         },
@@ -309,15 +327,6 @@
             { "value": "landscape", "label": "t:options.product_media_ratio.landscape" }
           ],
           "default": "natural"
-        },
-        {
-          "type": "range",
-          "id": "media_grid_columns",
-          "label": "t:labels.product_media_columns",
-          "min": 1,
-          "max": 3,
-          "step": 1,
-          "default": 2
         },
         {
           "type": "range",

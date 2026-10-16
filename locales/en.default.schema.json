@@ -119,8 +119,7 @@
     "cart_drawer_free_shipping_threshold_info": "Enter an amount in your store's currency.",
     "sticky_add_to_cart": "Show sticky add-to-cart bar on product pages",
     "product_media_layout": "Desktop media layout",
-    "product_media_columns": "Media columns on desktop",
-    "product_media_gap": "Gap between media",
+    "product_media_gap": "Grid gap between media (desktop)",
     "product_media_mobile_layout": "Mobile media layout",
     "product_media_mobile_controls": "Mobile gallery controls",
     "product_image_zoom": "Enable image zoom",
@@ -164,8 +163,12 @@
       "pills": "Selectable chips"
     },
     "product_media_layout": {
-      "grid": "Grid",
-      "stacked": "Stacked, one per row"
+      "grid_one": "Grid (1 per row)",
+      "grid_two": "Grid (2 per row)",
+      "grid_featured": "Grid (2 per row + first highlighted)",
+      "thumbnails_left": "Thumbnails left (carousel)",
+      "thumbnails_bottom": "Thumbnails bottom (carousel)",
+      "dots_carousel": "Dots (carousel)"
     },
     "product_media_mobile_layout": {
       "grid": "Grid",
