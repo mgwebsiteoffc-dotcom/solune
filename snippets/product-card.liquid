@@ -55,10 +55,10 @@
       {% if product.has_only_default_variant and product.requires_selling_plan == false %}
         {% form 'product', product, class: 'product-card__quick-add-form' %}
           <input type="hidden" name="id" value="{{ card_variant.id }}">
-          <button class="product-card__quick-add" type="submit" name="add">{{ 'product.add_to_cart' | t }}</button>
+          <button class="product-card__quick-add" type="submit" name="add" aria-label="{{ 'product.add_to_cart' | t | append: ': ' | append: product.title | escape }}">{{ 'product.add_to_cart' | t }}</button>
         {% endform %}
       {% else %}
-        <a class="product-card__quick-add" href="{{ product.url }}">{{ 'product.choose_options' | t }}</a>
+        <a class="product-card__quick-add" href="{{ product.url }}" aria-label="{{ 'product.choose_options' | t | append: ': ' | append: product.title | escape }}">{{ 'product.choose_options' | t }}</a>
       {% endif %}
     {% endif %}
   </div>

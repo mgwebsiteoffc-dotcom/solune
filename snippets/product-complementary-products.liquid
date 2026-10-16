@@ -8,9 +8,9 @@
                 {% if complementary_has_products %}
                   {% if block.settings.heading != blank %}<h2 class="product-complementary__heading">{{ block.settings.heading | escape }}</h2>{% endif %}
                   <div class="product-complementary__grid">
-                    {% if complementary_product_one != blank and complementary_product_one.id != product.id %}{% render 'product-card', product: complementary_product_one, show_vendor: false, show_quick_add: false, loading: 'lazy' %}{% endif %}
-                    {% if complementary_product_two != blank and complementary_product_two.id != product.id and complementary_product_two.id != complementary_product_one.id %}{% render 'product-card', product: complementary_product_two, show_vendor: false, show_quick_add: false, loading: 'lazy' %}{% endif %}
-                    {% if complementary_product_three != blank and complementary_product_three.id != product.id and complementary_product_three.id != complementary_product_one.id and complementary_product_three.id != complementary_product_two.id %}{% render 'product-card', product: complementary_product_three, show_vendor: false, show_quick_add: false, loading: 'lazy' %}{% endif %}
+                    {% if complementary_product_one != blank and complementary_product_one.id != product.id %}{% render 'product-card', product: complementary_product_one, show_vendor: false, show_quick_add: block.settings.show_quick_add, loading: 'lazy' %}{% endif %}
+                    {% if complementary_product_two != blank and complementary_product_two.id != product.id and complementary_product_two.id != complementary_product_one.id %}{% render 'product-card', product: complementary_product_two, show_vendor: false, show_quick_add: block.settings.show_quick_add, loading: 'lazy' %}{% endif %}
+                    {% if complementary_product_three != blank and complementary_product_three.id != product.id and complementary_product_three.id != complementary_product_one.id and complementary_product_three.id != complementary_product_two.id %}{% render 'product-card', product: complementary_product_three, show_vendor: false, show_quick_add: block.settings.show_quick_add, loading: 'lazy' %}{% endif %}
                   </div>
                 {% elsif request.design_mode %}
                   <p class="product-card__meta">{{ 'product.choose_complementary_products' | t }}</p>
