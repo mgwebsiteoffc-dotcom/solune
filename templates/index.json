@@ -25,10 +25,21 @@
     "featured_product": {
       "type": "featured-product",
       "blocks": {
-        "title": { "type": "title" },
-        "price": { "type": "price" },
-        "description": { "type": "description" },
-        "variant_picker": { "type": "variant_picker" },
+        "title": {
+          "type": "title",
+          "settings": {
+            "style": "h2"
+          }
+        },
+        "price": {
+          "type": "price"
+        },
+        "description": {
+          "type": "description"
+        },
+        "variant_picker": {
+          "type": "variant_picker"
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -37,7 +48,13 @@
           }
         }
       },
-      "block_order": ["title", "price", "description", "variant_picker", "buy_buttons"],
+      "block_order": [
+        "title",
+        "price",
+        "description",
+        "variant_picker",
+        "buy_buttons"
+      ],
       "settings": {
         "use_first_product_when_empty": true,
         "show_selling_plans": true,
@@ -58,11 +75,33 @@
     "routine": {
       "type": "routine-steps",
       "blocks": {
-        "cleanse": { "type": "step", "settings": { "title": "Cleanse", "body": "Begin with a gentle cleanse." } },
-        "treat": { "type": "step", "settings": { "title": "Treat", "body": "Layer the formula that fits your routine." } },
-        "moisturize": { "type": "step", "settings": { "title": "Moisturize", "body": "Finish with a moisturizer selected for your preferences." } }
+        "cleanse": {
+          "type": "step",
+          "settings": {
+            "title": "Cleanse",
+            "body": "Begin with a gentle cleanse."
+          }
+        },
+        "treat": {
+          "type": "step",
+          "settings": {
+            "title": "Treat",
+            "body": "Layer the formula that fits your routine."
+          }
+        },
+        "moisturize": {
+          "type": "step",
+          "settings": {
+            "title": "Moisturize",
+            "body": "Finish with a moisturizer selected for your preferences."
+          }
+        }
       },
-      "block_order": ["cleanse", "treat", "moisturize"],
+      "block_order": [
+        "cleanse",
+        "treat",
+        "moisturize"
+      ],
       "settings": {
         "eyebrow": "BUILD YOUR ROUTINE",
         "heading": "A few mindful steps.",
@@ -75,7 +114,110 @@
         "heading": "Notes for your ritual",
         "body": "<p>Thoughtful skincare, product notes, and occasional studio updates.</p>"
       }
+    },
+    "image_with_text": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "A CLOSER LOOK",
+        "heading": "A little care, built into your day.",
+        "body": "<p>Thoughtful skincare begins with clear information. Share the ingredients, sourcing, and rituals that make your formulas distinct.</p>",
+        "image_position": "left",
+        "image_ratio": "portrait",
+        "image_width": 50,
+        "text_alignment": "left",
+        "button_label": "Explore the collection",
+        "button_link": "/collections/all"
+      }
+    },
+    "instagram_stories": {
+      "type": "instagram-stories",
+      "blocks": {
+        "story_cleanse": {
+          "type": "story",
+          "settings": {
+            "caption": "The daily cleanse"
+          }
+        },
+        "story_treatment": {
+          "type": "story",
+          "settings": {
+            "caption": "A moment to treat"
+          }
+        },
+        "story_moisture": {
+          "type": "story",
+          "settings": {
+            "caption": "Hydration, layered"
+          }
+        },
+        "story_sun": {
+          "type": "story",
+          "settings": {
+            "caption": "The morning ritual"
+          }
+        }
+      },
+      "block_order": [
+        "story_cleanse",
+        "story_treatment",
+        "story_moisture",
+        "story_sun"
+      ],
+      "settings": {
+        "eyebrow": "FROM THE STUDIO",
+        "heading": "Stories from the ritual.",
+        "profile_handle": "@yourbrand"
+      }
+    },
+    "shoppable_videos": {
+      "type": "shoppable-video-carousel",
+      "blocks": {
+        "video_morning": {
+          "type": "video_product",
+          "settings": {
+            "title": "A slow morning",
+            "caption": "A simple start to your daily ritual."
+          }
+        },
+        "video_layering": {
+          "type": "video_product",
+          "settings": {
+            "title": "Layer by layer",
+            "caption": "See how to build your skincare routine."
+          }
+        },
+        "video_evening": {
+          "type": "video_product",
+          "settings": {
+            "title": "The evening ritual",
+            "caption": "A considered moment at the end of the day."
+          }
+        }
+      },
+      "block_order": [
+        "video_morning",
+        "video_layering",
+        "video_evening"
+      ],
+      "settings": {
+        "eyebrow": "WATCH & SHOP",
+        "heading": "See the ritual in motion.",
+        "body": "<p>Add short product videos and connect each one to a product.</p>",
+        "autoplay": false,
+        "loop": true,
+        "cards_per_row": "3"
+      }
     }
   },
-  "order": ["hero", "featured", "featured_product", "ingredient", "routine", "newsletter"]
+  "order": [
+    "hero",
+    "featured",
+    "featured_product",
+    "image_with_text",
+    "ingredient",
+    "routine",
+    "instagram_stories",
+    "shoppable_videos",
+    "newsletter"
+  ]
 }

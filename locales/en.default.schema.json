@@ -127,7 +127,23 @@
     "product_video_autoplay": "Autoplay product videos",
     "product_video_loop": "Loop product videos",
     "product_info_width": "Product information width on desktop",
-    "product_media_ratio": "Image aspect ratio"
+    "product_media_ratio": "Image aspect ratio",
+    "heading_style": "Style",
+    "hide_sold_out_variants": "Hide sold out variants",
+    "selector_style": "Selector style",
+    "swatch_selector_style": "Swatch selector style",
+    "swatch_selector_style_info": "Choose how product options with Shopify swatch data are displayed.",
+    "variant_image_option_names": "Show variant image for options",
+    "variant_image_option_names_info": "Enter comma-separated option names. With Block style, values use their variant image when available.",
+    "size_chart_page": "Size chart page",
+    "size_chart_page_info": "Linked next to any product option whose name includes “size”.",
+    "vendor_style": "Vendor style",
+    "price_style": "Price style",
+    "quantity_style": "Quantity input style",
+    "description_presentation": "Description presentation",
+    "description_heading": "Description heading",
+    "open_by_default": "Open by default",
+    "text_style": "Text style"
   },
   "options": {
     "page_width": {
@@ -183,6 +199,56 @@
       "square": "Square",
       "portrait": "Portrait (4:5)",
       "landscape": "Landscape (4:3)"
+    },
+    "product_title_style": {
+      "h1": "H1",
+      "h2": "H2",
+      "h3": "H3",
+      "h4": "H4"
+    },
+    "selector_style": {
+      "block": "Block",
+      "dropdown": "Dropdown"
+    },
+    "swatch_selector_style": {
+      "swatch": "Swatch",
+      "button": "Button",
+      "dropdown": "Dropdown"
+    },
+    "vendor_style": {
+      "eyebrow": "Eyebrow",
+      "body": "Body text"
+    },
+    "price_style": {
+      "regular": "Regular",
+      "large": "Large"
+    },
+    "quantity_style": {
+      "field": "Number field",
+      "stepper": "Stepper"
+    },
+    "description_presentation": {
+      "inline": "Inline text",
+      "accordion": "Expandable accordion"
+    },
+    "text_style": {
+      "body": "Body",
+      "lead": "Lead text",
+      "small": "Small text"
+    },
+    "image_with_text_position": {
+      "left": "Image left",
+      "right": "Image right"
+    },
+    "image_with_text_ratio": {
+      "adapt": "Adapt to image",
+      "square": "Square",
+      "portrait": "Portrait",
+      "landscape": "Landscape"
+    },
+    "image_with_text_alignment": {
+      "left": "Left",
+      "center": "Center"
     }
   },
   "sections": {
@@ -312,6 +378,58 @@
     },
     "cart_drawer": {
       "name": "Cart drawer"
+    },
+    "image_with_text": {
+      "name": "Image with text",
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Body copy",
+        "image": "Image",
+        "image_position": "Image position",
+        "image_ratio": "Image aspect ratio",
+        "image_width": "Image width on desktop",
+        "text_alignment": "Text alignment",
+        "button_label": "Button label",
+        "button_link": "Button link"
+      }
+    },
+    "instagram_stories": {
+      "name": "Instagram stories",
+      "blocks": {
+        "story": "Story"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "profile_handle": "Instagram handle",
+        "profile_url": "Instagram profile link",
+        "profile_url_info": "Curate story images and links manually; this section does not connect to Instagram’s API.",
+        "story": "Story",
+        "caption": "Caption",
+        "image": "Story image",
+        "link": "Story link"
+      }
+    },
+    "shoppable_video_carousel": {
+      "name": "Shoppable video carousel",
+      "blocks": {
+        "video_product": "Shoppable video"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "autoplay": "Autoplay videos",
+        "autoplay_info": "Videos are muted automatically when autoplay is enabled.",
+        "loop": "Loop videos",
+        "cards_per_row": "Cards per row on desktop",
+        "video": "Video",
+        "poster": "Poster image",
+        "product": "Product",
+        "title": "Card heading",
+        "caption": "Caption"
+      }
     }
   },
   "blocks": {

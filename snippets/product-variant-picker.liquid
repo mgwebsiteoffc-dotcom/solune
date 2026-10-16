@@ -1,11 +1,20 @@
 {% doc %}
-  Renders separate, accessible product option selectors with native swatch support.
+  Renders accessible product option selectors with configurable buttons, dropdowns, native swatches, and optional variant-image choices.
   @param {product} product
   @param {string} section_id
   @param {string} form_id
+  @param {string} selector_style
+  @param {string} swatch_selector_style
+  @param {boolean} hide_sold_out_variants
+  @param {string} variant_image_option_names
+  @param {page} size_chart_page
 {% enddoc %}
 
 {% assign option_picker_variant = product.selected_or_first_available_variant %}
+{% assign option_selector_style = selector_style | default: 'block' %}
+{% assign option_swatch_selector_style = swatch_selector_style | default: 'swatch' %}
+{% assign option_hide_sold_out_variants = hide_sold_out_variants | default: false %}
+{% assign option_image_names = variant_image_option_names | downcase | split: ',' %}
 {% if product.has_only_default_variant %}
   <input type="hidden" name="id" value="{{ option_picker_variant.id }}" form="{{ form_id }}" data-variant-select>
 {% else %}
@@ -32,63 +41,144 @@
         {% if option_value.swatch != blank %}{% assign option_has_swatches = true %}{% endif %}
       {% endfor %}
 
-      {% if option_has_swatches %}
-        <fieldset class="product-option-group product-option-group--swatches" data-product-option-group data-option-index="{{ option.position | minus: 1 }}">
+      {% assign option_name_normalized = option.name | downcase | strip %}
+      {% assign option_show_variant_images = false %}
+      {% for option_image_name in option_image_names %}
+        {% assign option_image_name = option_image_name | strip %}
+        {% if option_image_name != blank and option_image_name == option_name_normalized %}
+          {% assign option_show_variant_images = true %}
+        {% endif %}
+      {% endfor %}
+
+      {% assign render_option_swatches = false %}
+      {% assign render_option_buttons = false %}
+      {% if option_show_variant_images and option_selector_style == 'block' %}
+        {% assign render_option_buttons = true %}
+      {% elsif option_has_swatches %}
+        {% case option_swatch_selector_style %}
+          {% when 'swatch' %}{% assign render_option_swatches = true %}
+          {% when 'button' %}{% assign render_option_buttons = true %}
+        {% endcase %}
+      {% elsif option_selector_style != 'dropdown' %}
+        {% assign render_option_buttons = true %}
+      {% endif %}
+
+      {% assign option_name_lower = option.name | downcase %}
+      {% assign option_has_size_chart = false %}
+      {% if size_chart_page != blank and option_name_lower contains 'size' %}
+        {% assign option_has_size_chart = true %}
+      {% endif %}
+
+      {% assign option_group_class = 'product-option-group' %}
+      {% if render_option_swatches %}{% assign option_group_class = option_group_class | append: ' product-option-group--swatches' %}{% endif %}
+      {% if render_option_buttons %}{% assign option_group_class = option_group_class | append: ' product-option-group--buttons' %}{% endif %}
+      {% if option_show_variant_images %}{% assign option_group_class = option_group_class | append: ' product-option-group--variant-images' %}{% endif %}
+
+      {% if render_option_swatches or render_option_buttons %}
+        <fieldset class="{{ option_group_class }}" data-product-option-group data-option-index="{{ option.position | minus: 1 }}" data-hide-sold-out="{{ option_hide_sold_out_variants }}">
           <legend>
             {{ option.name | escape }}:
             <span data-option-current-value data-option-index="{{ option.position | minus: 1 }}">{{ option.selected_value | escape }}</span>
+            {% if option_has_size_chart %}<a class="product-option__size-chart" href="{{ size_chart_page.url }}">{{ 'product.size_chart' | t }}</a>{% endif %}
           </legend>
-          <div class="product-option__swatches">
+          {% assign option_values_class = 'product-option__buttons' %}
+          {% if render_option_swatches %}{% assign option_values_class = 'product-option__swatches' %}{% endif %}
+          <div class="{{ option_values_class }}">
             {% for option_value in option.values %}
-              {% assign option_swatch_id = 'Option-' | append: section_id | append: '-' | append: option.position | append: '-' | append: forloop.index %}
-              {% assign option_has_swatch_visual = false %}
-              {% if option_value.swatch.image != blank or option_value.swatch.color != blank %}{% assign option_has_swatch_visual = true %}{% endif %}
-              {% capture option_swatch_style %}
-                {% if option_value.swatch.color != blank %}--swatch-color: {{ option_value.swatch.color }};{% endif %}
-                {% if option_value.swatch.image != blank %}--swatch-image: url('{{ option_value.swatch.image | image_url: width: 100 }}');{% endif %}
-              {% endcapture %}
-              <input
-                class="visually-hidden product-option__radio"
-                type="radio"
-                id="{{ option_swatch_id }}"
-                name="Option-{{ section_id }}-{{ option.position }}"
-                value="{{ option_value.name | escape }}"
-                data-product-option
-                data-option-index="{{ option.position | minus: 1 }}"
-                data-option-value-id="{{ option_value.id }}"
-                data-option-base-label="{{ option_value.name | escape }}"
-                data-option-available="{{ option_value.available }}"
-                {% if option_value.selected %}checked{% endif %}
-              >
-              <label
-                class="product-option__swatch{% unless option_has_swatch_visual %} product-option__swatch--text{% endunless %}"
-                for="{{ option_swatch_id }}"
-                {% if option_has_swatch_visual %}style="{{ option_swatch_style | strip | escape }}"{% endif %}
-                title="{{ option_value.name | escape }}"
-              >
-                {% if option_has_swatch_visual %}
-                  <span class="product-option__swatch-visual" aria-hidden="true"></span>
-                  <span class="visually-hidden">{{ option_value.name | escape }}{% unless option_value.available %}, {{ 'general.sold_out' | t }}{% endunless %}</span>
-                {% else %}
-                  <span>{{ option_value.name | escape }}</span>
+              {% assign option_value_hidden = false %}
+              {% if option_hide_sold_out_variants and option_value.available == false and option_value.selected == false %}
+                {% assign option_value_hidden = true %}
+              {% endif %}
+              {% assign option_value_id = 'Option-' | append: section_id | append: '-' | append: option.position | append: '-' | append: forloop.index %}
+              {% if render_option_swatches %}
+                {% assign option_has_swatch_visual = false %}
+                {% if option_value.swatch.image != blank or option_value.swatch.color != blank %}{% assign option_has_swatch_visual = true %}{% endif %}
+                {% capture option_swatch_style %}
+                  {% if option_value.swatch.color != blank %}--swatch-color: {{ option_value.swatch.color }};{% endif %}
+                  {% if option_value.swatch.image != blank %}--swatch-image: url('{{ option_value.swatch.image | image_url: width: 100 }}');{% endif %}
+                {% endcapture %}
+                <input
+                  class="visually-hidden product-option__radio"
+                  type="radio"
+                  id="{{ option_value_id }}"
+                  name="Option-{{ section_id }}-{{ option.position }}"
+                  value="{{ option_value.name | escape }}"
+                  data-product-option
+                  data-option-index="{{ option.position | minus: 1 }}"
+                  data-option-value-id="{{ option_value.id }}"
+                  data-option-base-label="{{ option_value.name | escape }}"
+                  data-option-available="{{ option_value.available }}"
+                  {% if option_value.selected %}checked{% endif %}
+                  {% if option_value_hidden %}hidden disabled{% endif %}
+                >
+                <label
+                  class="product-option__swatch{% unless option_has_swatch_visual %} product-option__swatch--text{% endunless %}"
+                  for="{{ option_value_id }}"
+                  {% if option_value_hidden %}hidden{% endif %}
+                  {% if option_has_swatch_visual %}style="{{ option_swatch_style | strip | escape }}"{% endif %}
+                  title="{{ option_value.name | escape }}"
+                >
+                  {% if option_has_swatch_visual %}
+                    <span class="product-option__swatch-visual" aria-hidden="true"></span>
+                    <span class="visually-hidden">{{ option_value.name | escape }}{% unless option_value.available %}, {{ 'general.sold_out' | t }}{% endunless %}</span>
+                  {% else %}
+                    <span>{{ option_value.name | escape }}</span>
+                  {% endif %}
+                </label>
+              {% else %}
+                {% assign option_value_variant = nil %}
+                {% if option_show_variant_images %}
+                  {% for variant in product.variants %}
+                    {% case option.position %}
+                      {% when 1 %}{% if variant.option1 == option_value.name %}{% assign option_value_variant = variant %}{% break %}{% endif %}
+                      {% when 2 %}{% if variant.option2 == option_value.name %}{% assign option_value_variant = variant %}{% break %}{% endif %}
+                      {% when 3 %}{% if variant.option3 == option_value.name %}{% assign option_value_variant = variant %}{% break %}{% endif %}
+                    {% endcase %}
+                  {% endfor %}
                 {% endif %}
-              </label>
+                <input
+                  class="visually-hidden product-option__radio"
+                  type="radio"
+                  id="{{ option_value_id }}"
+                  name="Option-{{ section_id }}-{{ option.position }}"
+                  value="{{ option_value.name | escape }}"
+                  data-product-option
+                  data-option-index="{{ option.position | minus: 1 }}"
+                  data-option-value-id="{{ option_value.id }}"
+                  data-option-base-label="{{ option_value.name | escape }}"
+                  data-option-available="{{ option_value.available }}"
+                  {% if option_value.selected %}checked{% endif %}
+                  {% if option_value_hidden %}hidden disabled{% endif %}
+                >
+                <label class="product-option__button{% if option_show_variant_images %} product-option__button--image{% endif %}" for="{{ option_value_id }}"{% if option_value_hidden %} hidden{% endif %}>
+                  {% if option_show_variant_images and option_value_variant.featured_media.preview_image != blank %}
+                    {{ option_value_variant.featured_media.preview_image | image_url: width: 100 | image_tag: alt: '', widths: '48, 72, 100', loading: 'lazy' }}
+                  {% endif %}
+                  <span>{{ option_value.name | escape }}{% unless option_value.available %}<span class="visually-hidden">, {{ 'general.sold_out' | t }}</span>{% endunless %}</span>
+                </label>
+              {% endif %}
             {% endfor %}
           </div>
         </fieldset>
       {% else %}
-        <div class="field product-option-group" data-product-option-group data-option-index="{{ option.position | minus: 1 }}">
+        <div class="field product-option-group" data-product-option-group data-option-index="{{ option.position | minus: 1 }}" data-hide-sold-out="{{ option_hide_sold_out_variants }}">
           <label for="Option-{{ section_id }}-{{ option.position }}">
             {{ option.name | escape }}:
             <span data-option-current-value data-option-index="{{ option.position | minus: 1 }}">{{ option.selected_value | escape }}</span>
+            {% if option_has_size_chart %}<a class="product-option__size-chart" href="{{ size_chart_page.url }}">{{ 'product.size_chart' | t }}</a>{% endif %}
           </label>
           <select id="Option-{{ section_id }}-{{ option.position }}" data-product-option data-option-index="{{ option.position | minus: 1 }}">
             {% for option_value in option.values %}
+              {% assign option_value_hidden = false %}
+              {% if option_hide_sold_out_variants and option_value.available == false and option_value.selected == false %}
+                {% assign option_value_hidden = true %}
+              {% endif %}
               <option
                 value="{{ option_value.name | escape }}"
                 data-option-base-label="{{ option_value.name | escape }}"
                 data-option-available="{{ option_value.available }}"
                 {% if option_value.selected %}selected{% endif %}
+                {% if option_value_hidden %}hidden disabled{% endif %}
               >{{ option_value.name | escape }}{% unless option_value.available %} — {{ 'general.sold_out' | t }}{% endunless %}</option>
             {% endfor %}
           </select>

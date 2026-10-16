@@ -116,6 +116,41 @@
     });
   };
 
+  const updateShoppableVideoControls = (track) => {
+    const section = track.closest('.shoppable-video-section');
+    if (!section) return;
+    const maximumScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    const previousButton = section.querySelector('[data-shoppable-video-step="-1"]');
+    const nextButton = section.querySelector('[data-shoppable-video-step="1"]');
+    if (previousButton) previousButton.disabled = track.scrollLeft <= 1;
+    if (nextButton) nextButton.disabled = track.scrollLeft >= maximumScroll - 1;
+  };
+
+  const initializeShoppableVideoCarousels = (scope = document) => {
+    const tracks = [];
+    if (scope.matches?.('[data-shoppable-video-track]')) tracks.push(scope);
+    tracks.push(...scope.querySelectorAll('[data-shoppable-video-track]'));
+    tracks.forEach((track) => {
+      if (track.dataset.carouselInitialized === 'true') return;
+      track.dataset.carouselInitialized = 'true';
+      let animationFrame = 0;
+      track.addEventListener('scroll', () => {
+        if (animationFrame) return;
+        animationFrame = window.requestAnimationFrame(() => {
+          animationFrame = 0;
+          updateShoppableVideoControls(track);
+        });
+      }, { passive: true });
+      if ('ResizeObserver' in window) {
+        const resizeObserver = new ResizeObserver(() => updateShoppableVideoControls(track));
+        resizeObserver.observe(track);
+      } else {
+        window.addEventListener('resize', () => updateShoppableVideoControls(track));
+      }
+      updateShoppableVideoControls(track);
+    });
+  };
+
   const getVariants = (root) => {
     const json = root.querySelector('[data-product-variants]');
     if (!json) return [];
@@ -149,20 +184,31 @@
   const syncOptionPicker = (root, variant, variants) => {
     const groups = getOptionGroups(root);
     const soldOutLabel = root.dataset.soldOutLabel || 'Sold out';
+    const selectedValues = variant.options || getSelectedOptionValues(root);
 
     groups.forEach((group, index) => {
-      const selectedValue = variant.options?.[index];
+      const selectedValue = selectedValues[index];
+      const hideSoldOut = group.dataset.hideSoldOut === 'true';
       if (selectedValue !== undefined) setOptionGroupValue(group, selectedValue);
 
       const currentValue = group.querySelector('[data-option-current-value]');
       if (currentValue && selectedValue !== undefined) currentValue.textContent = selectedValue;
 
+      const getMatchingVariants = (value) => variants.filter((item) => (
+        String(item.options?.[index]) === String(value)
+        && item.options?.every((candidateValue, candidateIndex) => (
+          candidateIndex === index || String(candidateValue) === String(selectedValues[candidateIndex])
+        ))
+      ));
+
       const select = group.querySelector('select[data-product-option]');
       if (select) {
         [...select.options].forEach((option) => {
-          const optionVariants = variants.filter((item) => String(item.options?.[index]) === String(option.value));
+          const optionVariants = getMatchingVariants(option.value);
           const hasAvailableVariant = optionVariants.some((item) => item.available);
-          option.disabled = optionVariants.length === 0;
+          const isSelected = String(option.value) === String(selectedValue);
+          option.hidden = hideSoldOut && !hasAvailableVariant && !isSelected;
+          option.disabled = optionVariants.length === 0 || (hideSoldOut && !hasAvailableVariant && !isSelected);
           option.dataset.optionAvailable = String(hasAvailableVariant);
           const baseLabel = option.dataset.optionBaseLabel || option.value;
           option.textContent = hasAvailableVariant ? baseLabel : `${baseLabel} — ${soldOutLabel}`;
@@ -170,11 +216,17 @@
       }
 
       group.querySelectorAll('input[data-product-option]').forEach((input) => {
-        const optionVariants = variants.filter((item) => String(item.options?.[index]) === String(input.value));
+        const optionVariants = getMatchingVariants(input.value);
         const hasAvailableVariant = optionVariants.some((item) => item.available);
-        input.disabled = optionVariants.length === 0;
+        const isSelected = String(input.value) === String(selectedValue);
+        const isHidden = hideSoldOut && !hasAvailableVariant && !isSelected;
+        input.hidden = isHidden;
+        input.disabled = optionVariants.length === 0 || isHidden;
         input.dataset.optionAvailable = String(hasAvailableVariant);
-        input.nextElementSibling?.classList.toggle('is-sold-out', !hasAvailableVariant);
+        if (input.nextElementSibling) {
+          input.nextElementSibling.hidden = isHidden;
+          input.nextElementSibling.classList.toggle('is-sold-out', !hasAvailableVariant);
+        }
       });
     });
   };
@@ -404,6 +456,36 @@
       return;
     }
 
+    const quantityStepButton = event.target.closest?.('[data-quantity-step]');
+    if (quantityStepButton) {
+      const input = document.getElementById(quantityStepButton.dataset.quantityInput);
+      if (!input) return;
+      const minimum = Number(input.min || 1);
+      const maximum = input.max === '' ? Number.POSITIVE_INFINITY : Number(input.max);
+      const increment = Number(input.step || 1);
+      const current = Number(input.value || minimum);
+      const next = current + (Number(quantityStepButton.dataset.quantityStep) * increment);
+      input.value = String(Number.isFinite(maximum) ? Math.min(maximum, Math.max(minimum, next)) : Math.max(minimum, next));
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      return;
+    }
+
+    const carouselControl = event.target.closest?.('[data-shoppable-video-step]');
+    if (carouselControl) {
+      const track = carouselControl.closest('.shoppable-video-section')?.querySelector('[data-shoppable-video-track]');
+      const firstCard = track?.querySelector('.shoppable-video-card');
+      if (!track || !firstCard) return;
+      const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
+      const distance = firstCard.getBoundingClientRect().width + gap;
+      const direction = Number(carouselControl.dataset.shoppableVideoStep);
+      track.scrollBy({
+        left: distance * direction,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+      return;
+    }
+
     const galleryControl = event.target.closest?.('[data-gallery-dot], [data-gallery-thumb]');
     if (!galleryControl) return;
     const gallery = galleryControl.closest('.product-gallery-container')?.querySelector('[data-product-gallery]');
@@ -498,6 +580,7 @@
 
   initializePriceRanges();
   initializeProductGalleries();
+  initializeShoppableVideoCarousels();
   initializeProducts();
   initializeGiftCardRecipients();
   initializeStickyProductBars();
@@ -544,6 +627,7 @@
   document.addEventListener('shopify:section:load', (event) => {
     initializePriceRanges(event.target);
     initializeProductGalleries(event.target);
+    initializeShoppableVideoCarousels(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
     initializeStickyProductBars(event.target);

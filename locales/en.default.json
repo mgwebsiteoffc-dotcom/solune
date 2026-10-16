@@ -8,7 +8,8 @@
     "product_gallery": "Product images",
     "pagination": "Pagination",
     "announcement": "Store announcement",
-    "close": "Close"
+    "close": "Close",
+    "carousel_controls": "Carousel controls"
   },
   "general": {
     "search": "Search",
@@ -61,7 +62,12 @@
     "unit_price": "Unit price",
     "rating_summary": "Rated {{ rating }} out of {{ scale }} stars from {{ count }} reviews",
     "taxes_included": "Taxes included.",
-    "subscription_unavailable": "Subscription is unavailable for this option."
+    "subscription_unavailable": "Subscription is unavailable for this option.",
+    "size_chart": "Size chart",
+    "add_to_cart_for": "Add {{ title }} to bag",
+    "description": "Description",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity"
   },
   "cart": {
     "title": "Your bag",
@@ -174,6 +180,16 @@
       "demo_heading": "A closer look at your daily ritual.",
       "demo_image_alt": "Example cleanser tube, amber serum dropper, and moisturizer jar arranged on a warm neutral surface.",
       "choose_product": "Select a product in the theme editor, or add products to your catalog to preview this product feature."
+    },
+    "image_with_text": {
+      "demo_image_alt": "A botanical skincare still life used as a theme preview image."
+    },
+    "instagram_stories": {
+      "demo_image_alt": "A theme preview image for a curated skincare story.",
+      "preview_story": "Preview story"
+    },
+    "shoppable_video_carousel": {
+      "demo_image_alt": "A theme preview image used as a shoppable video poster."
     }
   },
   "pickup_availability": {
@@ -216,7 +232,8 @@
     "x": "X",
     "linkedin": "LinkedIn",
     "snapchat": "Snapchat",
-    "vimeo": "Vimeo"
+    "vimeo": "Vimeo",
+    "follow_instagram": "Follow on Instagram"
   },
   "password": {
     "title": "Opening soon",

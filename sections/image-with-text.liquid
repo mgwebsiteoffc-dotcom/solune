@@ -1,0 +1,86 @@
+{% assign image_with_text_image = section.settings.image %}
+{% assign image_with_text_alt = image_with_text_image.alt | default: section.settings.heading %}
+<section class="page-width section-space" aria-labelledby="ImageWithTextTitle-{{ section.id }}">
+  <div
+    class="image-with-text"
+    data-image-position="{{ section.settings.image_position }}"
+    data-image-ratio="{{ section.settings.image_ratio }}"
+    data-text-alignment="{{ section.settings.text_alignment }}"
+    style="--image-with-text-image-width: {{ section.settings.image_width }}%;"
+  >
+    <div class="image-with-text__media{% if image_with_text_image == blank %} image-with-text__media--demo{% endif %}">
+      {% if image_with_text_image != blank %}
+        {% capture image_with_text_focal_style %}object-position: {{ image_with_text_image.presentation.focal_point }};{% endcapture %}
+        {{ image_with_text_image | image_url: width: 1800 | image_tag: alt: image_with_text_alt, widths: '480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 1025px) 55vw, 100vw', loading: 'lazy', style: image_with_text_focal_style }}
+      {% else %}
+        <img
+          src="{{ 'demo-ingredient.jpg' | asset_url }}"
+          alt="{{ 'sections.image_with_text.demo_image_alt' | t | escape }}"
+          width="928"
+          height="1152"
+          loading="lazy"
+          decoding="async"
+        >
+        <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+      {% endif %}
+    </div>
+    <div class="image-with-text__copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="ImageWithTextTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.body != blank %}<div class="rich-text image-with-text__body">{{ section.settings.body }}</div>{% endif %}
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <p class="image-with-text__action"><a class="button button--secondary" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.image_with_text.settings.eyebrow", "default": "A CLOSER LOOK" },
+    { "type": "text", "id": "heading", "label": "t:sections.image_with_text.settings.heading", "default": "A little care, built into your day." },
+    { "type": "richtext", "id": "body", "label": "t:sections.image_with_text.settings.body", "default": "<p>Share helpful, accurate product or brand information in your own words.</p>" },
+    { "type": "image_picker", "id": "image", "label": "t:sections.image_with_text.settings.image" },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.image_with_text.settings.image_position",
+      "options": [
+        { "value": "left", "label": "t:options.image_with_text_position.left" },
+        { "value": "right", "label": "t:options.image_with_text_position.right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.image_with_text.settings.image_ratio",
+      "options": [
+        { "value": "adapt", "label": "t:options.image_with_text_ratio.adapt" },
+        { "value": "square", "label": "t:options.image_with_text_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_with_text_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_with_text_ratio.landscape" }
+      ],
+      "default": "portrait"
+    },
+    { "type": "range", "id": "image_width", "label": "t:sections.image_with_text.settings.image_width", "min": 35, "max": 65, "step": 5, "unit": "%", "default": 50 },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.image_with_text.settings.text_alignment",
+      "options": [
+        { "value": "left", "label": "t:options.image_with_text_alignment.left" },
+        { "value": "center", "label": "t:options.image_with_text_alignment.center" }
+      ],
+      "default": "left"
+    },
+    { "type": "text", "id": "button_label", "label": "t:sections.image_with_text.settings.button_label", "default": "Explore the collection" },
+    { "type": "url", "id": "button_link", "label": "t:sections.image_with_text.settings.button_link" }
+  ],
+  "presets": [
+    { "name": "t:sections.image_with_text.name" }
+  ]
+}
+{% endschema %}
