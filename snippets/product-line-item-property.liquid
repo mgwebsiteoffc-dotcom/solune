@@ -1,0 +1,28 @@
+{% assign product_property_label = block.settings.label %}
+                {% if product_property_label == blank %}{% assign product_property_label = 'product.personalization' | t %}{% endif %}
+                {% assign product_property_name = block.settings.label | default: product_property_label %}
+                {% assign product_property_id = 'ProductProperty-' | append: section_id | append: '-' | append: block.id %}
+                <div class="field product-line-item-property">
+                  {% if block.settings.property_type == 'checkbox' %}
+                    <label class="product-line-item-property__checkbox" for="{{ product_property_id }}">
+                      <input id="{{ product_property_id }}" type="checkbox" name="properties[{{ product_property_name | escape }}]" value="{{ 'product.yes' | t | escape }}" form="{{ product_form_id }}"{% if block.settings.required %} required{% endif %}>
+                      <span>{{ product_property_label | escape }}{% if block.settings.required %} <span aria-hidden="true">*</span>{% endif %}</span>
+                    </label>
+                  {% else %}
+                    <label for="{{ product_property_id }}">{{ product_property_label | escape }}{% if block.settings.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+                    {% if block.settings.property_type == 'textarea' %}
+                      <textarea id="{{ product_property_id }}" name="properties[{{ product_property_name | escape }}]" placeholder="{{ block.settings.placeholder | escape }}" form="{{ product_form_id }}"{% if block.settings.required %} required{% endif %}></textarea>
+                    {% elsif block.settings.property_type == 'select' %}
+                      {% assign product_property_options = block.settings.options | split: ',' %}
+                      <select id="{{ product_property_id }}" name="properties[{{ product_property_name | escape }}]" form="{{ product_form_id }}"{% if block.settings.required %} required{% endif %}>
+                        <option value="">{{ 'product.select_option' | t }}</option>
+                        {% for product_property_option in product_property_options %}
+                          {% assign product_property_option = product_property_option | strip %}
+                          {% if product_property_option != blank %}<option value="{{ product_property_option | escape }}">{{ product_property_option | escape }}</option>{% endif %}
+                        {% endfor %}
+                      </select>
+                    {% else %}
+                      <input id="{{ product_property_id }}" type="text" name="properties[{{ product_property_name | escape }}]" value="{{ block.settings.default_value | escape }}" placeholder="{{ block.settings.placeholder | escape }}" form="{{ product_form_id }}"{% if block.settings.required %} required{% endif %}>
+                    {% endif %}
+                  {% endif %}
+                </div>

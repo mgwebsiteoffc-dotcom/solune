@@ -186,6 +186,79 @@
     });
   };
 
+  const initializeProductInfoBlocks = (scope = document) => {
+    const dialogs = [];
+    if (scope.matches?.('[data-product-info-modal]')) dialogs.push(scope);
+    dialogs.push(...scope.querySelectorAll('[data-product-info-modal]'));
+    dialogs.forEach((dialog) => {
+      if (dialog.dataset.productInfoModalInitialized === 'true') return;
+      dialog.dataset.productInfoModalInitialized = 'true';
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog && typeof dialog.close === 'function') dialog.close();
+      });
+      dialog.addEventListener('close', () => {
+        const opener = dialog._productInfoOpener;
+        dialog._productInfoOpener = null;
+        opener?.focus?.();
+      });
+    });
+
+    const nativeShareButtons = [];
+    if (scope.matches?.('[data-product-native-share]')) nativeShareButtons.push(scope);
+    nativeShareButtons.push(...scope.querySelectorAll('[data-product-native-share]'));
+    nativeShareButtons.forEach((button) => {
+      button.hidden = typeof navigator.share !== 'function';
+    });
+  };
+
+  const updateProductSku = (root, variant) => {
+    root.querySelectorAll('[data-product-sku]').forEach((element) => {
+      const sku = variant.sku || '';
+      const value = element.querySelector('[data-product-sku-value]');
+      if (value) value.textContent = sku;
+      element.hidden = !sku;
+      const block = element.closest('.product-block');
+      if (block) block.hidden = !sku;
+    });
+  };
+
+  const updateProductBadges = (root, variant) => {
+    root.querySelectorAll('[data-product-badges]').forEach((container) => {
+      const saleBadge = container.querySelector('[data-product-badge-sale]');
+      const soldOutBadge = container.querySelector('[data-product-badge-sold-out]');
+      if (saleBadge) {
+        saleBadge.hidden = container.dataset.showSale !== 'true'
+          || Number(variant.compare_at_price || 0) <= Number(variant.price || 0);
+      }
+      if (soldOutBadge) soldOutBadge.hidden = container.dataset.showSoldOut !== 'true' || Boolean(variant.available);
+      container.hidden = ![...container.children].some((child) => !child.hidden);
+      const block = container.closest('.product-block');
+      if (block) block.hidden = container.hidden;
+    });
+  };
+
+  const updateProductInventory = (root, variant) => {
+    root.querySelectorAll('[data-product-inventory]').forEach((element) => {
+      const isAvailable = Boolean(variant.available);
+      const quantity = Number(variant.inventory_quantity || 0);
+      const threshold = Number(element.dataset.lowStockThreshold || 0);
+      const canShowQuantity = element.dataset.showQuantity === 'true'
+        && Boolean(variant.inventory_management)
+        && variant.inventory_policy !== 'continue'
+        && quantity > 0
+        && quantity <= threshold;
+      let message = isAvailable ? element.dataset.inStockLabel : element.dataset.soldOutLabel;
+      if (isAvailable && canShowQuantity) {
+        message = (element.dataset.lowStockTemplate || '').replace('__COUNT__', String(quantity));
+      }
+      const messageElement = element.querySelector('[data-product-inventory-message]');
+      if (messageElement) messageElement.textContent = message;
+      element.classList.toggle('product-inventory--available', isAvailable && !canShowQuantity);
+      element.classList.toggle('product-inventory--low-stock', isAvailable && canShowQuantity);
+      element.classList.toggle('product-inventory--unavailable', !isAvailable);
+    });
+  };
+
   const stopStoryPlayback = (dialog) => {
     const video = dialog.querySelector('video');
     if (video) {
@@ -431,7 +504,11 @@
     const planUnavailable = updateSellingPlans(root, variant);
     const moneyFormat = root.dataset.moneyFormat;
 
+    root.dataset.currentVariantId = String(variant.id);
     updateDisplayedPrice(root, variant);
+    updateProductSku(root, variant);
+    updateProductBadges(root, variant);
+    updateProductInventory(root, variant);
 
     if (status) {
       status.textContent = planUnavailable
@@ -571,6 +648,68 @@
   });
 
   document.addEventListener('click', (event) => {
+    const productModalTrigger = event.target.closest?.('[data-product-modal-trigger]');
+    if (productModalTrigger) {
+      const dialog = document.getElementById(productModalTrigger.getAttribute('aria-controls'));
+      if (!dialog) return;
+      dialog._productInfoOpener = productModalTrigger;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      dialog.querySelector('[data-product-modal-close]')?.focus();
+      return;
+    }
+
+    const productModalCloseButton = event.target.closest?.('[data-product-modal-close]');
+    if (productModalCloseButton) {
+      const dialog = productModalCloseButton.closest('[data-product-info-modal]');
+      if (dialog && typeof dialog.close === 'function') dialog.close();
+      else if (dialog) {
+        dialog.removeAttribute('open');
+        const opener = dialog._productInfoOpener;
+        dialog._productInfoOpener = null;
+        opener?.focus?.();
+      }
+      return;
+    }
+
+    const nativeShareButton = event.target.closest?.('[data-product-native-share]');
+    if (nativeShareButton && typeof navigator.share === 'function') {
+      navigator.share({ title: nativeShareButton.dataset.shareTitle, url: nativeShareButton.dataset.shareUrl })
+        .catch((error) => {
+          if (error.name !== 'AbortError') {
+            const status = nativeShareButton.closest('[data-product-share]')?.querySelector('[data-product-share-status]');
+            if (status) status.textContent = nativeShareButton.dataset.shareError || '';
+          }
+        });
+      return;
+    }
+
+    const copyLinkButton = event.target.closest?.('[data-product-copy-link]');
+    if (copyLinkButton) {
+      const shareContainer = copyLinkButton.closest('[data-product-share]');
+      const status = shareContainer?.querySelector('[data-product-share-status]');
+      const url = copyLinkButton.dataset.shareUrl || window.location.href;
+      const copiedMessage = copyLinkButton.dataset.copySuccess || '';
+      const failedMessage = copyLinkButton.dataset.copyFailed || '';
+      const announce = (copied) => { if (status) status.textContent = copied ? copiedMessage : failedMessage; };
+      const fallbackCopy = () => {
+        const field = document.createElement('textarea');
+        field.value = url;
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.opacity = '0';
+        document.body.append(field);
+        field.select();
+        let copied = false;
+        try { copied = document.execCommand('copy'); } catch (error) { copied = false; }
+        field.remove();
+        announce(copied);
+      };
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(() => announce(true), fallbackCopy);
+      else fallbackCopy();
+      return;
+    }
+
     const zoomButton = event.target.closest?.('[data-image-zoom]');
     if (zoomButton) {
       const media = zoomButton.closest('.product-gallery__media');
@@ -713,7 +852,15 @@
     roots.push(...scope.querySelectorAll('[data-product-root]'));
     roots.forEach((root) => {
       const select = root.querySelector('[data-variant-select]');
-      if (select) updateVariant(root, select, false);
+      if (select) {
+        updateVariant(root, select, false);
+        return;
+      }
+      const selectedVariant = getVariants(root).find((variant) => String(variant.id) === String(root.dataset.currentVariantId));
+      if (!selectedVariant) return;
+      updateProductSku(root, selectedVariant);
+      updateProductBadges(root, selectedVariant);
+      updateProductInventory(root, selectedVariant);
     });
   };
 
@@ -799,11 +946,13 @@
   };
 
   observeRecommendations();
+  initializeProductInfoBlocks();
   document.addEventListener('shopify:section:load', (event) => {
     initializePriceRanges(event.target);
     initializeProductGalleries(event.target);
     initializeShoppableVideoCarousels(event.target);
     initializeStoryDialogs(event.target);
+    initializeProductInfoBlocks(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
     initializeStickyProductBars(event.target);

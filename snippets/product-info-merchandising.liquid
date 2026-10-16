@@ -1,0 +1,50 @@
+{% case block.type %}
+{% when 'sku' %}
+                <p class="product-sku" data-product-sku{% if current_variant.sku == blank %} hidden{% endif %}>
+                  {% if block.settings.show_label %}<span class="product-sku__label">{{ 'product.sku' | t }}:</span> {% endif %}
+                  <span data-product-sku-value>{{ current_variant.sku | escape }}</span>
+                </p>
+              {% when 'badges' %}
+                {% assign product_badge_has_visible_item = false %}
+                {% assign product_badge_matches_new_tag = false %}
+                {% if block.settings.show_new_badge and block.settings.new_product_tag != blank %}
+                  {% assign product_badge_tag_to_match = block.settings.new_product_tag | downcase | strip %}
+                  {% for product_badge_tag in product.tags %}
+                    {% assign product_badge_tag_normalized = product_badge_tag | downcase | strip %}
+                    {% if product_badge_tag_normalized == product_badge_tag_to_match %}{% assign product_badge_matches_new_tag = true %}{% break %}{% endif %}
+                  {% endfor %}
+                {% endif %}
+                {% if block.settings.custom_badge != blank %}{% assign product_badge_has_visible_item = true %}{% endif %}
+                {% if product_badge_matches_new_tag %}{% assign product_badge_has_visible_item = true %}{% endif %}
+                {% if block.settings.show_sale_badge and current_compare_at_price > current_price %}{% assign product_badge_has_visible_item = true %}{% endif %}
+                {% if block.settings.show_sold_out_badge and current_variant.available == false %}{% assign product_badge_has_visible_item = true %}{% endif %}
+                <div class="product-badges" data-product-badges data-show-sale="{{ block.settings.show_sale_badge }}" data-show-sold-out="{{ block.settings.show_sold_out_badge }}"{% unless product_badge_has_visible_item %} hidden{% endunless %}>
+                  {% if block.settings.custom_badge != blank %}<span class="product-badge">{{ block.settings.custom_badge | escape }}</span>{% endif %}
+                  {% if product_badge_matches_new_tag %}<span class="product-badge product-badge--new">{{ 'product.new_badge' | t }}</span>{% endif %}
+                  {% if block.settings.show_sale_badge %}<span class="product-badge product-badge--sale" data-product-badge-sale{% unless current_compare_at_price > current_price %} hidden{% endunless %}>{{ 'general.sale' | t }}</span>{% endif %}
+                  {% if block.settings.show_sold_out_badge %}<span class="product-badge product-badge--sold-out" data-product-badge-sold-out{% if current_variant.available %} hidden{% endif %}>{{ 'general.sold_out' | t }}</span>{% endif %}
+                </div>
+              {% when 'rating' %}
+                {% render 'product-rating', product: product, show_rating: true %}
+              {% when 'separator' %}
+                <hr class="product-divider product-divider--{{ block.settings.style }}" style="--product-divider-space: {{ block.settings.spacing }}px;" aria-hidden="true">
+              {% when 'inventory' %}
+                {% assign current_inventory_quantity = current_variant.inventory_quantity | default: 0 %}
+                {% assign product_inventory_message = 'product.inventory_in_stock' | t %}
+                {% assign product_inventory_class = 'product-inventory--available' %}
+                {% if current_variant.available == false %}
+                  {% assign product_inventory_message = 'product.inventory_sold_out' | t %}
+                  {% assign product_inventory_class = 'product-inventory--unavailable' %}
+                {% elsif block.settings.show_quantity and current_variant.inventory_management != blank and current_variant.inventory_policy != 'continue' and current_inventory_quantity > 0 and current_inventory_quantity <= block.settings.low_stock_threshold %}
+                  {% assign product_inventory_message = 'product.inventory_low_stock' | t: count: current_inventory_quantity %}
+                  {% assign product_inventory_class = 'product-inventory--low-stock' %}
+                {% endif %}
+                <p class="product-inventory {{ product_inventory_class }}" role="status" aria-live="polite" data-product-inventory data-show-quantity="{{ block.settings.show_quantity }}" data-low-stock-threshold="{{ block.settings.low_stock_threshold }}" data-in-stock-label="{{ 'product.inventory_in_stock' | t | escape }}" data-sold-out-label="{{ 'product.inventory_sold_out' | t | escape }}" data-low-stock-template="{{ 'product.inventory_low_stock' | t: count: '__COUNT__' | escape }}">
+                  <span class="product-inventory__indicator" aria-hidden="true"></span>
+                  <span data-product-inventory-message>{{ product_inventory_message }}</span>
+                </p>
+              {% when 'pickup_availability' %}
+                {% if show_pickup_availability %}
+                  <div id="{{ pickup_container_id }}-{{ block.id }}" class="pickup-availability-container" hidden data-store-availability-container data-variant-id="{{ current_variant.id }}" data-product-title="{{ product.title | escape }}" data-has-only-default-variant="{{ product.has_only_default_variant }}" data-base-url="{{ shop.url }}{{ routes.root_url }}" aria-live="polite"></div>
+                {% endif %}
+              {% endcase %}

@@ -4,6 +4,7 @@
     const requestId = (Number(container.dataset.requestId) || 0) + 1;
     container.dataset.requestId = String(requestId);
     container.dataset.variantId = String(variantId);
+    container.hidden = true;
     container.setAttribute('aria-busy', 'true');
 
     try {
@@ -17,8 +18,16 @@
       const section = documentFromResponse.querySelector('.shopify-section');
       if (!section) throw new Error('Pickup availability section was not returned');
       container.innerHTML = section.innerHTML;
+      container.hidden = !container.innerHTML.trim();
+      const productBlock = container.closest('.product-block');
+      if (productBlock) productBlock.hidden = container.hidden;
     } catch (error) {
-      if (container.dataset.requestId === String(requestId)) container.innerHTML = '';
+      if (container.dataset.requestId === String(requestId)) {
+        container.innerHTML = '';
+        container.hidden = true;
+        const productBlock = container.closest('.product-block');
+        if (productBlock) productBlock.hidden = true;
+      }
     } finally {
       if (container.dataset.requestId === String(requestId)) container.removeAttribute('aria-busy');
     }

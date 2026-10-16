@@ -1,6 +1,8 @@
 {% assign rating_data = product.metafields.reviews.rating.value %}
 {% assign rating_count = product.metafields.reviews.rating_count.value %}
-{% if settings.product_card_show_rating and rating_data != blank and rating_count != blank %}
+{% assign product_rating_enabled = settings.product_card_show_rating %}
+{% if show_rating %}{% assign product_rating_enabled = true %}{% endif %}
+{% if product_rating_enabled and rating_data != blank and rating_count != blank %}
   {% assign rating_scale = rating_data.scale_max | default: 5 %}
   {% if rating_scale > 0 %}
     {% assign rating_value = rating_data.rating %}

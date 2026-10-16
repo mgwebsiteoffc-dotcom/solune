@@ -49,16 +49,24 @@
         },
         "usage": {
           "type": "usage"
+        },
+        "rating": {
+          "type": "rating"
+        },
+        "pickup_availability": {
+          "type": "pickup_availability"
         }
       },
       "block_order": [
         "media",
         "vendor",
         "title",
+        "rating",
         "price",
         "variant_picker",
         "quantity",
         "buy_buttons",
+        "pickup_availability",
         "description",
         "ingredients",
         "skin_profile",

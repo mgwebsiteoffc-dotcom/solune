@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-16
 
-- **28 of 52 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **29 of 53 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 
 ## Current implementation
@@ -25,6 +25,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
+- [x] Add a customizable product-page block library for SKU, badges, ratings, separators, product variations, line-item properties, inventory, pickup, complementary products, offers, icon features, text/collapsible text, an extra image, buttons, share links, on-site modals, and more-information content.
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
 - [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes/quantities, and accelerated cart checkout.
 - [x] Implement customer account navigation, Follow on Shop, country/language localization, payment icons, social media icon settings, and favicon support.
@@ -33,7 +34,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check with Shopify CLI via `npx` (61 files inspected with no offenses; product picker and homepage sections included).
+- [x] Run Shopify Theme Check with Shopify CLI via `npx` (66 files inspected with no offenses; product picker, product-block renderers, and homepage sections included).
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
