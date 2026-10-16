@@ -1,4 +1,5 @@
 {% assign collection_hero_image = collection.image | default: collection.featured_image %}
+{% render 'breadcrumbs', mode: 'visible' %}
 <section aria-labelledby="CollectionTitle-{{ section.id }}">
   <div class="page-width collection-header">
     <div>

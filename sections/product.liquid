@@ -48,6 +48,7 @@
 {% elsif product_mobile_layout == 'slider' and product_mobile_controls == 'dots' %}
   {% assign show_gallery_dots = true %}
 {% endif %}
+{% render 'breadcrumbs', mode: 'visible' %}
 <section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
   <div class="product-layout" style="--product-info-width: {{ section.settings.product_info_width }}%;">
     <div class="product-gallery-container" data-desktop-layout="{{ product_media_layout }}" data-mobile-layout="{{ product_mobile_layout }}" data-mobile-controls="{{ product_mobile_controls }}" data-has-thumbnails="{{ product_gallery_has_thumbnails }}" {% if product_media_block != blank %}{{ product_media_block.shopify_attributes }}{% endif %}>

@@ -1,4 +1,5 @@
 {% assign cart_form_id = 'CartForm-' | append: section.id %}
+{% render 'breadcrumbs', mode: 'visible' %}
 <section class="page-width section-space--small" aria-labelledby="CartTitle-{{ section.id }}">
   <p class="eyebrow">{{ 'general.cart' | t }}</p>
   <h1 id="CartTitle-{{ section.id }}" class="section-heading">{{ 'cart.title' | t }}</h1>

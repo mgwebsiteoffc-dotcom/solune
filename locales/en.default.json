@@ -1,5 +1,6 @@
 {
   "accessibility": {
+    "breadcrumbs": "Breadcrumbs",
     "skip_to_content": "Skip to content",
     "main_navigation": "Main navigation",
     "footer_navigation": "Footer navigation",
@@ -16,6 +17,9 @@
   },
   "general": {
     "search": "Search",
+    "home": "Home",
+    "all_products": "All products",
+    "all_collections": "All collections",
     "account": "Account",
     "cart": "Bag",
     "menu": "Menu",

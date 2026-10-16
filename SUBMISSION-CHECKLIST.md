@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-16
 
-- **26 of 50 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **28 of 52 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 
 ## Current implementation
@@ -28,7 +28,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
 - [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes/quantities, and accelerated cart checkout.
 - [x] Implement customer account navigation, Follow on Shop, country/language localization, payment icons, social media icon settings, and favicon support.
-- [x] Implement canonical/social metadata and Shopify Product/Article structured data without replacing Shopify-managed `/agents.md` content.
+- [x] Implement canonical/social metadata, Shopify Product/Article structured data, route-aware BreadcrumbList JSON-LD, and accessible visible breadcrumbs without replacing Shopify-managed `/agents.md` content.
+- [x] Provide a reusable localized breadcrumb component on product, collection, collection-list, search, blog, article, page/contact, cart, and 404 templates.
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
@@ -66,6 +67,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test latest supported desktop/mobile browsers and relevant social-app webviews.
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
 - [ ] Verify font, image, icon, and third-party asset licenses; confirm no external libraries or app-like features are required.
-- [ ] Package with Shopify CLI, inspect the ZIP against Shopify's current Theme Store requirements, and complete the official review workflow.
+- [x] Package with Shopify CLI and inspect the generated ZIP for standard theme structure, key templates/configuration, and the included upstream license notice; this local preflight is not a Theme Store review.
+- [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.

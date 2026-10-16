@@ -1,4 +1,5 @@
 {% assign comment_form_id = 'ArticleCommentForm-' | append: section.id %}
+{% render 'breadcrumbs', mode: 'visible' %}
 <section class="page-width section-space--small article-page" aria-labelledby="ArticleTitle-{{ section.id }}">
   <article class="article-page__content">
     {% if article.image %}

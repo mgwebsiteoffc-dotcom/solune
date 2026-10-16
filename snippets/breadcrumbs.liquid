@@ -1,0 +1,102 @@
+{% assign breadcrumbs_current_title = blank %}
+{% assign breadcrumbs_current_url = blank %}
+{% assign breadcrumbs_parent_title = blank %}
+{% assign breadcrumbs_parent_url = blank %}
+
+{% case request.page_type %}
+  {% when 'product' %}
+    {% assign breadcrumbs_current_title = product.title %}
+    {% assign breadcrumbs_current_url = product.url %}
+    {% if collection != blank %}
+      {% assign breadcrumbs_parent_title = collection.title %}
+      {% assign breadcrumbs_parent_url = collection.url %}
+    {% else %}
+      {% assign breadcrumbs_product_collection = product.collections | first %}
+      {% if breadcrumbs_product_collection != blank %}
+        {% assign breadcrumbs_parent_title = breadcrumbs_product_collection.title %}
+        {% assign breadcrumbs_parent_url = breadcrumbs_product_collection.url %}
+      {% else %}
+        {% assign breadcrumbs_parent_title = 'general.all_products' | t %}
+        {% assign breadcrumbs_parent_url = routes.all_products_collection_url %}
+      {% endif %}
+    {% endif %}
+  {% when 'collection' %}
+    {% assign breadcrumbs_current_title = collection.title %}
+    {% assign breadcrumbs_current_url = collection.url %}
+  {% when 'list-collections' %}
+    {% assign breadcrumbs_current_title = 'general.all_collections' | t %}
+    {% assign breadcrumbs_current_url = routes.collections_url %}
+  {% when 'search' %}
+    {% assign breadcrumbs_current_title = 'general.search' | t %}
+    {% assign breadcrumbs_current_url = routes.search_url %}
+  {% when 'blog' %}
+    {% assign breadcrumbs_current_title = blog.title %}
+    {% assign breadcrumbs_current_url = blog.url %}
+  {% when 'article' %}
+    {% assign breadcrumbs_current_title = article.title %}
+    {% assign breadcrumbs_current_url = article.url %}
+    {% if blog != blank %}
+      {% assign breadcrumbs_parent_title = blog.title %}
+      {% assign breadcrumbs_parent_url = blog.url %}
+    {% endif %}
+  {% when 'page' %}
+    {% assign breadcrumbs_current_title = page.title %}
+    {% assign breadcrumbs_current_url = page.url %}
+  {% when 'cart' %}
+    {% assign breadcrumbs_current_title = 'cart.title' | t %}
+    {% assign breadcrumbs_current_url = routes.cart_url %}
+  {% when '404' %}
+    {% assign breadcrumbs_current_title = '404.title' | t %}
+    {% assign breadcrumbs_current_url = request.path %}
+{% endcase %}
+
+{% if breadcrumbs_current_title != blank %}
+  {% assign breadcrumbs_home_url = routes.root_url | prepend: request.origin %}
+  {% assign breadcrumbs_current_absolute_url = breadcrumbs_current_url %}
+  {% unless breadcrumbs_current_absolute_url contains '://' %}
+    {% assign breadcrumbs_current_absolute_url = breadcrumbs_current_absolute_url | prepend: request.origin %}
+  {% endunless %}
+  {% assign breadcrumbs_parent_absolute_url = blank %}
+  {% if breadcrumbs_parent_url != blank %}
+    {% assign breadcrumbs_parent_absolute_url = breadcrumbs_parent_url | prepend: request.origin %}
+  {% endif %}
+  {% assign breadcrumbs_current_position = 2 %}
+  {% if breadcrumbs_parent_title != blank %}{% assign breadcrumbs_current_position = 3 %}{% endif %}
+
+  {% if mode == 'jsonld' %}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": {{ shop.name | json }},
+            "item": {{ breadcrumbs_home_url | json }}
+          }{% if breadcrumbs_parent_title != blank %},
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ breadcrumbs_parent_title | json }},
+            "item": {{ breadcrumbs_parent_absolute_url | json }}
+          }{% endif %},
+          {
+            "@type": "ListItem",
+            "position": {{ breadcrumbs_current_position }},
+            "name": {{ breadcrumbs_current_title | json }},
+            "item": {{ breadcrumbs_current_absolute_url | json }}
+          }
+        ]
+      }
+    </script>
+  {% elsif mode == 'visible' %}
+    <nav class="breadcrumbs page-width" aria-label="{{ 'accessibility.breadcrumbs' | t | escape }}">
+      <ol class="breadcrumbs__list">
+        <li><a href="{{ routes.root_url }}">{{ 'general.home' | t | escape }}</a></li>
+        {% if breadcrumbs_parent_title != blank %}<li><span class="breadcrumbs__separator" aria-hidden="true">/</span><a href="{{ breadcrumbs_parent_url }}">{{ breadcrumbs_parent_title | escape }}</a></li>{% endif %}
+        <li><span class="breadcrumbs__separator" aria-hidden="true">/</span><span aria-current="page">{{ breadcrumbs_current_title | escape }}</span></li>
+      </ol>
+    </nav>
+  {% endif %}
+{% endif %}
