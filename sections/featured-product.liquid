@@ -1,6 +1,11 @@
 {% assign featured_product = section.settings.product %}
 {% if featured_product == blank and section.settings.use_first_product_when_empty %}
-  {% assign featured_product = collections['all'].products.first %}
+  {% for candidate_product in collections['all'].products %}
+    {% if candidate_product.available %}
+      {% assign featured_product = candidate_product %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 {% if featured_product != blank %}
   {% assign featured_variant = featured_product.selected_or_first_available_variant %}
