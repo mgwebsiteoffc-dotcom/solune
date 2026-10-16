@@ -1,4 +1,4 @@
-<section class="page-width section-space shoppable-video-section" data-cards-per-row="{{ section.settings.cards_per_row }}" aria-labelledby="ShoppableVideosTitle-{{ section.id }}">
+<section class="page-width section-space shoppable-video-section" data-cards-per-row="{{ section.settings.cards_per_row }}" data-caption-scheme="{{ section.settings.caption_scheme }}" aria-labelledby="ShoppableVideosTitle-{{ section.id }}">
   <div class="section-intro shoppable-video-section__intro">
     <div class="section-intro__copy">
       {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
@@ -43,7 +43,10 @@
         <article class="shoppable-video-card" {{ block.shopify_attributes }}>
           <div class="shoppable-video-card__media">
             {% if block.settings.video != blank %}
-              {{ block.settings.video | video_tag: image_size: '900x', controls: true, autoplay: section.settings.autoplay, loop: section.settings.loop, muted: section.settings.autoplay }}
+              {{ block.settings.video | video_tag: class: 'shoppable-video-card__video', image_size: '900x', controls: true, autoplay: section.settings.autoplay, loop: section.settings.loop, muted: section.settings.autoplay, playsinline: true, preload: 'metadata' }}
+              <button class="shoppable-video-card__play" type="button" data-shoppable-video-play aria-label="{{ 'accessibility.play_video' | t | escape }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
+              </button>
             {% elsif shoppable_video_poster != blank %}
               {% assign shoppable_video_alt = shoppable_video_poster.alt | default: shoppable_video_product.title | default: section.settings.heading %}
               {{ shoppable_video_poster | image_url: width: 1000 | image_tag: alt: shoppable_video_alt, widths: '320, 480, 640, 800, 1000', sizes: '(min-width: 1025px) 28vw, (min-width: 681px) 40vw, 82vw', loading: 'lazy' }}
@@ -76,6 +79,9 @@
         </article>
       {% endfor %}
     </div>
+    {% if section.blocks.size > 1 %}
+      <div class="shoppable-video-pagination" data-shoppable-video-pagination role="group" aria-label="{{ 'accessibility.carousel_pagination' | t | escape }}" data-page-label-template="{{ 'general.page_of' | t: current: '__CURRENT__', total: '__TOTAL__' | escape }}"></div>
+    {% endif %}
   {% endif %}
 </section>
 
@@ -96,9 +102,21 @@
       "options": [
         { "value": "2", "label": "2" },
         { "value": "3", "label": "3" },
-        { "value": "4", "label": "4" }
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
       ],
-      "default": "3"
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "caption_scheme",
+      "label": "t:sections.shoppable_video_carousel.settings.caption_scheme",
+      "options": [
+        { "value": "accent", "label": "t:options.shoppable_video_caption_scheme.accent" },
+        { "value": "surface", "label": "t:options.shoppable_video_caption_scheme.surface" },
+        { "value": "dark", "label": "t:options.shoppable_video_caption_scheme.dark" }
+      ],
+      "default": "accent"
     }
   ],
   "blocks": [

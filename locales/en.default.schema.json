@@ -249,6 +249,11 @@
     "image_with_text_alignment": {
       "left": "Left",
       "center": "Center"
+    },
+    "shoppable_video_caption_scheme": {
+      "accent": "Accent",
+      "surface": "Surface",
+      "dark": "Botanical dark"
     }
   },
   "sections": {
@@ -404,11 +409,12 @@
         "heading": "Heading",
         "profile_handle": "Instagram handle",
         "profile_url": "Instagram profile link",
-        "profile_url_info": "Curate story images and links manually; this section does not connect to Instagram’s API.",
+        "profile_url_info": "Optional follow link, displayed separately from the in-site story viewer.",
         "story": "Story",
         "caption": "Caption",
-        "image": "Story image",
-        "link": "Story link"
+        "image": "Story cover image",
+        "video": "Story video",
+        "video_info": "Choose a Shopify-hosted video. Visitors play stories in the storefront without being sent to Instagram."
       }
     },
     "shoppable_video_carousel": {
@@ -425,10 +431,11 @@
         "loop": "Loop videos",
         "cards_per_row": "Cards per row on desktop",
         "video": "Video",
-        "poster": "Poster image",
+        "poster": "Fallback image (shown when a video is not selected)",
         "product": "Product",
         "title": "Card heading",
-        "caption": "Caption"
+        "caption": "Caption",
+        "caption_scheme": "Caption panel color"
       }
     }
   },

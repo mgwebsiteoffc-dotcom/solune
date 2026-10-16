@@ -119,11 +119,38 @@
   const updateShoppableVideoControls = (track) => {
     const section = track.closest('.shoppable-video-section');
     if (!section) return;
+    const pagination = section.querySelector('[data-shoppable-video-pagination]');
+    if (track.clientWidth === 0) {
+      if (pagination) pagination.hidden = true;
+      return;
+    }
     const maximumScroll = Math.max(0, track.scrollWidth - track.clientWidth);
     const previousButton = section.querySelector('[data-shoppable-video-step="-1"]');
     const nextButton = section.querySelector('[data-shoppable-video-step="1"]');
     if (previousButton) previousButton.disabled = track.scrollLeft <= 1;
     if (nextButton) nextButton.disabled = track.scrollLeft >= maximumScroll - 1;
+
+    if (!pagination) return;
+    const pageCount = maximumScroll > 1 ? Math.max(2, Math.ceil(track.scrollWidth / track.clientWidth)) : 1;
+    pagination.hidden = pageCount < 2;
+    if (pagination.dataset.pageCount !== String(pageCount)) {
+      pagination.replaceChildren();
+      const labelTemplate = pagination.dataset.pageLabelTemplate || 'Page __CURRENT__ of __TOTAL__';
+      for (let index = 0; index < pageCount; index += 1) {
+        const dot = document.createElement('button');
+        dot.className = 'shoppable-video-pagination__dot';
+        dot.type = 'button';
+        dot.dataset.shoppableVideoPage = String(index);
+        dot.setAttribute('aria-label', labelTemplate.replace('__CURRENT__', String(index + 1)).replace('__TOTAL__', String(pageCount)));
+        pagination.append(dot);
+      }
+      pagination.dataset.pageCount = String(pageCount);
+    }
+    const activePage = maximumScroll > 1 ? Math.round((track.scrollLeft / maximumScroll) * (pageCount - 1)) : 0;
+    pagination.querySelectorAll('[data-shoppable-video-page]').forEach((dot) => {
+      if (Number(dot.dataset.shoppableVideoPage) === activePage) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
   };
 
   const initializeShoppableVideoCarousels = (scope = document) => {
@@ -147,7 +174,55 @@
       } else {
         window.addEventListener('resize', () => updateShoppableVideoControls(track));
       }
+      track.querySelectorAll('video').forEach((video) => {
+        const playButton = video.closest('.shoppable-video-card__media')?.querySelector('[data-shoppable-video-play]');
+        if (!playButton) return;
+        video.addEventListener('play', () => { playButton.hidden = true; });
+        video.addEventListener('pause', () => { playButton.hidden = false; });
+        video.addEventListener('ended', () => { playButton.hidden = false; });
+        if (!video.paused) playButton.hidden = true;
+      });
       updateShoppableVideoControls(track);
+    });
+  };
+
+  const stopStoryPlayback = (dialog) => {
+    const video = dialog.querySelector('video');
+    if (video) {
+      video.pause();
+      try { video.currentTime = 0; } catch (error) { /* Metadata may not be ready yet. */ }
+    }
+  };
+
+  const closeStoryDialog = (dialog) => {
+    if (!dialog) return;
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close();
+      return;
+    }
+    dialog.removeAttribute('open');
+    stopStoryPlayback(dialog);
+    const opener = dialog._storyOpener;
+    dialog._storyOpener = null;
+    opener?.focus?.();
+  };
+
+  const initializeStoryDialogs = (scope = document) => {
+    const dialogs = [];
+    if (scope.matches?.('[data-story-dialog]')) dialogs.push(scope);
+    dialogs.push(...scope.querySelectorAll('[data-story-dialog]'));
+    dialogs.forEach((dialog) => {
+      if (dialog.dataset.storyDialogInitialized === 'true') return;
+      dialog.dataset.storyDialogInitialized = 'true';
+      dialog.addEventListener('close', () => {
+        stopStoryPlayback(dialog);
+        const opener = dialog._storyOpener;
+        dialog._storyOpener = null;
+        opener?.focus?.();
+      });
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) closeStoryDialog(dialog);
+      });
     });
   };
 
@@ -522,6 +597,54 @@
       return;
     }
 
+    const storyCloseButton = event.target.closest?.('[data-story-close]');
+    if (storyCloseButton) {
+      closeStoryDialog(storyCloseButton.closest('[data-story-dialog]'));
+      return;
+    }
+
+    const storyTrigger = event.target.closest?.('[data-story-open]');
+    if (storyTrigger) {
+      const dialog = document.getElementById(storyTrigger.getAttribute('aria-controls'));
+      if (!dialog) return;
+      dialog._storyOpener = storyTrigger;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      const video = dialog.querySelector('video');
+      if (video) {
+        try { video.currentTime = 0; } catch (error) { /* The browser can seek after metadata loads. */ }
+        const playback = video.play();
+        playback?.catch?.(() => {});
+      }
+      dialog.querySelector('[data-story-close]')?.focus();
+      return;
+    }
+
+    const videoPlayButton = event.target.closest?.('[data-shoppable-video-play]');
+    if (videoPlayButton) {
+      const video = videoPlayButton.closest('.shoppable-video-card__media')?.querySelector('video');
+      if (!video) return;
+      const playback = video.play();
+      playback?.catch?.(() => {});
+      return;
+    }
+
+    const pageIndicator = event.target.closest?.('[data-shoppable-video-page]');
+    if (pageIndicator) {
+      const section = pageIndicator.closest('.shoppable-video-section');
+      const track = section?.querySelector('[data-shoppable-video-track]');
+      const pagination = pageIndicator.closest('[data-shoppable-video-pagination]');
+      const pageCount = Number(pagination?.dataset.pageCount || 1);
+      if (!track || pageCount < 2) return;
+      const pageIndex = Number(pageIndicator.dataset.shoppableVideoPage);
+      const maximumScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      track.scrollTo({
+        left: maximumScroll * (pageIndex / (pageCount - 1)),
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+      return;
+    }
+
     const carouselControl = event.target.closest?.('[data-shoppable-video-step]');
     if (carouselControl) {
       const track = carouselControl.closest('.shoppable-video-section')?.querySelector('[data-shoppable-video-track]');
@@ -632,6 +755,7 @@
   initializePriceRanges();
   initializeProductGalleries();
   initializeShoppableVideoCarousels();
+  initializeStoryDialogs();
   initializeProducts();
   initializeGiftCardRecipients();
   initializeStickyProductBars();
@@ -679,6 +803,7 @@
     initializePriceRanges(event.target);
     initializeProductGalleries(event.target);
     initializeShoppableVideoCarousels(event.target);
+    initializeStoryDialogs(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
     initializeStickyProductBars(event.target);

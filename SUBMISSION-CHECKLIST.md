@@ -2,6 +2,11 @@
 
 This project is a development foundation. A checked implementation item means code is present; it does not imply real-store behavior, Lighthouse results, or Shopify review have passed. Theme Check results are recorded separately below.
 
+## Progress snapshot — 2026-10-16
+
+- **26 of 50 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
+- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
+
 ## Current implementation
 
 - [x] Start from the official Shopify Skeleton Theme v1.0.0, preserve its license, and document provenance.
@@ -13,6 +18,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Add a scroll-aware PDP sticky add-to-cart bar synchronized with variant price and availability.
 - [x] Expose Title H1–H4 visual styles and configurable sold-out, selector, swatch, variant-image, and size-chart controls in the product blocks.
 - [x] Add editable Image with text, manually curated Instagram stories, and shoppable video/product carousel sections to the homepage template, with demo-image fallbacks.
+- [x] Make Shopify-hosted UGC videos play inline and open story videos in an in-site viewer; story-card clicks do not navigate away from the storefront.
 - [x] Add cart-drawer order-note saving through Shopify Ajax, cart-line unit prices and discount comparisons, and a single cart-page savings total.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
@@ -39,6 +45,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test gift-card recipient validation, scheduled delivery (including the 90-day limit and timezone), cart properties, QR rendering, and Apple Wallet.
 - [ ] Test pickup availability for available/unavailable locations and multiple variants.
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types.
+- [ ] Test in-site UGC playback, story viewer play/close and focus restoration, carousel pagination, reduced motion, and no story-card redirects on desktop/mobile.
 - [ ] Test line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
 - [ ] Test AJAX cart drawer add/change/remove flows, free-shipping progress, section refresh, keyboard dismissal, and cart-page fallback.
 - [ ] Test sticky PDP add-to-cart visibility, variant price/availability synchronization, and submission from the external form-associated button.

@@ -9,7 +9,10 @@
     "pagination": "Pagination",
     "announcement": "Store announcement",
     "close": "Close",
-    "carousel_controls": "Carousel controls"
+    "carousel_controls": "Carousel controls",
+    "play_video": "Play video",
+    "close_story": "Close story",
+    "carousel_pagination": "Carousel pages"
   },
   "general": {
     "search": "Search",
@@ -189,7 +192,8 @@
     },
     "instagram_stories": {
       "demo_image_alt": "A theme preview image for a curated skincare story.",
-      "preview_story": "Preview story"
+      "preview_story": "Preview story",
+      "open_story": "Open story: {{ caption }}"
     },
     "shoppable_video_carousel": {
       "demo_image_alt": "A theme preview image used as a shoppable video poster."
