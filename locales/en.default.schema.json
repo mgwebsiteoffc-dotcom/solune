@@ -127,7 +127,8 @@
     "product_image_zoom_level": "Maximum image zoom level",
     "product_video_autoplay": "Autoplay product videos",
     "product_video_loop": "Loop product videos",
-    "product_info_width": "Product information width on desktop"
+    "product_info_width": "Product information width on desktop",
+    "product_media_ratio": "Image aspect ratio"
   },
   "options": {
     "page_width": {
@@ -173,6 +174,12 @@
     "product_media_mobile_controls": {
       "dots": "Dots",
       "none": "None"
+    },
+    "product_media_ratio": {
+      "natural": "Use image proportions",
+      "square": "Square",
+      "portrait": "Portrait (4:5)",
+      "landscape": "Landscape (4:3)"
     }
   },
   "sections": {
@@ -316,6 +323,7 @@
     "skin_profile": "Skin profile",
     "text": "Text",
     "usage": "How to use",
-    "variant_picker": "Variant picker"
+    "variant_picker": "Variant picker",
+    "product_media": "Product media"
   }
 }

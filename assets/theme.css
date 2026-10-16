@@ -1513,6 +1513,27 @@ label {
   transform-origin: center;
 }
 
+.product-gallery[data-media-ratio='square'] .product-gallery__media--image {
+  aspect-ratio: 1 / 1;
+}
+
+.product-gallery[data-media-ratio='portrait'] .product-gallery__media--image {
+  aspect-ratio: 4 / 5;
+}
+
+.product-gallery[data-media-ratio='landscape'] .product-gallery__media--image {
+  aspect-ratio: 4 / 3;
+}
+
+.product-gallery[data-media-ratio='square'] .product-gallery__media--image img,
+.product-gallery[data-media-ratio='portrait'] .product-gallery__media--image img,
+.product-gallery[data-media-ratio='landscape'] .product-gallery__media--image img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: contain;
+}
+
 .product-gallery__media[data-image-zoomed='true'] img {
   transform: scale(var(--media-image-zoom, 3));
   cursor: zoom-out;
