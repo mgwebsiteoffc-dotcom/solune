@@ -2,15 +2,58 @@
   "sections": {
     "hero": {
       "type": "hero-editorial",
-      "settings": {}
+      "settings": {
+        "eyebrow": "SKINCARE, IN ITS ELEMENT",
+        "heading": "Your skin, met with care.",
+        "body": "<p>Thoughtful formulas and small rituals for the skin you live in.</p>",
+        "button_label": "Explore the ritual",
+        "button_link": "/collections/all"
+      }
     },
     "featured": {
       "type": "featured-collection",
-      "settings": {}
+      "settings": {
+        "eyebrow": "THE FORMULA EDIT",
+        "heading": "The daily essentials",
+        "collection": "all",
+        "products_to_show": 4,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_all_link": true
+      }
+    },
+    "featured_product": {
+      "type": "featured-product",
+      "blocks": {
+        "title": { "type": "title" },
+        "price": { "type": "price" },
+        "description": { "type": "description" },
+        "variant_picker": { "type": "variant_picker" },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        }
+      },
+      "block_order": ["title", "price", "description", "variant_picker", "buy_buttons"],
+      "settings": {
+        "use_first_product_when_empty": true,
+        "show_selling_plans": true,
+        "show_payment_terms": true
+      }
     },
     "ingredient": {
       "type": "ingredient-story",
-      "settings": {}
+      "settings": {
+        "eyebrow": "FORMULA NOTES",
+        "ingredient_name": "A closer look",
+        "heading": "Thoughtful ingredients, clearly explained.",
+        "body": "<p>Use this space to share verified sourcing, formulation, or ingredient information in your brand's own words.</p>",
+        "button_label": "Shop the formulas",
+        "button_link": "/collections/all"
+      }
     },
     "routine": {
       "type": "routine-steps",
@@ -20,12 +63,19 @@
         "moisturize": { "type": "step", "settings": { "title": "Moisturize", "body": "Finish with a moisturizer selected for your preferences." } }
       },
       "block_order": ["cleanse", "treat", "moisturize"],
-      "settings": {}
+      "settings": {
+        "eyebrow": "BUILD YOUR ROUTINE",
+        "heading": "A few mindful steps.",
+        "body": "<p>Make room for the simple rituals that feel right for you.</p>"
+      }
     },
     "newsletter": {
       "type": "newsletter",
-      "settings": {}
+      "settings": {
+        "heading": "Notes for your ritual",
+        "body": "<p>Thoughtful skincare, product notes, and occasional studio updates.</p>"
+      }
     }
   },
-  "order": ["hero", "featured", "ingredient", "routine", "newsletter"]
+  "order": ["hero", "featured", "featured_product", "ingredient", "routine", "newsletter"]
 }

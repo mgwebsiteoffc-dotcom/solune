@@ -4,7 +4,9 @@
   "sections": {
     "announcement": {
       "type": "announcement-bar",
-      "settings": {}
+      "settings": {
+        "message": "Thoughtful skincare, made for everyday rituals."
+      }
     },
     "header": {
       "type": "header",

@@ -387,8 +387,6 @@
         "id": "cart_drawer_free_shipping_threshold",
         "label": "t:labels.cart_drawer_free_shipping_threshold",
         "info": "t:labels.cart_drawer_free_shipping_threshold_info",
-        "min": 0,
-        "max": 100000,
         "default": 75
       },
       {

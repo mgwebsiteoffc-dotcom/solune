@@ -161,7 +161,8 @@
     "featured_product": {
       "name": "Featured product",
       "settings": {
-        "product": "Product"
+        "product": "Product",
+        "use_first_product_when_empty": "Use the first available product if none is selected"
       }
     },
     "footer": {

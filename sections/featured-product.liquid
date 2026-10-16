@@ -1,4 +1,7 @@
 {% assign featured_product = section.settings.product %}
+{% if featured_product == blank and section.settings.use_first_product_when_empty %}
+  {% assign featured_product = collections['all'].products.first %}
+{% endif %}
 {% if featured_product != blank %}
   {% assign featured_variant = featured_product.selected_or_first_available_variant %}
   {% assign featured_price = featured_variant.price %}
@@ -27,6 +30,18 @@
             {% else %}
               {{ media | media_tag: image_size: '1000x', controls: true }}
             {% endif %}
+          </div>
+        {% else %}
+          <div class="product-gallery__media product-gallery__media--demo">
+            <img
+              src="{{ 'demo-product.jpg' | asset_url }}"
+              alt="{{ 'general.demo_image_alt' | t | escape }}"
+              width="928"
+              height="1152"
+              loading="lazy"
+              decoding="async"
+            >
+            <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
           </div>
         {% endfor %}
       </div>
@@ -91,9 +106,25 @@
     <script type="application/json" data-product-variants>{{ featured_product.variants | json }}</script>
   </section>
 {% else %}
-  <section class="page-width section-space--small">
-    <p class="eyebrow">{{ 'sections.featured_product.eyebrow' | t }}</p>
-    <p>{{ 'sections.featured_product.choose_product' | t }}</p>
+  <section class="page-width section-space--small" aria-label="{{ 'sections.featured_product.eyebrow' | t | escape }}">
+    <div class="featured-product-demo">
+      <div class="featured-product-demo__media">
+        <img
+          src="{{ 'demo-product.jpg' | asset_url }}"
+          alt="{{ 'sections.featured_product.demo_image_alt' | t | escape }}"
+          width="928"
+          height="1152"
+          loading="lazy"
+          decoding="async"
+        >
+        <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+      </div>
+      <div class="featured-product-demo__copy">
+        <p class="eyebrow">{{ 'sections.featured_product.eyebrow' | t }}</p>
+        <h2 class="section-heading">{{ 'sections.featured_product.demo_heading' | t }}</h2>
+        <p>{{ 'sections.featured_product.choose_product' | t }}</p>
+      </div>
+    </div>
   </section>
 {% endif %}
 
@@ -102,6 +133,7 @@
   "name": "t:sections.featured_product.name",
   "settings": [
     { "type": "product", "id": "product", "label": "t:sections.featured_product.settings.product" },
+    { "type": "checkbox", "id": "use_first_product_when_empty", "label": "t:sections.featured_product.settings.use_first_product_when_empty", "default": false },
     { "type": "checkbox", "id": "show_selling_plans", "label": "t:labels.show_selling_plans", "default": true },
     { "type": "checkbox", "id": "show_payment_terms", "label": "t:labels.show_payment_terms", "default": true }
   ],

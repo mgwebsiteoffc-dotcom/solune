@@ -7,7 +7,14 @@
         {% capture story_focal_style %}object-position: {{ story_image.presentation.focal_point }};{% endcapture %}
         {{ story_image | image_url: width: 1600 | image_tag: alt: story_alt, widths: '480, 640, 800, 1000, 1200, 1600', sizes: '(min-width: 1025px) 45vw, (min-width: 681px) 48vw, 100vw', loading: 'lazy', style: story_focal_style }}
       {% else %}
-        <span class="visually-hidden">{{ 'general.no_image' | t }}</span>
+        <img
+          src="{{ 'demo-ingredient.jpg' | asset_url }}"
+          alt="{{ 'sections.ingredient_story.demo_image_alt' | t | escape }}"
+          width="928"
+          height="1152"
+          loading="lazy"
+          decoding="async"
+        >
       {% endif %}
     </div>
     <div class="ingredient-story__copy">

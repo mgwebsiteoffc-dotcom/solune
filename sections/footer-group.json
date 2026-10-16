@@ -4,7 +4,16 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "footer_note": "A considered ritual for every day.",
+        "show_newsletter": true,
+        "newsletter_heading": "Notes for your ritual",
+        "newsletter_body": "Thoughtful skincare, product notes, and occasional studio updates.",
+        "show_payment_icons": true,
+        "show_country_selector": true,
+        "show_language_selector": true,
+        "show_follow_on_shop": true
+      }
     }
   },
   "order": ["footer"]

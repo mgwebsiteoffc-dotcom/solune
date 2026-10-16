@@ -30,7 +30,17 @@
           {% endif %}
         </div>
       {% else %}
-        <div class="product-gallery__media product-card__placeholder">{{ 'general.no_image' | t }}</div>
+        <div class="product-gallery__media product-gallery__media--demo">
+          <img
+            src="{{ 'demo-product.jpg' | asset_url }}"
+            alt="{{ 'general.demo_image_alt' | t | escape }}"
+            width="928"
+            height="1152"
+            loading="eager"
+            decoding="async"
+          >
+          <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+        </div>
       {% endfor %}
     </div>
 

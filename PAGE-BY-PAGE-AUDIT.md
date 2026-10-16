@@ -4,7 +4,7 @@ A Theme Check pass does not mean a storefront page looks finished. Each page bel
 
 ## Screenshot-driven first pass
 
-- **Theme upload:** Shopify rejected `theme_author` because it exceeded the 25-character limit. Theme metadata now uses `Sani Kumar`; the company name remains documented in the README.
+- **Theme upload:** The author metadata now uses `Sani Kumar` (within Shopify's 25-character limit). The latest user-reported CLI push also rejected `max` on the cart free-shipping number setting and warned about `.github/` in `.shopifyignore`; the local fix removes `min`/`max` and uses the recursive `.github/**` pattern. A fresh Shopify upload is still required to confirm acceptance.
 - **Contact page:** Contact inputs and textarea now have explicit visible, high-contrast styles. Recheck the exact uploaded preview because the supplied screenshot showed labels without visible controls.
 - **Header/account:** Replaced the default `<shopify-account>` popover (including its externally styled Shop sign-in panel) with a theme-styled account link.
 - **Cart:** Added an AJAX cart drawer with line quantity controls/removal, updated counts and totals, optional free-shipping progress, accessible close behavior, and normal cart-page fallbacks. Real Shopify Ajax/section-rendering behavior still needs development-store verification.
@@ -14,7 +14,7 @@ A Theme Check pass does not mean a storefront page looks finished. Each page bel
 
 | Page/flow | Current code baseline | Work still required |
 | --- | --- | --- |
-| Home | Editorial hero, featured collection/product, ingredient story, routines, newsletter | Verify actual content, image art direction, responsive spacing, merchandising hierarchy, and section defaults. |
+| Home | Editorial hero, all-products collection, first-available featured product, ingredient story, routine steps, newsletter, announcement, and footer content. Generated hero/ingredient/product images appear when merchant imagery or catalog products are missing. | Verify the rendered Shopify preview, real product/media data, image art direction, responsive spacing, merchandising hierarchy, and Theme Editor controls. Demo imagery is a fallback, not live-store product photography. |
 | Collection | Product grid, sort, filters, price range, pagination, cards | Test filter combinations/clear state, mobile filter UX, sorting, empty states, pagination, merchandising controls, and visual alignment. |
 | Search | Predictive search and mixed product/content results | Test keyboard/empty/error states, result types, filters, sort, and relevance; audit search metadata. |
 | Product detail (PDP) | Variant selection, selling plans, media, skincare metafields, ratings, recommendations, sticky CTA | Continue the full PDP pass: gallery interaction, buy-box hierarchy, trust/shipping information, review presentation, subscription clarity, mobile behavior, and app blocks. |

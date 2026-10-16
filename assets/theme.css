@@ -658,6 +658,21 @@ label {
   text-align: center;
 }
 
+.demo-media-label {
+  position: absolute;
+  z-index: 1;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  padding: 0.35rem 0.55rem;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
 .product-card__badge {
   position: absolute;
   top: 0.7rem;
@@ -1239,6 +1254,66 @@ label {
 }
 
 /* Product template, options, and media */
+.featured-collection-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  margin-top: 1.5rem;
+  background: var(--color-surface);
+}
+
+.featured-collection-demo__media,
+.featured-product-demo__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-collection-demo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 0.86;
+  object-fit: cover;
+  background: var(--color-surface);
+}
+
+.featured-collection-demo__copy {
+  max-width: 42rem;
+  padding: clamp(1.5rem, 5vw, 5rem);
+}
+
+.featured-product-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 6vw, 6rem);
+}
+
+.featured-product-demo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 0.806;
+  object-fit: cover;
+  background: var(--color-surface);
+}
+
+.featured-product-demo__copy {
+  max-width: 38rem;
+  padding-block: clamp(1rem, 4vw, 4rem);
+}
+
+.featured-product-demo__copy .section-heading {
+  margin: 0 0 1rem;
+}
+
+.featured-product-demo__copy p:not(.eyebrow) {
+  max-width: 52ch;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
 .product-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(21rem, 0.8fr);
@@ -1255,6 +1330,7 @@ label {
 }
 
 .product-gallery__media {
+  position: relative;
   overflow: hidden;
   background: var(--color-surface);
 }
@@ -2846,6 +2922,28 @@ label {
 
   .product-card__price {
     font-size: 0.76rem;
+  }
+
+  .featured-collection-demo {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .featured-collection-demo img {
+    aspect-ratio: 0.9;
+  }
+
+  .featured-collection-demo__copy {
+    padding: 1.5rem;
+  }
+
+  .featured-product-demo {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .featured-product-demo__copy {
+    padding-block: 0;
   }
 
   .ingredient-story__visual,

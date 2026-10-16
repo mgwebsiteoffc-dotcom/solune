@@ -18,7 +18,15 @@
       {% assign card_alt = product.featured_media.alt | default: product.title %}
       {{ card_media | image_url: width: 1000 | image_tag: alt: card_alt, widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 1101px) 22vw, (min-width: 1025px) 30vw, 46vw', loading: loading | default: 'lazy', style: card_focal_style }}
     {% else %}
-      <span class="product-card__placeholder">{{ product.title | escape }}</span>
+      <img
+        src="{{ 'demo-product.jpg' | asset_url }}"
+        alt="{{ 'general.demo_image_alt' | t | escape }}"
+        width="928"
+        height="1152"
+        loading="{{ loading | default: 'lazy' }}"
+        decoding="async"
+      >
+      <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
     {% endif %}
     {% unless product.available %}
       <span class="product-card__badge">{{ 'general.sold_out' | t }}</span>

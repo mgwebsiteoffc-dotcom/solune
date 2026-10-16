@@ -16,7 +16,22 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="section-intro__body">{{ 'sections.featured_collection.choose_collection' | t }}</p>
+    <div class="featured-collection-demo">
+      <div class="featured-collection-demo__media">
+        <img
+          src="{{ 'demo-product.jpg' | asset_url }}"
+          alt="{{ 'sections.featured_collection.demo_image_alt' | t | escape }}"
+          width="928"
+          height="1152"
+          loading="lazy"
+          decoding="async"
+        >
+        <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+      </div>
+      <div class="featured-collection-demo__copy">
+        <p class="section-intro__body">{{ 'sections.featured_collection.choose_collection' | t }}</p>
+      </div>
+    </div>
   {% endif %}
 </section>
 

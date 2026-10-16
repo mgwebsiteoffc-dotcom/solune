@@ -23,6 +23,8 @@
     "sold_out": "Sold out",
     "newsletter_success": "Thanks for subscribing.",
     "no_image": "Add an image in the theme editor",
+    "demo_image_alt": "Example skincare product photography; replace with product-specific images.",
+    "demo_image_label": "Preview image",
     "previous": "Previous",
     "next": "Next",
     "page_of": "Page {{ current }} of {{ total }}"
@@ -144,7 +146,8 @@
   },
   "sections": {
     "featured_collection": {
-      "choose_collection": "Choose a collection in this section's settings to show products here."
+      "choose_collection": "Add active products or select a collection to preview product cards here.",
+      "demo_image_alt": "A cleanser tube, serum dropper, and cream jar arranged as a skincare collection."
     },
     "collections": {
       "eyebrow": "EXPLORE THE FORMULAS"
@@ -155,9 +158,17 @@
     "recommendations": {
       "eyebrow": "BUILD YOUR ROUTINE"
     },
+    "hero": {
+      "demo_image_alt": "A quiet skincare ritual in warm natural light."
+    },
+    "ingredient_story": {
+      "demo_image_alt": "Botanical leaves and skincare serum arranged in a soft still life."
+    },
     "featured_product": {
       "eyebrow": "A CLOSER LOOK",
-      "choose_product": "Choose a product in this section's settings to feature."
+      "demo_heading": "A closer look at your daily ritual.",
+      "demo_image_alt": "Example cleanser tube, amber serum dropper, and moisturizer jar arranged on a warm neutral surface.",
+      "choose_product": "Select a product in the theme editor, or add products to your catalog to preview this product feature."
     }
   },
   "pickup_availability": {

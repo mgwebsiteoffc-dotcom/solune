@@ -14,7 +14,7 @@
       {% endif %}
     </div>
   </div>
-  <div class="hero__visual{% if hero_image == blank %} hero__visual--placeholder{% endif %}" aria-hidden="{% if hero_image == blank %}true{% else %}false{% endif %}">
+  <div class="hero__visual{% if hero_image == blank %} hero__visual--placeholder{% endif %}" aria-hidden="false">
     {% if hero_image != blank %}
       <picture>
         {% if section.settings.mobile_image != blank %}
@@ -24,7 +24,15 @@
         {{ hero_image | image_url: width: 2400 | image_tag: alt: hero_alt, widths: '640, 800, 1000, 1200, 1600, 2000, 2400', sizes: '(min-width: 1025px) 52vw, (min-width: 681px) 48vw, 100vw', loading: 'eager', fetchpriority: 'high', style: focal_style }}
       </picture>
     {% else %}
-      <span class="visually-hidden">{{ 'general.no_image' | t }}</span>
+      <img
+        src="{{ 'demo-hero.jpg' | asset_url }}"
+        alt="{{ 'sections.hero.demo_image_alt' | t | escape }}"
+        width="1264"
+        height="848"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
     {% endif %}
   </div>
 </section>
