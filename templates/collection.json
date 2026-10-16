@@ -2,7 +2,17 @@
   "sections": {
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "show_description": true,
+        "show_filters": true,
+        "price_filter_style": "range_slider",
+        "filter_value_style": "checkboxes",
+        "show_filter_counts": true,
+        "show_sort": true,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "products_per_page": 16
+      }
     },
     "custom_liquid": {
       "type": "custom-liquid",

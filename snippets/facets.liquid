@@ -5,7 +5,18 @@
   @param {string} section_id
   @param {string} [search_terms]
   @param {string} [sort_by]
+  @param {string} [price_style] - range_slider or number_inputs.
+  @param {string} [value_style] - checkboxes or pills.
+  @param {boolean} [show_counts]
 {% enddoc %}
+
+{% assign facet_price_style = price_style | default: 'range_slider' %}
+{% assign facet_value_style = value_style | default: 'checkboxes' %}
+{% if show_counts == nil %}
+  {% assign facet_show_counts = true %}
+{% else %}
+  {% assign facet_show_counts = show_counts %}
+{% endif %}
 
 <form class="facets" action="{{ action }}" method="get">
   {% if search_terms != blank %}
@@ -16,36 +27,63 @@
   <h2 class="visually-hidden">{{ 'collection.filter' | t }}</h2>
   {% for filter in filters %}
     <details class="facet-group" open>
-      <summary>{{ filter.label | escape }}{% if filter.active_values.size > 0 %} ({{ filter.active_values.size }}){% endif %}</summary>
-      <div class="facet-values">
+      <summary>{{ filter.label | escape }}{% if facet_show_counts and filter.active_values.size > 0 %} ({{ filter.active_values.size }}){% endif %}</summary>
+      <div class="facet-values{% if facet_value_style == 'pills' and filter.type != 'price_range' %} facet-values--pills{% endif %}">
         {% case filter.type %}
           {% when 'boolean' %}
             <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.index }}-true">
-              <input id="Filter-{{ section_id }}-{{ forloop.index }}-true" type="checkbox" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value }}"{% if filter.true_value.active %} checked{% endif %}{% if filter.true_value.count == 0 and filter.true_value.active == false %} disabled{% endif %}>
-              <span>{{ filter.true_value.label | escape }} ({{ filter.true_value.count }})</span>
+              <input id="Filter-{{ section_id }}-{{ forloop.index }}-true" type="checkbox" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value | escape }}"{% if filter.true_value.active %} checked{% endif %}{% if filter.true_value.count == 0 and filter.true_value.active == false %} disabled{% endif %}>
+              <span>{{ filter.true_value.label | escape }}{% if facet_show_counts %} ({{ filter.true_value.count }}){% endif %}</span>
             </label>
             <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.index }}-false">
-              <input id="Filter-{{ section_id }}-{{ forloop.index }}-false" type="checkbox" name="{{ filter.false_value.param_name }}" value="{{ filter.false_value.value }}"{% if filter.false_value.active %} checked{% endif %}{% if filter.false_value.count == 0 and filter.false_value.active == false %} disabled{% endif %}>
-              <span>{{ filter.false_value.label | escape }} ({{ filter.false_value.count }})</span>
+              <input id="Filter-{{ section_id }}-{{ forloop.index }}-false" type="checkbox" name="{{ filter.false_value.param_name }}" value="{{ filter.false_value.value | escape }}"{% if filter.false_value.active %} checked{% endif %}{% if filter.false_value.count == 0 and filter.false_value.active == false %} disabled{% endif %}>
+              <span>{{ filter.false_value.label | escape }}{% if facet_show_counts %} ({{ filter.false_value.count }}){% endif %}</span>
             </label>
           {% when 'list' %}
             {% for filter_value in filter.values %}
               <label class="facet-value" for="Filter-{{ section_id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}">
                 <input id="Filter-{{ section_id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value | escape }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}>
-                <span>{{ filter_value.label | escape }} ({{ filter_value.count }})</span>
+                <span>{{ filter_value.label | escape }}{% if facet_show_counts %} ({{ filter_value.count }}){% endif %}</span>
               </label>
             {% endfor %}
           {% when 'price_range' %}
-            <div class="facet-price-range">
-              <div class="field">
-                <label for="Filter-{{ section_id }}-{{ forloop.index }}-min">{{ 'collection.from_price' | t }}</label>
-                <input id="Filter-{{ section_id }}-{{ forloop.index }}-min" type="number" inputmode="decimal" name="{{ filter.min_value.param_name }}" min="0" step="any"{% if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="0">
+            {% if facet_price_style == 'range_slider' %}
+              {% assign price_range_max_cents = filter.range_max | default: 0 %}
+              {% assign price_range_max = price_range_max_cents | divided_by: 100.0 %}
+              {% assign price_display_min = filter.min_value.value | default: 0 %}
+              {% assign price_display_max = filter.max_value.value | default: filter.range_max %}
+              {% assign price_min_value = filter.min_value.value | default: 0 | divided_by: 100.0 %}
+              {% assign price_max_value = filter.max_value.value | default: filter.range_max | divided_by: 100.0 %}
+              {% assign price_start_percent = 0 %}
+              {% assign price_end_percent = 100 %}
+              {% if price_range_max_cents > 0 %}
+                {% assign price_start_percent = filter.min_value.value | default: 0 | times: 100.0 | divided_by: price_range_max_cents %}
+                {% assign price_end_percent = filter.max_value.value | default: filter.range_max | times: 100.0 | divided_by: price_range_max_cents %}
+              {% endif %}
+              <div class="facet-price-slider" data-price-range data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" style="--range-start: {{ price_start_percent }}%; --range-end: {{ price_end_percent }}%;">
+                <div class="facet-price-slider__track" aria-hidden="true"><span data-range-fill></span></div>
+                <label class="visually-hidden" for="Filter-{{ section_id }}-{{ forloop.index }}-min-range">{{ 'collection.minimum_price' | t }}</label>
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-min-range" type="range" name="{{ filter.min_value.param_name }}" min="0" max="{{ price_range_max }}" step="0.01" value="{{ price_min_value }}" data-price-range-min>
+                <label class="visually-hidden" for="Filter-{{ section_id }}-{{ forloop.index }}-max-range">{{ 'collection.maximum_price' | t }}</label>
+                <input id="Filter-{{ section_id }}-{{ forloop.index }}-max-range" type="range" name="{{ filter.max_value.param_name }}" min="0" max="{{ price_range_max }}" step="0.01" value="{{ price_max_value }}" data-price-range-max>
               </div>
-              <div class="field">
-                <label for="Filter-{{ section_id }}-{{ forloop.index }}-max">{{ 'collection.to_price' | t }}</label>
-                <input id="Filter-{{ section_id }}-{{ forloop.index }}-max" type="number" inputmode="decimal" name="{{ filter.max_value.param_name }}" min="0" step="any"{% if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %} placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+              <div class="facet-price-slider__values">
+                <span data-price-min-output>{% render 'format-money', amount: price_display_min %}</span>
+                <span aria-hidden="true">–</span>
+                <span data-price-max-output>{% render 'format-money', amount: price_display_max %}</span>
               </div>
-            </div>
+            {% else %}
+              <div class="facet-price-range">
+                <div class="field">
+                  <label for="Filter-{{ section_id }}-{{ forloop.index }}-min">{{ 'collection.from_price' | t }}</label>
+                  <input id="Filter-{{ section_id }}-{{ forloop.index }}-min" type="number" inputmode="decimal" name="{{ filter.min_value.param_name }}" min="0" step="any"{% if filter.min_value.value %} value="{{ filter.min_value.value | divided_by: 100.0 }}"{% endif %} placeholder="0">
+                </div>
+                <div class="field">
+                  <label for="Filter-{{ section_id }}-{{ forloop.index }}-max">{{ 'collection.to_price' | t }}</label>
+                  <input id="Filter-{{ section_id }}-{{ forloop.index }}-max" type="number" inputmode="decimal" name="{{ filter.max_value.param_name }}" min="0" step="any"{% if filter.max_value.value %} value="{{ filter.max_value.value | divided_by: 100.0 }}"{% endif %} placeholder="{{ filter.range_max | divided_by: 100.0 }}">
+                </div>
+              </div>
+            {% endif %}
         {% endcase %}
       </div>
     </details>

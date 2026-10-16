@@ -23,8 +23,8 @@
         <form action="{{ collection.url }}" method="get">
           {% for filter in collection.filters %}
             {% if filter.type == 'price_range' %}
-              {% if filter.min_value.value %}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
-              {% if filter.max_value.value %}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">{% endif %}
+              {% if filter.min_value.value %}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | divided_by: 100.0 }}">{% endif %}
+              {% if filter.max_value.value %}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | divided_by: 100.0 }}">{% endif %}
             {% elsif filter.type == 'boolean' %}
               {% if filter.true_value.active %}<input type="hidden" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value | escape }}">{% endif %}
               {% if filter.false_value.active %}<input type="hidden" name="{{ filter.false_value.param_name }}" value="{{ filter.false_value.value | escape }}">{% endif %}
@@ -47,7 +47,7 @@
 
     <div class="collection-layout">
       {% if section.settings.show_filters and collection.filters.size > 0 %}
-        {% render 'facets', filters: collection.filters, action: collection.url, section_id: section.id, sort_by: collection.sort_by %}
+        {% render 'facets', filters: collection.filters, action: collection.url, section_id: section.id, sort_by: collection.sort_by, price_style: section.settings.price_filter_style, value_style: section.settings.filter_value_style, show_counts: section.settings.show_filter_counts %}
       {% endif %}
       <div>
         {% paginate collection.products by section.settings.products_per_page %}
@@ -79,6 +79,29 @@
   "settings": [
     { "type": "checkbox", "id": "show_description", "label": "t:labels.show_description", "default": true },
     { "type": "checkbox", "id": "show_filters", "label": "t:labels.show_filters", "default": true },
+    {
+      "type": "select",
+      "id": "price_filter_style",
+      "label": "t:labels.price_filter_style",
+      "info": "t:labels.price_filter_style_info",
+      "options": [
+        { "value": "range_slider", "label": "t:options.price_filter_style.range_slider" },
+        { "value": "number_inputs", "label": "t:options.price_filter_style.number_inputs" }
+      ],
+      "default": "range_slider"
+    },
+    {
+      "type": "select",
+      "id": "filter_value_style",
+      "label": "t:labels.filter_value_style",
+      "info": "t:labels.filter_value_style_info",
+      "options": [
+        { "value": "checkboxes", "label": "t:options.filter_value_style.checkboxes" },
+        { "value": "pills", "label": "t:options.filter_value_style.pills" }
+      ],
+      "default": "checkboxes"
+    },
+    { "type": "checkbox", "id": "show_filter_counts", "label": "t:labels.show_filter_counts", "default": true },
     { "type": "checkbox", "id": "show_sort", "label": "t:labels.show_sort", "default": true },
     { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false },
     { "type": "checkbox", "id": "show_quick_add", "label": "t:labels.show_quick_add", "default": true },

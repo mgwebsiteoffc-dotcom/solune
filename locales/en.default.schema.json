@@ -55,6 +55,11 @@
     "show_dynamic_checkout": "Show dynamic checkout button",
     "show_gift_card_recipient": "Show gift card recipient form",
     "show_filters": "Show filters",
+    "price_filter_style": "Price filter presentation",
+    "price_filter_style_info": "Choose a dual range slider or editable minimum and maximum fields for Shopify price filters.",
+    "filter_value_style": "List filter presentation",
+    "filter_value_style_info": "Shopify list and availability filters remain discrete values; choose checkboxes or chips for their presentation.",
+    "show_filter_counts": "Show product counts for filter values",
     "show_follow_on_shop": "Show Follow on Shop button",
     "show_language_selector": "Show language selector",
     "show_newsletter": "Show newsletter signup",
@@ -112,7 +117,17 @@
     "cart_drawer_free_shipping_enabled": "Show free-shipping progress",
     "cart_drawer_free_shipping_threshold": "Free-shipping threshold",
     "cart_drawer_free_shipping_threshold_info": "Enter an amount in your store's currency.",
-    "sticky_add_to_cart": "Show sticky add-to-cart bar on product pages"
+    "sticky_add_to_cart": "Show sticky add-to-cart bar on product pages",
+    "product_media_layout": "Desktop media layout",
+    "product_media_columns": "Media columns on desktop",
+    "product_media_gap": "Gap between media",
+    "product_media_mobile_layout": "Mobile media layout",
+    "product_media_mobile_controls": "Mobile gallery controls",
+    "product_image_zoom": "Enable image zoom",
+    "product_image_zoom_level": "Maximum image zoom level",
+    "product_video_autoplay": "Autoplay product videos",
+    "product_video_loop": "Loop product videos",
+    "product_info_width": "Product information width on desktop"
   },
   "options": {
     "page_width": {
@@ -138,6 +153,26 @@
     "product_card_hover_effect": {
       "none": "None",
       "zoom": "Subtle zoom"
+    },
+    "price_filter_style": {
+      "range_slider": "Dual range slider",
+      "number_inputs": "Minimum and maximum fields"
+    },
+    "filter_value_style": {
+      "checkboxes": "Checkbox list",
+      "pills": "Selectable chips"
+    },
+    "product_media_layout": {
+      "grid": "Grid",
+      "stacked": "Stacked, one per row"
+    },
+    "product_media_mobile_layout": {
+      "grid": "Grid",
+      "slider": "Swipe slider"
+    },
+    "product_media_mobile_controls": {
+      "dots": "Dots",
+      "none": "None"
     }
   },
   "sections": {

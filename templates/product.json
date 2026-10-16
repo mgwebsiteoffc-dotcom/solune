@@ -15,7 +15,22 @@
         "usage": { "type": "usage" }
       },
       "block_order": ["vendor", "title", "price", "variant_picker", "quantity", "buy_buttons", "description", "ingredients", "skin_profile", "usage"],
-      "settings": {}
+      "settings": {
+        "product_info_width": 40,
+        "media_layout": "grid",
+        "media_grid_columns": 2,
+        "media_grid_gap": 8,
+        "mobile_gallery_layout": "slider",
+        "mobile_gallery_controls": "dots",
+        "enable_image_zoom": true,
+        "image_zoom_level": 3,
+        "video_autoplay": false,
+        "video_loop": true,
+        "sticky_add_to_cart": true,
+        "show_selling_plans": true,
+        "show_payment_terms": true,
+        "show_pickup_availability": true
+      }
     },
     "related": {
       "type": "product-recommendations",

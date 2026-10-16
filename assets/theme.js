@@ -32,6 +32,86 @@
     return moneyFormat.replace(match[0], amount);
   };
 
+  const updatePriceRange = (slider, changedInput) => {
+    const minimumInput = slider.querySelector('[data-price-range-min]');
+    const maximumInput = slider.querySelector('[data-price-range-max]');
+    if (!minimumInput || !maximumInput) return;
+
+    const rangeMaximum = Number(minimumInput.max);
+    let minimum = Number(minimumInput.value);
+    let maximum = Number(maximumInput.value);
+    if (!Number.isFinite(minimum) || !Number.isFinite(maximum)) return;
+
+    if (minimum > maximum) {
+      if (changedInput === minimumInput) minimum = maximum;
+      else maximum = minimum;
+    }
+
+    minimumInput.value = String(minimum);
+    maximumInput.value = String(maximum);
+    minimumInput.style.zIndex = changedInput === minimumInput ? '5' : '4';
+    maximumInput.style.zIndex = changedInput === maximumInput ? '5' : '4';
+
+    const start = rangeMaximum > 0 ? (minimum / rangeMaximum) * 100 : 0;
+    const end = rangeMaximum > 0 ? (maximum / rangeMaximum) * 100 : 100;
+    slider.style.setProperty('--range-start', `${Math.max(0, Math.min(100, start))}%`);
+    slider.style.setProperty('--range-end', `${Math.max(0, Math.min(100, end))}%`);
+
+    const moneyFormat = slider.dataset.moneyFormat;
+    const minimumText = formatMoney(Math.round(minimum * 100), moneyFormat);
+    const maximumText = formatMoney(Math.round(maximum * 100), moneyFormat);
+    const minimumOutput = slider.parentElement.querySelector('[data-price-min-output]');
+    const maximumOutput = slider.parentElement.querySelector('[data-price-max-output]');
+    if (minimumOutput) minimumOutput.textContent = minimumText;
+    if (maximumOutput) maximumOutput.textContent = maximumText;
+    minimumInput.setAttribute('aria-valuetext', minimumText);
+    maximumInput.setAttribute('aria-valuetext', maximumText);
+  };
+
+  const initializePriceRanges = (scope = document) => {
+    const sliders = [];
+    if (scope.matches?.('[data-price-range]')) sliders.push(scope);
+    sliders.push(...scope.querySelectorAll('[data-price-range]'));
+    sliders.forEach((slider) => {
+      if (slider.dataset.priceRangeInitialized === 'true') return;
+      slider.dataset.priceRangeInitialized = 'true';
+      updatePriceRange(slider);
+    });
+  };
+
+  const updateGalleryDots = (gallery) => {
+    const controls = gallery.parentElement?.querySelector('[data-gallery-controls]');
+    if (!controls || gallery.clientWidth === 0) return;
+    const dots = [...controls.querySelectorAll('[data-gallery-dot]')];
+    if (dots.length === 0) return;
+    const activeIndex = Math.max(0, Math.min(dots.length - 1, Math.round(gallery.scrollLeft / gallery.clientWidth)));
+    dots.forEach((dot, index) => {
+      if (index === activeIndex) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+  };
+
+  const initializeProductGalleries = (scope = document) => {
+    const galleries = [];
+    if (scope.matches?.('[data-product-gallery]')) galleries.push(scope);
+    galleries.push(...scope.querySelectorAll('[data-product-gallery]'));
+    galleries.forEach((gallery) => {
+      if (gallery.dataset.galleryInitialized === 'true') return;
+      gallery.dataset.galleryInitialized = 'true';
+      if (gallery.dataset.mobileLayout !== 'slider') return;
+
+      let animationFrame = 0;
+      gallery.addEventListener('scroll', () => {
+        if (animationFrame) return;
+        animationFrame = window.requestAnimationFrame(() => {
+          animationFrame = 0;
+          updateGalleryDots(gallery);
+        });
+      }, { passive: true });
+      updateGalleryDots(gallery);
+    });
+  };
+
   const getVariants = (root) => {
     const json = root.querySelector('[data-product-variants]');
     if (!json) return [];
@@ -302,6 +382,38 @@
     }
   };
 
+  document.addEventListener('input', (event) => {
+    if (!event.target.matches('[data-price-range-min], [data-price-range-max]')) return;
+    const slider = event.target.closest('[data-price-range]');
+    if (slider) updatePriceRange(slider, event.target);
+  });
+
+  document.addEventListener('click', (event) => {
+    const zoomButton = event.target.closest?.('[data-image-zoom]');
+    if (zoomButton) {
+      const media = zoomButton.closest('.product-gallery__media');
+      if (!media) return;
+      const isZoomed = media.dataset.imageZoomed === 'true';
+      media.dataset.imageZoomed = String(!isZoomed);
+      zoomButton.setAttribute('aria-pressed', String(!isZoomed));
+      zoomButton.setAttribute('aria-label', isZoomed ? zoomButton.dataset.zoomLabel : zoomButton.dataset.resetLabel);
+      return;
+    }
+
+    const dot = event.target.closest?.('[data-gallery-dot]');
+    if (!dot) return;
+    const gallery = dot.closest('.product-gallery-container')?.querySelector('[data-product-gallery]');
+    const targetIndex = dot.dataset.galleryDot;
+    const media = gallery?.querySelector(`[data-gallery-index="${targetIndex}"]`);
+    if (media) {
+      media.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'start'
+      });
+    }
+  });
+
   document.addEventListener('change', (event) => {
     if (event.target.matches('[data-variant-select]')) {
       const root = event.target.closest('[data-product-root]');
@@ -379,6 +491,8 @@
     });
   };
 
+  initializePriceRanges();
+  initializeProductGalleries();
   initializeProducts();
   initializeGiftCardRecipients();
   initializeStickyProductBars();
@@ -423,6 +537,8 @@
 
   observeRecommendations();
   document.addEventListener('shopify:section:load', (event) => {
+    initializePriceRanges(event.target);
+    initializeProductGalleries(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
     initializeStickyProductBars(event.target);

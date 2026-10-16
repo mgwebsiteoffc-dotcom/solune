@@ -15,22 +15,43 @@
 {% assign product_form_id = 'ProductForm-' | append: section.id %}
 {% assign pickup_container_id = 'PickupAvailability-' | append: section.id %}
 <section class="page-width" id="Product-{{ section.id }}" data-product-root data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
-  <div class="product-layout">
-    <div class="product-gallery" role="region" aria-label="{{ 'accessibility.product_gallery' | t }}">
+  <div class="product-layout" style="--product-info-width: {{ section.settings.product_info_width }}%;">
+    <div class="product-gallery-container">
+      <div
+        class="product-gallery{% if section.settings.media_layout == 'stacked' %} product-gallery--stacked{% endif %}{% if section.settings.mobile_gallery_layout == 'slider' %} product-gallery--mobile-slider{% endif %}"
+        role="region"
+        aria-label="{{ 'accessibility.product_gallery' | t }}"
+        data-product-gallery
+        data-mobile-layout="{{ section.settings.mobile_gallery_layout }}"
+        style="--media-grid-columns: {{ section.settings.media_grid_columns }}; --media-grid-gap: {{ section.settings.media_grid_gap }}px; --media-image-zoom: {{ section.settings.image_zoom_level }};"
+      >
       {% for media in product.media %}
         {% assign media_loading = 'lazy' %}
         {% if forloop.first %}{% assign media_loading = 'eager' %}{% endif %}
-        <div class="product-gallery__media" id="ProductMedia-{{ section.id }}-{{ media.id }}" data-media-id="{{ media.id }}">
+        <div class="product-gallery__media" id="ProductMedia-{{ section.id }}-{{ media.id }}" data-media-id="{{ media.id }}" data-gallery-index="{{ forloop.index0 }}">
           {% if media.media_type == 'image' %}
             {% assign media_alt = media.alt | default: product.title %}
             {% capture media_focal_style %}object-position: {{ media.preview_image.presentation.focal_point }};{% endcapture %}
             {{ media.preview_image | image_url: width: 1800 | image_tag: alt: media_alt, widths: '360, 480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 1025px) 54vw, (min-width: 681px) 50vw, 100vw', loading: media_loading, style: media_focal_style }}
+            {% if section.settings.enable_image_zoom %}
+              <button
+                class="product-gallery__zoom"
+                type="button"
+                aria-label="{{ 'product.zoom_image' | t | escape }}"
+                aria-pressed="false"
+                data-image-zoom
+                data-zoom-label="{{ 'product.zoom_image' | t | escape }}"
+                data-reset-label="{{ 'product.reset_image_zoom' | t | escape }}"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m16 16 4 4M10.8 7.8v6M7.8 10.8h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            {% endif %}
           {% else %}
-            {{ media | media_tag: image_size: '1200x', controls: true }}
+            {{ media | media_tag: image_size: '1200x', controls: true, autoplay: section.settings.video_autoplay, loop: section.settings.video_loop, muted: section.settings.video_autoplay }}
           {% endif %}
         </div>
       {% else %}
-        <div class="product-gallery__media product-gallery__media--demo">
+        <div class="product-gallery__media product-gallery__media--demo" data-gallery-index="0">
           <img
             src="{{ 'demo-product.jpg' | asset_url }}"
             alt="{{ 'general.demo_image_alt' | t | escape }}"
@@ -40,8 +61,29 @@
             decoding="async"
           >
           <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+          {% if section.settings.enable_image_zoom %}
+            <button
+              class="product-gallery__zoom"
+              type="button"
+              aria-label="{{ 'product.zoom_image' | t | escape }}"
+              aria-pressed="false"
+              data-image-zoom
+              data-zoom-label="{{ 'product.zoom_image' | t | escape }}"
+              data-reset-label="{{ 'product.reset_image_zoom' | t | escape }}"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m16 16 4 4M10.8 7.8v6M7.8 10.8h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          {% endif %}
         </div>
       {% endfor %}
+      </div>
+      {% if section.settings.mobile_gallery_layout == 'slider' and section.settings.mobile_gallery_controls == 'dots' and product.media.size > 1 %}
+        <div class="product-gallery__controls" data-gallery-controls role="group" aria-label="{{ 'accessibility.product_gallery' | t | escape }}">
+          {% for media in product.media %}
+            <button class="product-gallery__dot" type="button" data-gallery-dot="{{ forloop.index0 }}" aria-label="{{ 'product.gallery_go_to_media' | t: index: forloop.index | escape }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
 
     <div class="product-information">
@@ -178,6 +220,92 @@
 {
   "name": "t:sections.product.name",
   "settings": [
+    {
+      "type": "range",
+      "id": "product_info_width",
+      "label": "t:labels.product_info_width",
+      "min": 30,
+      "max": 55,
+      "step": 1,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "media_layout",
+      "label": "t:labels.product_media_layout",
+      "options": [
+        { "value": "grid", "label": "t:options.product_media_layout.grid" },
+        { "value": "stacked", "label": "t:options.product_media_layout.stacked" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "media_grid_columns",
+      "label": "t:labels.product_media_columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "media_grid_gap",
+      "label": "t:labels.product_media_gap",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "mobile_gallery_layout",
+      "label": "t:labels.product_media_mobile_layout",
+      "options": [
+        { "value": "grid", "label": "t:options.product_media_mobile_layout.grid" },
+        { "value": "slider", "label": "t:options.product_media_mobile_layout.slider" }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "select",
+      "id": "mobile_gallery_controls",
+      "label": "t:labels.product_media_mobile_controls",
+      "options": [
+        { "value": "dots", "label": "t:options.product_media_mobile_controls.dots" },
+        { "value": "none", "label": "t:options.product_media_mobile_controls.none" }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "t:labels.product_image_zoom",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "image_zoom_level",
+      "label": "t:labels.product_image_zoom_level",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "t:labels.product_video_autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "t:labels.product_video_loop",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "sticky_add_to_cart",
