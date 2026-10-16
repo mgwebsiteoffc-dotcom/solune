@@ -155,10 +155,56 @@
     const json = root.querySelector('[data-product-variants]');
     if (!json) return [];
     try {
-      return JSON.parse(json.textContent);
+      const variants = JSON.parse(json.textContent);
+      const rulesJson = root.querySelector('[data-product-quantity-rules]');
+      if (!rulesJson) return variants;
+      const rules = JSON.parse(rulesJson.textContent);
+      const rulesById = new Map(rules.map((rule) => [String(rule.id), rule]));
+      return variants.map((variant) => ({
+        ...variant,
+        quantity_rule: rulesById.get(String(variant.id)) || variant.quantity_rule || {}
+      }));
     } catch (error) {
       return [];
     }
+  };
+
+  const updateQuantityStepperButtons = (input) => {
+    const stepper = input.closest('.quantity-stepper');
+    if (!stepper) return;
+    const minimum = Number(input.min || 1);
+    const maximum = input.max === '' ? Number.POSITIVE_INFINITY : Number(input.max);
+    const value = Number(input.value || minimum);
+    stepper.querySelectorAll('[data-quantity-step]').forEach((button) => {
+      const direction = Number(button.dataset.quantityStep);
+      button.disabled = direction < 0 ? value <= minimum : value >= maximum;
+    });
+  };
+
+  const updateProductQuantityRules = (root, variant) => {
+    const rule = variant.quantity_rule || {};
+    const minimum = Math.max(1, Number(rule.min) || 1);
+    const increment = Math.max(1, Number(rule.increment) || 1);
+    const maximum = Number(rule.max);
+    const hasMaximum = Number.isFinite(maximum) && maximum > 0;
+    const lastValidQuantity = hasMaximum
+      ? minimum + Math.floor(Math.max(0, maximum - minimum) / increment) * increment
+      : Number.POSITIVE_INFINITY;
+
+    root.querySelectorAll('[data-product-quantity]').forEach((input) => {
+      input.min = String(minimum);
+      input.step = String(increment);
+      if (Number.isFinite(lastValidQuantity)) input.max = String(lastValidQuantity);
+      else input.removeAttribute('max');
+
+      const current = Number(input.value);
+      let next = Number.isFinite(current) && current >= minimum
+        ? minimum + Math.floor((current - minimum) / increment) * increment
+        : minimum;
+      if (Number.isFinite(lastValidQuantity)) next = Math.min(next, lastValidQuantity);
+      input.value = String(next);
+      updateQuantityStepperButtons(input);
+    });
   };
 
   const getOptionGroups = (root) => [...root.querySelectorAll('[data-product-option-group]')]
@@ -304,6 +350,7 @@
     if (!variant) return;
 
     syncOptionPicker(root, variant, variants);
+    updateProductQuantityRules(root, variant);
     const status = root.querySelector('[data-variant-status]');
     const addButton = root.querySelector('[data-add-to-cart]');
     const planUnavailable = updateSellingPlans(root, variant);
@@ -442,6 +489,10 @@
     if (!event.target.matches('[data-price-range-min], [data-price-range-max]')) return;
     const slider = event.target.closest('[data-price-range]');
     if (slider) updatePriceRange(slider, event.target);
+  });
+
+  document.addEventListener('input', (event) => {
+    if (event.target.matches('[data-product-quantity]')) updateQuantityStepperButtons(event.target);
   });
 
   document.addEventListener('click', (event) => {

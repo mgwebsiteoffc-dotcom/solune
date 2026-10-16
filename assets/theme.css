@@ -2668,10 +2668,26 @@ label {
   margin-block: 0.25rem;
 }
 
-.cart-drawer__line-price {
+.cart-drawer__line-price-wrap {
+  display: grid;
   flex: 0 0 auto;
+  justify-items: end;
+  gap: 0.1rem;
+  text-align: right;
+}
+
+.cart-drawer__line-price {
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
+}
+
+.cart-drawer__line-price-wrap .price__compare {
+  font-size: 0.72rem;
+}
+
+.cart-drawer__unit-price {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
 }
 
 .cart-drawer__item-actions {
@@ -2726,6 +2742,22 @@ label {
   text-underline-offset: 0.2em;
 }
 
+.cart-drawer__note-form {
+  display: grid;
+  gap: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  padding-block: 1rem;
+}
+
+.cart-drawer__note-form textarea {
+  min-height: 5rem;
+}
+
+.cart-drawer__note-form .button {
+  width: auto;
+  justify-self: start;
+}
+
 .cart-drawer__footer {
   flex: 0 0 auto;
   border-top: 1px solid var(--color-border);
@@ -2761,6 +2793,18 @@ label {
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 0.4rem;
+}
+
+.cart-drawer__savings {
+  color: var(--color-sale, var(--color-foreground));
+  font-size: 0.86rem;
+}
+
+.cart-drawer__total {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.8rem;
+  margin-top: 0.8rem;
+  font-size: 1.05rem;
 }
 
 .cart-drawer__footer > .product-card__meta {

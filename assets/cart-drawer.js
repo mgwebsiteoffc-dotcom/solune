@@ -106,15 +106,53 @@
   };
 
   const showFormError = (form, message) => {
-    let error = form.querySelector('[data-cart-add-error]');
+    let error = form.querySelector('[data-cart-form-error]');
     if (!error) {
       error = document.createElement('p');
       error.className = 'form-status form-status--error';
       error.setAttribute('role', 'alert');
-      error.dataset.cartAddError = '';
+      error.dataset.cartFormError = '';
       form.prepend(error);
     }
     error.textContent = message;
+  };
+
+  const saveCartNote = async (form) => {
+    if (form.dataset.cartNoteSaving === 'true') return;
+    const noteField = form.querySelector('[name="note"]');
+    const submitter = form.querySelector('[type="submit"]');
+    if (!noteField) return;
+
+    const wasDisabled = submitter?.disabled || false;
+    form.dataset.cartNoteSaving = 'true';
+    form.querySelector('[data-cart-form-error]')?.remove();
+    if (submitter) {
+      submitter.disabled = true;
+      submitter.setAttribute('aria-busy', 'true');
+    }
+
+    try {
+      const response = await fetch(getUrl('updateUrl'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        credentials: 'same-origin',
+        body: new URLSearchParams({ note: noteField.value })
+      });
+      const cart = await parseJsonResponse(response);
+      updateCartCount(cart.item_count || 0);
+      announce(drawer.dataset.noteSavedLabel || 'Order note saved.');
+    } catch (error) {
+      showFormError(form, drawer.dataset.noteUpdateError || error.message || drawer.dataset.updateError);
+    } finally {
+      if (submitter) {
+        submitter.disabled = wasDisabled;
+        submitter.removeAttribute('aria-busy');
+      }
+      delete form.dataset.cartNoteSaving;
+    }
   };
 
   document.addEventListener('click', (event) => {
@@ -167,7 +205,13 @@
 
   document.addEventListener('submit', async (event) => {
     const form = event.target;
-    if (!(form instanceof HTMLFormElement) || !form.action.includes('/cart/add')) return;
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.matches('[data-cart-note-form]')) {
+      event.preventDefault();
+      saveCartNote(form);
+      return;
+    }
+    if (!form.action.includes('/cart/add')) return;
     if (form.dataset.cartDrawerSubmitting === 'true') return;
 
     event.preventDefault();
@@ -178,7 +222,7 @@
     const wasDisabled = submitter?.disabled || false;
     submitter?.setAttribute('aria-busy', 'true');
     if (submitter) submitter.disabled = true;
-    form.querySelector('[data-cart-add-error]')?.remove();
+    form.querySelector('[data-cart-form-error]')?.remove();
 
     try {
       const response = await fetch(getUrl('addUrl'), {

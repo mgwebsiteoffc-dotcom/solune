@@ -11,6 +11,9 @@ This project is a development foundation. A checked implementation item means co
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
 - [x] Add a native AJAX cart drawer with quantity adjustment/removal, cart totals, optional free-shipping progress, and a cart-page fallback.
 - [x] Add a scroll-aware PDP sticky add-to-cart bar synchronized with variant price and availability.
+- [x] Expose Title H1–H4 visual styles and configurable sold-out, selector, swatch, variant-image, and size-chart controls in the product blocks.
+- [x] Add editable Image with text, manually curated Instagram stories, and shoppable video/product carousel sections to the homepage template, with demo-image fallbacks.
+- [x] Add cart-drawer order-note saving through Shopify Ajax, cart-line unit prices and discount comparisons, and a single cart-page savings total.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
@@ -23,7 +26,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check with Shopify CLI via `npx` (57 files inspected with no offenses).
+- [x] Run Shopify Theme Check with Shopify CLI via `npx` (61 files inspected with no offenses; product picker and homepage sections included).
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
@@ -31,7 +34,7 @@ This project is a development foundation. A checked implementation item means co
 
 ### Required shopping flows
 
-- [ ] Test single- and multi-option products, swatch images/colors, unavailable combinations, sold-out variants, variant URLs, variant media, and product prices.
+- [ ] Test single- and multi-option products, swatch images/colors, unavailable combinations, sold-out variants, variant URLs/media/prices, and variant quantity minimums, increments, and maximums.
 - [ ] Test selling plans and cart display on optional- and required-subscription products.
 - [ ] Test gift-card recipient validation, scheduled delivery (including the 90-day limit and timezone), cart properties, QR rendering, and Apple Wallet.
 - [ ] Test pickup availability for available/unavailable locations and multiple variants.

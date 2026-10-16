@@ -96,7 +96,10 @@
     "decrease_quantity": "Decrease quantity for {{ title }}",
     "increase_quantity": "Increase quantity for {{ title }}",
     "remove_item": "Remove {{ title }}",
-    "update_error": "Your bag couldn't be updated. Please try again."
+    "update_error": "Your bag couldn't be updated. Please try again.",
+    "save_note": "Save note",
+    "note_saved": "Order note saved.",
+    "note_update_error": "Your order note could not be saved. Please try again."
   },
   "collection": {
     "filter": "Filter",

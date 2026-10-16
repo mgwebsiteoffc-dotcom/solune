@@ -1,4 +1,7 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
+{% assign current_quantity_min = current_variant.quantity_rule.min | default: 1 %}
+{% assign current_quantity_max = current_variant.quantity_rule.max | default: 0 %}
+{% assign current_quantity_increment = current_variant.quantity_rule.increment | default: 1 %}
 {% assign current_price = current_variant.price %}
 {% assign current_compare_at_price = current_variant.compare_at_price %}
 {% if product.requires_selling_plan and current_variant.selling_plan_allocations.size > 0 %}
@@ -175,11 +178,11 @@
                   {% if block.settings.style == 'stepper' %}
                     <div class="quantity-stepper">
                       <button class="quantity-stepper__button" type="button" data-quantity-step="-1" data-quantity-input="Quantity-{{ section.id }}" aria-label="{{ 'product.decrease_quantity' | t | escape }}">−</button>
-                      <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" form="{{ product_form_id }}">
+                      <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="{{ current_quantity_min }}" min="{{ current_quantity_min }}" step="{{ current_quantity_increment }}"{% if current_quantity_max > 0 %} max="{{ current_quantity_max }}"{% endif %} inputmode="numeric" form="{{ product_form_id }}" data-product-quantity>
                       <button class="quantity-stepper__button" type="button" data-quantity-step="1" data-quantity-input="Quantity-{{ section.id }}" aria-label="{{ 'product.increase_quantity' | t | escape }}">+</button>
                     </div>
                   {% else %}
-                    <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" form="{{ product_form_id }}">
+                    <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="{{ current_quantity_min }}" min="{{ current_quantity_min }}" step="{{ current_quantity_increment }}"{% if current_quantity_max > 0 %} max="{{ current_quantity_max }}"{% endif %} inputmode="numeric" form="{{ product_form_id }}" data-product-quantity>
                   {% endif %}
                 </div>
               {% when 'buy_buttons' %}
@@ -269,6 +272,14 @@
     </div>
   {% endif %}
   <script type="application/json" data-product-variants>{{ product.variants | json }}</script>
+  <script type="application/json" data-product-quantity-rules>
+    [
+      {%- for quantity_variant in product.variants -%}
+        {%- unless forloop.first -%},{%- endunless -%}
+        {"id":{{ quantity_variant.id | json }},"min":{{ quantity_variant.quantity_rule.min | default: 1 | json }},"max":{{ quantity_variant.quantity_rule.max | default: 0 | json }},"increment":{{ quantity_variant.quantity_rule.increment | default: 1 | json }}}
+      {%- endfor -%}
+    ]
+  </script>
 </section>
 
 {% schema %}

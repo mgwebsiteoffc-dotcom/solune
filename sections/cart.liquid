@@ -78,7 +78,6 @@
         {% for discount_application in cart.cart_level_discount_applications %}
           <p>{{ discount_application.title | escape }} <span>−{% render 'format-money', amount: discount_application.total_allocated_amount %}</span></p>
         {% endfor %}
-        {% if cart.total_discount > 0 %}<p>{{ 'cart.discount' | t }} <span>−{% render 'format-money', amount: cart.total_discount %}</span></p>{% endif %}
         <p>{{ 'cart.subtotal' | t }}: {% render 'format-money', amount: cart.original_total_price %}</p>
         {% if cart.total_discount > 0 %}<p>{{ 'cart.total_discount' | t }} <span>−{% render 'format-money', amount: cart.total_discount %}</span></p>{% endif %}
         <p><strong>{{ 'cart.estimated_total' | t }}: {% render 'format-money', amount: cart.total_price %}</strong></p>

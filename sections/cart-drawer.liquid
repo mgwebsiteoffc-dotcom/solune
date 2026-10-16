@@ -6,11 +6,14 @@
     aria-labelledby="CartDrawerTitle"
     data-add-url="{{ routes.cart_add_url | append: '.js' }}"
     data-change-url="{{ routes.cart_change_url | append: '.js' }}"
+    data-update-url="{{ routes.cart_update_url | append: '.js' }}"
     data-cart-url="{{ routes.cart_url | append: '.js' }}"
     data-section-url="{{ routes.cart_url }}?section_id=cart-drawer"
     data-cart-label="{{ 'general.cart' | t | escape }}"
     data-added-label="{{ 'cart.added_to_cart' | t | escape }}"
     data-update-error="{{ 'cart.update_error' | t | escape }}"
+    data-note-saved-label="{{ 'cart.note_saved' | t | escape }}"
+    data-note-update-error="{{ 'cart.note_update_error' | t | escape }}"
   >
     <div class="cart-drawer__panel">
       <header class="cart-drawer__header">
@@ -57,8 +60,14 @@
                         {% if property.last != blank and property_first_char != '_' %}<p class="product-card__meta">{{ property.first | escape }}: {{ property.last | escape }}</p>{% endif %}
                       {% endfor %}
                     </div>
-                    <strong class="cart-drawer__line-price">{% render 'format-money', amount: item.final_line_price %}</strong>
+                    <span class="cart-drawer__line-price-wrap">
+                      {% if item.original_line_price > item.final_line_price %}<s class="price__compare">{% render 'format-money', amount: item.original_line_price %}</s>{% endif %}
+                      <strong class="cart-drawer__line-price">{% render 'format-money', amount: item.final_line_price %}</strong>
+                    </span>
                   </div>
+                  {% if item.unit_price_measurement %}
+                    <p class="product-card__meta cart-drawer__unit-price"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{% render 'format-money', amount: item.unit_price %} / {{ item.unit_price_measurement.reference_value }}{{ item.unit_price_measurement.reference_unit }}</p>
+                  {% endif %}
                   <div class="cart-drawer__item-actions">
                     <div class="cart-drawer__quantity" role="group" aria-label="{{ 'cart.quantity_for' | t: title: item.product.title | escape }}">
                       <button type="button" data-cart-quantity-step="down" data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.decrease_quantity' | t: title: item.product.title | escape }}">−</button>
@@ -71,6 +80,15 @@
               </li>
             {% endfor %}
           </ul>
+          {% if settings.cart_show_note %}
+            <form class="cart-drawer__note-form" action="{{ routes.cart_url }}" method="post" data-cart-note-form>
+              <div class="field">
+                <label for="CartDrawerNote">{{ 'cart.note' | t }}</label>
+                <textarea id="CartDrawerNote" name="note" rows="3" data-cart-note>{{ cart.note | escape }}</textarea>
+              </div>
+              <button class="button button--secondary" type="submit" name="update">{{ 'cart.save_note' | t }}</button>
+            </form>
+          {% endif %}
         {% endif %}
       </div>
 
@@ -91,9 +109,19 @@
             {% endif %}
           </div>
         {% endif %}
+        {% if cart.total_discount > 0 %}
+          <div class="cart-drawer__subtotal cart-drawer__savings">
+            <span>{{ 'cart.total_discount' | t }}</span>
+            <strong>−{% render 'format-money', amount: cart.total_discount %}</strong>
+          </div>
+        {% endif %}
         <div class="cart-drawer__subtotal">
           <span>{{ 'cart.subtotal' | t }}</span>
-          <strong data-cart-drawer-subtotal>{% render 'format-money', amount: cart.total_price %}</strong>
+          <strong data-cart-drawer-subtotal>{% render 'format-money', amount: cart.original_total_price %}</strong>
+        </div>
+        <div class="cart-drawer__subtotal cart-drawer__total">
+          <strong>{{ 'cart.estimated_total' | t }}</strong>
+          <strong data-cart-drawer-total>{% render 'format-money', amount: cart.total_price %}</strong>
         </div>
         {% if settings.cart_show_tax_notice and cart.taxes_included %}<p class="product-card__meta">{{ 'cart.taxes_included' | t }}</p>{% endif %}
         {% if settings.cart_show_shipping_note %}<p class="product-card__meta">{{ 'cart.shipping_at_checkout' | t }}</p>{% endif %}
