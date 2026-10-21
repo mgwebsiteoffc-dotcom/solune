@@ -4,4 +4,8 @@ AGENTS.md
 UPSTREAM.md
 METAFIELDS.md
 SUBMISSION-CHECKLIST.md
+docs/**
+tests/**
+package.json
+package-lock.json
 .github/**

@@ -2,9 +2,9 @@
 
 This project is a development foundation. A checked implementation item means code is present; it does not imply real-store behavior, Lighthouse results, or Shopify review have passed. Theme Check results are recorded separately below.
 
-## Progress snapshot — 2026-10-16
+## Progress snapshot — 2026-10-21
 
-- **32 of 57 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **38 of 63 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is the official Theme Info support email (needed for a clean current Theme Check), authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 - No authenticated Shopify store session is available in this workspace, so the store-dependent tests below remain open; no upload or live storefront QA is claimed.
 
@@ -12,6 +12,7 @@ This project is a development foundation. A checked implementation item means co
 
 - [x] Start from the official Shopify Skeleton Theme v1.0.0, preserve its license, and document provenance.
 - [x] Build an original, responsive skincare visual system with a curated section library and merchant-facing settings.
+- [x] Add a development-only JSDOM smoke suite for selected storefront interactions; fixtures and mocked Shopify requests are not live-store or real-browser QA.
 - [x] Add five original theme style presets, a 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
 - [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
@@ -35,8 +36,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check with Shopify CLI via `npx` (66 files inspected; the pre-metadata-edit run had no offenses).
-- [ ] Pass the latest Theme Check with valid theme metadata; the latest run scans 66 files and reports one `ValidJSON` error because the required `theme_support_email` is blank pending the owner's official support address.
+- [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
+- [ ] Pass the latest Theme Check with valid theme metadata; the latest run scans 68 files and reports one `ValidJSON` error because the required `theme_support_email` is blank pending the owner's official support address.
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
@@ -44,15 +45,20 @@ This project is a development foundation. A checked implementation item means co
 
 ### Required shopping flows
 
-- [ ] Test single- and multi-option products, swatch images/colors, unavailable combinations, sold-out variants, variant URLs/media/prices, and variant quantity minimums, increments, and maximums.
+- [x] Run a JSDOM fixture test for direct variant-selector changes, sold-out UI, price/SKU/variant-URL updates, and quantity-rule minimum/increment/maximum normalization.
+- [ ] Verify single- and multi-option products against real Shopify data, including swatch images/colors, unavailable combinations, variant media/prices, and quantity minimums, increments, and maximums.
 - [ ] Test selling plans and cart display on optional- and required-subscription products.
-- [ ] Test gift-card recipient validation, scheduled delivery (including the 90-day limit and timezone), cart properties, QR rendering, and Apple Wallet.
+- [x] Run a JSDOM fixture test for recipient-field required/disabled state and the local 90-day date boundary across the New York spring-DST transition.
+- [ ] Test Shopify gift-card recipient validation, scheduled delivery/timezone handling, cart properties, QR rendering, and Apple Wallet.
 - [ ] Test pickup availability for available/unavailable locations and multiple variants.
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types.
-- [ ] Test in-site UGC playback, story viewer play/close and focus restoration, carousel pagination, reduced motion, and no story-card redirects on desktop/mobile.
+- [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation.
+- [ ] Verify in-site UGC playback, focus restoration, pagination, reduced motion, and no story-card redirects on real desktop/mobile browsers.
 - [ ] Test line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
-- [ ] Test AJAX cart drawer add/change/remove flows, free-shipping progress, section refresh, keyboard dismissal, and cart-page fallback.
-- [ ] Test sticky PDP add-to-cart visibility, variant price/availability synchronization, and submission from the external form-associated button.
+- [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths and external form-associated submission.
+- [ ] Test AJAX cart drawer behavior against Shopify for section refresh, free-shipping progress, keyboard dismissal, and cart-page fallback.
+- [x] Run JSDOM fixture tests for sticky PDP bar visibility and variant price/availability synchronization; the external form-associated submit path is covered in the mocked cart test.
+- [ ] Verify sticky PDP add-to-cart and form association in a real Shopify storefront.
 - [ ] Test customer account navigation, Follow on Shop, country/language selectors, and payment/social icons on eligible shops.
 - [x] Static code audit confirms app blocks and Custom Liquid are optional extension points and the core theme has no required app dependency; this is not runtime QA.
 - [ ] Test app-block and Custom Liquid insertion behavior in Shopify's Theme Editor.
@@ -71,9 +77,9 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Validate keyboard/screen-reader behavior, focus order, contrast, reduced motion, form labels/errors, all image ratios/focal points, and realistic long/short content.
 - [ ] Test latest supported desktop/mobile browsers and relevant social-app webviews.
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
-- [x] Inventory static asset and dependency use: no npm/pip package dependencies or remote third-party UI libraries/icon sets; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
+- [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
 - [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
-- [x] Package with Shopify CLI and inspect the generated ZIP for standard theme structure, key templates/configuration, and the included upstream license notice; this local preflight is not a Theme Store review.
+- [x] Package with Shopify CLI and inspect the generated ZIP for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of the development-only test/package files (85 theme files); this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.

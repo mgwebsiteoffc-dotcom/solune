@@ -631,7 +631,8 @@
         return adjustedDate.toISOString().slice(0, 10);
       };
       const today = new Date();
-      const latestDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+      const latestDate = new Date(today);
+      latestDate.setDate(latestDate.getDate() + 90);
       sendOn.min = localDate(today);
       sendOn.max = localDate(latestDate);
     }

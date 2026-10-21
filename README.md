@@ -42,7 +42,16 @@ To upload a persistent, unpublished preview theme (never make the live theme the
 shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
 ```
 
-A prior Theme Check run passed using Shopify CLI via `npx` (66 files inspected, no offenses). The latest run still inspects 66 files but reports one `ValidJSON` error because Shopify now requires a valid `theme_support_email`; the field is blank until the owner supplies an official merchant-support address. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No authenticated development-store preview has been tested from this workspace. Liquid rendering, Theme Editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift-card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
+A prior Theme Check run passed using Shopify CLI via `npx` (66 files inspected, no offenses). The latest run inspected 68 files and reported one `ValidJSON` error because `theme_support_email` is blank; Shopify requires the owner's valid support-email address, which has not been supplied. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing.
+
+Run the fixture-based DOM smoke suite for variant/quantity updates, sticky-cart behavior, dialogs/story focus return, gift-card date limits, carousel controls, and mocked cart requests with:
+
+```sh
+npm ci
+npm test
+```
+
+The suite uses development-only `jsdom`, excluded from the Shopify theme package. Its fixtures and mocked requests do not substitute for real Shopify data or browser QA. No authenticated development-store preview has been tested from this workspace. Liquid rendering, Theme Editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift-card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
 
 ## Project conventions
 
