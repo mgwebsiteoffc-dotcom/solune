@@ -22,6 +22,9 @@
         </thead>
         <tbody>
           {% for item in cart.items %}
+            {% assign cart_quantity_min = item.variant.quantity_rule.min | default: 1 %}
+            {% assign cart_quantity_max = item.variant.quantity_rule.max | default: 0 %}
+            {% assign cart_quantity_increment = item.variant.quantity_rule.increment | default: 1 %}
             <tr>
               <td>
                 <div class="cart-table__product">
@@ -55,7 +58,7 @@
               <td>
                 <span class="cart-table__label">{{ 'cart.quantity' | t }}</span>
                 <label class="visually-hidden" for="CartQuantity-{{ section.id }}-{{ forloop.index }}">{{ 'cart.quantity_for' | t: title: item.product.title }}</label>
-                <input id="CartQuantity-{{ section.id }}-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                <input id="CartQuantity-{{ section.id }}-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="{{ cart_quantity_min }}" step="{{ cart_quantity_increment }}"{% if cart_quantity_max > 0 %} max="{{ cart_quantity_max }}"{% endif %} inputmode="numeric">
               </td>
               <td>
                 <span class="cart-table__label">{{ 'cart.total' | t }}</span>

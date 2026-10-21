@@ -39,6 +39,9 @@
         {% else %}
           <ul class="cart-drawer__items" data-cart-drawer-items>
             {% for item in cart.items %}
+              {% assign cart_drawer_quantity_min = item.variant.quantity_rule.min | default: 1 %}
+              {% assign cart_drawer_quantity_max = item.variant.quantity_rule.max | default: 0 %}
+              {% assign cart_drawer_quantity_increment = item.variant.quantity_rule.increment | default: 1 %}
               <li class="cart-drawer__item" data-cart-line data-line-key="{{ item.key | escape }}">
                 {% if settings.cart_show_product_image and item.image %}
                   {% assign cart_drawer_image_alt = item.image.alt | default: item.product.title %}
@@ -71,7 +74,7 @@
                   <div class="cart-drawer__item-actions">
                     <div class="cart-drawer__quantity" role="group" aria-label="{{ 'cart.quantity_for' | t: title: item.product.title | escape }}">
                       <button type="button" data-cart-quantity-step="down" data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.decrease_quantity' | t: title: item.product.title | escape }}">−</button>
-                      <input type="number" min="0" inputmode="numeric" value="{{ item.quantity }}" data-cart-quantity data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.quantity_for' | t: title: item.product.title | escape }}">
+                      <input type="number" min="{{ cart_drawer_quantity_min }}" step="{{ cart_drawer_quantity_increment }}"{% if cart_drawer_quantity_max > 0 %} max="{{ cart_drawer_quantity_max }}"{% endif %} inputmode="numeric" value="{{ item.quantity }}" data-cart-quantity data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.quantity_for' | t: title: item.product.title | escape }}">
                       <button type="button" data-cart-quantity-step="up" data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.increase_quantity' | t: title: item.product.title | escape }}">+</button>
                     </div>
                     <a class="cart-drawer__remove" href="{{ item.url_to_remove }}" data-cart-remove data-line-key="{{ item.key | escape }}" aria-label="{{ 'cart.remove_item' | t: title: item.product.title | escape }}">{{ 'cart.remove' | t }}</a>

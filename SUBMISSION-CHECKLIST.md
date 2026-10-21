@@ -30,7 +30,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Add a variant-aware quantity-selector block to Featured Product and include it in the default homepage setup.
 - [x] Add a customizable product-page block library for SKU, badges, ratings with an optional reviews link, separators, product variations, line-item properties, inventory, pickup, complementary products with block-level quick-add control, offers, icon features, text/collapsible text, an extra image, buttons, share links, on-site modals, and more-information content.
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
-- [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes/quantities, and accelerated cart checkout.
+- [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes, variant-rule-aware cart quantity edits, and accelerated cart checkout.
 - [x] Implement customer account navigation, Follow on Shop, country/language localization, payment icons, social media icon settings, and favicon support.
 - [x] Implement canonical/social metadata, Shopify Product/Article structured data, route-aware BreadcrumbList JSON-LD, and accessible visible breadcrumbs without replacing Shopify-managed `/agents.md` content.
 - [x] Provide a reusable localized breadcrumb component on product, collection, collection-list, search, blog, article, page/contact, cart, and 404 templates.
@@ -50,7 +50,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run a JSDOM fixture for two-option color/size selectors, variant resolution, sold-out label/state, add-to-cart status, price/URL updates, and featured-media scroll selection.
 - [x] Verify a Featured Product fixture serializes an external quantity field with the selected variant and applies variant-specific minimum/increment/maximum rules.
 - [ ] Verify single- and multi-option products against real Shopify data, including Shopify-rendered swatch images/colors, unavailable combinations, variant media/prices, and quantity minimums, increments, and maximums.
-- [x] Audit product-card/video direct-add and accelerated-checkout paths at source level; guard quick add for variants, gift cards, selling plans, and minimum quantities; document remaining PDP-only and client-side bypasses. This is not live shopper QA.
+- [x] Audit PDP/sticky, product-card, video, Featured Product, cart-page, and accelerated-checkout purchase paths at source level; guard quick add for variants, gift cards, selling plans, and minimum quantities; document remaining PDP-only and client-side bypasses. This is not live shopper QA.
 - [x] Run JSDOM fixture checks for optional-plan discount/compare-at pricing, required-plan variant matching, and unavailable-plan add-to-cart state.
 - [ ] Test Shopify selling-plan submissions and cart display on optional- and required-subscription products.
 - [x] Run a JSDOM fixture test for recipient-field required/disabled state, enabled/disabled form-property serialization, and the local 90-day date boundary across the New York spring-DST transition.
@@ -64,7 +64,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Verify in-site UGC playback, focus restoration, pagination, reduced motion, and no story-card redirects on real desktop/mobile browsers.
 - [x] Run a mocked cart-note save test covering the `/cart/update.js` payload, submit-button busy state, and live confirmation.
 - [ ] Verify Shopify line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
-- [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths, cart-note saving, and external form-associated submission.
+- [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths, form-associated submission, and variant min/increment/max enforcement including rounding to a valid cart quantity.
 - [x] Verify in JSDOM that native product/cart form submissions remain un-intercepted when the optional drawer is absent or the form is a checkout action.
 - [x] Run a mocked add-error case to verify the server message is exposed as an alert and the enabled submit button regains focus after its busy/disabled state is restored.
 - [ ] Test AJAX cart drawer behavior against Shopify for section refresh, free-shipping progress, keyboard dismissal, and cart-page fallback.

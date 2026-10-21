@@ -19,6 +19,42 @@
     });
   };
 
+  const getQuantityBounds = (input) => {
+    const rawMinimum = Number(input.min);
+    const minimum = Number.isFinite(rawMinimum) && rawMinimum > 0 ? rawMinimum : 1;
+    const rawIncrement = Number(input.step);
+    const increment = Number.isFinite(rawIncrement) && rawIncrement > 0 ? rawIncrement : 1;
+    const rawMaximum = input.max === '' ? Number.POSITIVE_INFINITY : Number(input.max);
+    const maximum = Number.isFinite(rawMaximum)
+      ? minimum + Math.floor(Math.max(0, rawMaximum - minimum) / increment) * increment
+      : Number.POSITIVE_INFINITY;
+    return { minimum, increment, maximum };
+  };
+
+  const normalizeCartQuantity = (input, quantity) => {
+    const { minimum, increment, maximum } = getQuantityBounds(input);
+    const value = String(quantity ?? '').trim();
+    if (!value) return minimum;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return minimum;
+    if (parsed <= 0) return 0;
+    const clamped = Math.min(maximum, Math.max(minimum, parsed));
+    return minimum + Math.floor((clamped - minimum) / increment) * increment;
+  };
+
+  const updateCartQuantityControls = () => {
+    drawer.querySelectorAll('[data-cart-quantity]').forEach((input) => {
+      const { minimum, maximum } = getQuantityBounds(input);
+      if (Number.isFinite(maximum)) input.max = String(maximum);
+      const quantity = Number(input.value || minimum);
+      const line = input.closest('[data-cart-line]');
+      const downButton = line?.querySelector('[data-cart-quantity-step="down"]');
+      const upButton = line?.querySelector('[data-cart-quantity-step="up"]');
+      if (downButton) downButton.disabled = quantity <= minimum;
+      if (upButton) upButton.disabled = quantity >= maximum;
+    });
+  };
+
   const openDrawer = async (trigger) => {
     state.lastTrigger = trigger || state.lastTrigger;
     if (!drawer.open) {
@@ -64,6 +100,7 @@
 
     drawer.innerHTML = nextDrawer.innerHTML;
     updateCartCount(cart.item_count || 0);
+    updateCartQuantityControls();
 
     if (focusLineKey) {
       const quantities = [...drawer.querySelectorAll('[data-cart-quantity]')];
@@ -80,10 +117,18 @@
     state.isUpdating = true;
     const line = [...drawer.querySelectorAll('[data-cart-line]')]
       .find((item) => item.dataset.lineKey === lineKey);
+    const input = line?.querySelector('[data-cart-quantity]');
+    const nextQuantity = input
+      ? normalizeCartQuantity(input, quantity)
+      : Math.max(0, Number(quantity) || 0);
+    if (input) {
+      input.value = String(nextQuantity);
+      updateCartQuantityControls();
+    }
     line?.setAttribute('aria-busy', 'true');
 
     try {
-      const body = new URLSearchParams({ id: lineKey, quantity: String(Math.max(0, quantity)) });
+      const body = new URLSearchParams({ id: lineKey, quantity: String(nextQuantity) });
       const response = await fetch(getUrl('changeUrl'), {
         method: 'POST',
         headers: {
@@ -99,6 +144,7 @@
       announce('');
     } catch (error) {
       line?.removeAttribute('aria-busy');
+      await refreshDrawer(focusAfterUpdate ? lineKey : null).catch(() => {});
       announce(drawer.dataset.updateError || error.message);
     } finally {
       state.isUpdating = false;
@@ -171,19 +217,24 @@
     const removeButton = event.target.closest('[data-cart-remove]');
     if (removeButton) {
       event.preventDefault();
+      if (state.isUpdating) return;
       changeLineQuantity(removeButton.dataset.lineKey, 0, true);
       return;
     }
 
     const stepButton = event.target.closest('[data-cart-quantity-step]');
     if (stepButton) {
+      if (state.isUpdating) return;
       const lineKey = stepButton.dataset.lineKey;
       const input = [...drawer.querySelectorAll('[data-cart-quantity]')]
         .find((candidate) => candidate.dataset.lineKey === lineKey);
       if (!input) return;
-      const delta = stepButton.dataset.cartQuantityStep === 'up' ? 1 : -1;
-      const nextQuantity = Math.max(0, Number(input.value || 0) + delta);
+      const { minimum, increment } = getQuantityBounds(input);
+      const direction = stepButton.dataset.cartQuantityStep === 'up' ? 1 : -1;
+      const currentQuantity = Number(input.value || minimum);
+      const nextQuantity = normalizeCartQuantity(input, Math.max(minimum, currentQuantity + direction * increment));
       input.value = String(nextQuantity);
+      updateCartQuantityControls();
       changeLineQuantity(lineKey, nextQuantity, true);
     }
   });
@@ -199,8 +250,11 @@
 
   drawer.addEventListener('change', (event) => {
     const input = event.target.closest('[data-cart-quantity]');
-    if (!input) return;
-    changeLineQuantity(input.dataset.lineKey, Number(input.value || 0), true);
+    if (!input || state.isUpdating) return;
+    const quantity = normalizeCartQuantity(input, input.value);
+    input.value = String(quantity);
+    updateCartQuantityControls();
+    changeLineQuantity(input.dataset.lineKey, quantity, true);
   });
 
   document.addEventListener('submit', async (event) => {
@@ -257,4 +311,6 @@
     }
     if (shouldRefocusSubmitter && submitter && !submitter.disabled) submitter.focus();
   });
+
+  updateCartQuantityControls();
 })();

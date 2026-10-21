@@ -699,18 +699,20 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
       <div data-cart-drawer-body><p data-cart-drawer-empty>Empty bag</p></div>
       <p data-cart-drawer-status role="status" aria-live="polite"></p>
     </dialog>
-    <form id="ProductForm" method="post" action="/cart/add.js"><input name="id" value="variant-1"></form>
+    <form id="ProductForm" method="post" action="/cart/add.js"><input name="id" value="variant-1"><input name="quantity" value="2"></form>
     <button id="external-add" type="submit" name="add" form="ProductForm">Add</button>
   </body></html>`);
   const { window } = dom;
   let itemCount = 0;
   let quantity = 0;
+  let changeCalls = 0;
+  let lastChangedQuantity = null;
   let savedNote = '';
   const jsonResponse = (value) => ({ ok: true, json: async () => value });
   const htmlResponse = (value) => ({ ok: true, text: async () => value });
   const sectionMarkup = () => {
     const content = itemCount
-      ? `<ul><li data-cart-line data-line-key="line-1"><input type="number" value="${quantity}" data-cart-quantity data-line-key="line-1" aria-label="Quantity"><button type="button" data-cart-quantity-step="up" data-line-key="line-1">+</button><a href="/cart/change?line=1&amp;quantity=0" data-cart-remove data-line-key="line-1">Remove</a></li></ul><form action="/cart" method="post" data-cart-note-form><textarea name="note"></textarea><button type="submit" name="update">Save note</button></form>`
+      ? `<ul><li data-cart-line data-line-key="line-1"><button type="button" data-cart-quantity-step="down" data-line-key="line-1">−</button><input type="number" min="2" step="3" max="9" value="${quantity}" data-cart-quantity data-line-key="line-1" aria-label="Quantity"><button type="button" data-cart-quantity-step="up" data-line-key="line-1">+</button><a href="/cart/change?line=1&amp;quantity=0" data-cart-remove data-line-key="line-1">Remove</a></li></ul><form action="/cart" method="post" data-cart-note-form><textarea name="note"></textarea><button type="submit" name="update">Save note</button></form>`
       : '<p data-cart-drawer-empty>Empty bag</p>';
     return `<dialog data-cart-drawer><button type="button" data-cart-drawer-close>Close</button><div data-cart-drawer-body>${content}</div><p data-cart-drawer-status role="status" aria-live="polite"></p></dialog>`;
   };
@@ -718,12 +720,14 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
   window.fetch = async (input, init = {}) => {
     const url = new URL(input, window.location.href);
     if (url.pathname === '/cart/add.js') {
-      itemCount = 1;
-      quantity = 1;
+      quantity = Number(init.body.get('quantity') || 1);
+      itemCount = quantity;
       return jsonResponse({ item_count: itemCount });
     }
     if (url.pathname === '/cart/change.js') {
-      quantity = Number(init.body.get('quantity'));
+      changeCalls += 1;
+      lastChangedQuantity = Number(init.body.get('quantity'));
+      quantity = lastChangedQuantity;
       itemCount = quantity;
       return jsonResponse({ item_count: itemCount });
     }
@@ -745,13 +749,36 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
   form.requestSubmit(submit);
   assert.equal(submitEvent.submitter, submit);
   assert.equal(submitEvent.defaultPrevented, true);
-  await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '1');
+  await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '2');
+  assert.equal(quantity, 2);
   assert.equal(drawer.open, true);
   assert.equal(window.document.querySelector('[data-cart-drawer-status]').textContent, 'Added to bag');
 
+  let quantityInput = window.document.querySelector('[data-cart-quantity]');
+  assert.equal(quantityInput.min, '2');
+  assert.equal(quantityInput.step, '3');
+  assert.equal(quantityInput.max, '8');
+  assert.equal(quantityInput.value, '2');
+  assert.equal(window.document.querySelector('[data-cart-quantity-step="down"]').disabled, true);
   window.document.querySelector('[data-cart-quantity-step="up"]').click();
-  await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '2'
-    && window.document.querySelector('[data-cart-quantity]')?.value === '2');
+  await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '5'
+    && window.document.querySelector('[data-cart-quantity]')?.value === '5');
+  assert.equal(lastChangedQuantity, 5);
+  assert.equal(window.document.querySelector('[data-cart-quantity-step="down"]').disabled, false);
+
+  quantityInput = window.document.querySelector('[data-cart-quantity]');
+  quantityInput.value = '6';
+  quantityInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+  await waitFor(() => changeCalls === 2 && lastChangedQuantity === 5
+    && window.document.querySelector('[data-cart-quantity]')?.value === '5');
+  await waitFor(() => window.document.querySelector('[data-cart-drawer-status]').textContent === '');
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  window.document.querySelector('[data-cart-quantity-step="up"]').click();
+  await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '8'
+    && window.document.querySelector('[data-cart-quantity]')?.value === '8');
+  assert.equal(window.document.querySelector('[data-cart-quantity-step="up"]').disabled, true);
+  await waitFor(() => window.document.querySelector('[data-cart-drawer-status]').textContent === '');
+  await new Promise((resolve) => setTimeout(resolve, 0));
 
   const noteForm = drawer.querySelector('[data-cart-note-form]');
   const noteField = noteForm.querySelector('[name="note"]');
