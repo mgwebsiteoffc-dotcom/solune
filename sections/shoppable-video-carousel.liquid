@@ -26,6 +26,13 @@
           {% endfor %}
         {% endif %}
         {% assign shoppable_video_variant = shoppable_video_product.selected_or_first_available_variant %}
+        {% assign shoppable_video_min_quantity = shoppable_video_variant.quantity_rule.min | default: 1 %}
+        {% assign shoppable_video_requires_product_page = false %}
+        {% if shoppable_video_product != blank %}
+          {% if shoppable_video_product.has_only_default_variant == false or shoppable_video_product.gift_card? or shoppable_video_product.selling_plan_groups.size > 0 or shoppable_video_min_quantity > 1 %}
+            {% assign shoppable_video_requires_product_page = true %}
+          {% endif %}
+        {% endif %}
         {% assign shoppable_video_price = shoppable_video_variant.price %}
         {% assign shoppable_video_allocation = shoppable_video_variant.selling_plan_allocations.first %}
         {% if shoppable_video_product.requires_selling_plan and shoppable_video_allocation != blank %}
@@ -64,16 +71,19 @@
                 <span>{{ shoppable_video_product.title | escape }}</span>
                 <span>{% render 'format-money', amount: shoppable_video_price %}</span>
               </a>
-              {% form 'product', shoppable_video_product, id: shoppable_video_form_id, class: 'shoppable-video-card__form' %}
-                <input type="hidden" name="id" value="{{ shoppable_video_variant.id }}">
-                <input type="hidden" name="quantity" value="1">
-                {% if shoppable_video_product.requires_selling_plan and shoppable_video_allocation != blank %}
-                  <input type="hidden" name="selling_plan" value="{{ shoppable_video_allocation.selling_plan.id }}">
-                {% endif %}
-                <button class="button" type="submit" name="add" aria-label="{{ 'product.add_to_cart_for' | t: title: shoppable_video_product.title | escape }}"{% unless shoppable_video_can_add %} disabled{% endunless %}>
-                  {% if shoppable_video_can_add %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'general.sold_out' | t }}{% endif %}
-                </button>
-              {% endform %}
+              {% if shoppable_video_requires_product_page %}
+                <a class="button" href="{{ shoppable_video_product.url }}" aria-label="{% if shoppable_video_product.has_only_default_variant %}{{ 'product.view_details' | t | append: ': ' | append: shoppable_video_product.title | escape }}{% else %}{{ 'product.choose_options' | t | append: ': ' | append: shoppable_video_product.title | escape }}{% endif %}">
+                  {% if shoppable_video_product.has_only_default_variant %}{{ 'product.view_details' | t }}{% else %}{{ 'product.choose_options' | t }}{% endif %}
+                </a>
+              {% elsif shoppable_video_can_add %}
+                {% form 'product', shoppable_video_product, id: shoppable_video_form_id, class: 'shoppable-video-card__form' %}
+                  <input type="hidden" name="id" value="{{ shoppable_video_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button class="button" type="submit" name="add" aria-label="{{ 'product.add_to_cart_for' | t: title: shoppable_video_product.title | escape }}">{{ 'product.add_to_cart' | t }}</button>
+                {% endform %}
+              {% else %}
+                <button class="button" type="button" disabled>{{ 'general.sold_out' | t }}</button>
+              {% endif %}
             {% endif %}
           </div>
         </article>

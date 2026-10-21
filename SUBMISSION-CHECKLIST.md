@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-21
 
-- **46 of 71 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **49 of 74 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is the official Theme Info support email (needed for a clean current Theme Check), authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 - No authenticated Shopify store session is available in this workspace, so the store-dependent tests below remain open; no upload or live storefront QA is claimed.
 
@@ -27,6 +27,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
+- [x] Add a variant-aware quantity-selector block to Featured Product and include it in the default homepage setup.
 - [x] Add a customizable product-page block library for SKU, badges, ratings with an optional reviews link, separators, product variations, line-item properties, inventory, pickup, complementary products with block-level quick-add control, offers, icon features, text/collapsible text, an extra image, buttons, share links, on-site modals, and more-information content.
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
 - [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes/quantities, and accelerated cart checkout.
@@ -47,7 +48,9 @@ This project is a development foundation. A checked implementation item means co
 
 - [x] Run a JSDOM fixture test for direct variant-selector changes, sold-out UI, price/SKU/variant-URL updates, and quantity-rule minimum/increment/maximum normalization.
 - [x] Run a JSDOM fixture for two-option color/size selectors, variant resolution, sold-out label/state, add-to-cart status, price/URL updates, and featured-media scroll selection.
+- [x] Verify a Featured Product fixture serializes an external quantity field with the selected variant and applies variant-specific minimum/increment/maximum rules.
 - [ ] Verify single- and multi-option products against real Shopify data, including Shopify-rendered swatch images/colors, unavailable combinations, variant media/prices, and quantity minimums, increments, and maximums.
+- [x] Audit product-card/video direct-add and accelerated-checkout paths at source level; guard quick add for variants, gift cards, selling plans, and minimum quantities; document remaining PDP-only and client-side bypasses. This is not live shopper QA.
 - [x] Run JSDOM fixture checks for optional-plan discount/compare-at pricing, required-plan variant matching, and unavailable-plan add-to-cart state.
 - [ ] Test Shopify selling-plan submissions and cart display on optional- and required-subscription products.
 - [x] Run a JSDOM fixture test for recipient-field required/disabled state, enabled/disabled form-property serialization, and the local 90-day date boundary across the New York spring-DST transition.

@@ -9,6 +9,9 @@
 {% endif %}
 {% if featured_product != blank %}
   {% assign featured_variant = featured_product.selected_or_first_available_variant %}
+  {% assign featured_quantity_min = featured_variant.quantity_rule.min | default: 1 %}
+  {% assign featured_quantity_max = featured_variant.quantity_rule.max | default: 0 %}
+  {% assign featured_quantity_increment = featured_variant.quantity_rule.increment | default: 1 %}
   {% assign featured_price = featured_variant.price %}
   {% assign featured_compare_at_price = featured_variant.compare_at_price %}
   {% if featured_product.requires_selling_plan and featured_variant.selling_plan_allocations.size > 0 %}
@@ -99,6 +102,19 @@
                       </div>
                     {% endif %}
                   {% endif %}
+                {% when 'quantity_selector' %}
+                  <div class="field product-quantity-selector{% if block.settings.style == 'stepper' %} product-quantity-selector--stepper{% endif %}">
+                    <label for="FeaturedQuantity-{{ section.id }}">{{ 'product.quantity' | t }}</label>
+                    {% if block.settings.style == 'stepper' %}
+                      <div class="quantity-stepper">
+                        <button class="quantity-stepper__button" type="button" data-quantity-step="-1" data-quantity-input="FeaturedQuantity-{{ section.id }}" aria-label="{{ 'product.decrease_quantity' | t | escape }}">−</button>
+                        <input id="FeaturedQuantity-{{ section.id }}" type="number" name="quantity" value="{{ featured_quantity_min }}" min="{{ featured_quantity_min }}" step="{{ featured_quantity_increment }}"{% if featured_quantity_max > 0 %} max="{{ featured_quantity_max }}"{% endif %} inputmode="numeric" form="{{ featured_form_id }}" data-product-quantity>
+                        <button class="quantity-stepper__button" type="button" data-quantity-step="1" data-quantity-input="FeaturedQuantity-{{ section.id }}" aria-label="{{ 'product.increase_quantity' | t | escape }}">+</button>
+                      </div>
+                    {% else %}
+                      <input id="FeaturedQuantity-{{ section.id }}" type="number" name="quantity" value="{{ featured_quantity_min }}" min="{{ featured_quantity_min }}" step="{{ featured_quantity_increment }}"{% if featured_quantity_max > 0 %} max="{{ featured_quantity_max }}"{% endif %} inputmode="numeric" form="{{ featured_form_id }}" data-product-quantity>
+                    {% endif %}
+                  </div>
                 {% when 'buy_buttons' %}
                   {% form 'product', featured_product, id: featured_form_id, class: 'product-form' %}
                     {% if featured_product.gift_card? and block.settings.show_gift_card_recipient %}
@@ -119,6 +135,14 @@
       </div>
     </div>
     <script type="application/json" data-product-variants>{{ featured_product.variants | json }}</script>
+    <script type="application/json" data-product-quantity-rules>
+      [
+        {%- for quantity_variant in featured_product.variants -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {"id":{{ quantity_variant.id | json }},"min":{{ quantity_variant.quantity_rule.min | default: 1 | json }},"max":{{ quantity_variant.quantity_rule.max | default: 0 | json }},"increment":{{ quantity_variant.quantity_rule.increment | default: 1 | json }}}
+        {%- endfor -%}
+      ]
+    </script>
   </section>
 {% else %}
   <section class="page-width section-space--small" aria-label="{{ 'sections.featured_product.eyebrow' | t | escape }}">
@@ -252,6 +276,23 @@
       ]
     },
     {
+      "type": "quantity_selector",
+      "name": "t:blocks.quantity_selector",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "t:labels.quantity_style",
+          "options": [
+            { "value": "field", "label": "t:options.quantity_style.field" },
+            { "value": "stepper", "label": "t:options.quantity_style.stepper" }
+          ],
+          "default": "field"
+        }
+      ]
+    },
+    {
       "type": "buy_buttons",
       "name": "t:blocks.buy_buttons",
       "limit": 1,
@@ -287,7 +328,7 @@
   "presets": [
     {
       "name": "t:sections.featured_product.name",
-      "blocks": [ { "type": "title" }, { "type": "price" }, { "type": "variant_picker" }, { "type": "buy_buttons" } ]
+      "blocks": [ { "type": "title" }, { "type": "price" }, { "type": "variant_picker" }, { "type": "quantity_selector" }, { "type": "buy_buttons" } ]
     }
   ]
 }

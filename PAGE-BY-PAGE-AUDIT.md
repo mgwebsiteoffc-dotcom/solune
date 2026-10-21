@@ -24,6 +24,17 @@ A Theme Check pass does not mean a storefront page looks finished. Each page bel
 | Header/footer/localization | Responsive navigation, search, account link, social icons, localization selectors | Check mobile menu, focus/keyboard behavior, overlays, locale routing, account states, footer forms, and real store branding. |
 | SEO/AEO | Canonical/social metadata, Shopify Product/Article structured data, route-aware BreadcrumbList JSON-LD, and accessible visible breadcrumbs on key routes | Validate rendered metadata and schema on every route in Shopify; test duplicate/missing titles and descriptions and search-engine reporting. |
 
+## Shopper shortcut and bypass audit — source-level only
+
+This is a review of storefront code paths, not a live shopper session. No authenticated Shopify storefront or real browser was available for this audit.
+
+- **Collection/complementary-product quick add:** Quick add is limited to available single-variant products with no gift-card recipient flow, selling plans, or minimum quantity above one. Products outside that safe case route to the PDP. Quick add can still skip PDP-only personalization fields or app blocks because product cards cannot inspect the PDP's configured blocks; merchants must disable quick add when those fields are operationally required.
+- **Homepage Featured Product:** The section has its own variant/selling-plan controls and a quantity block, but it cannot render the PDP's line-item-property blocks or app blocks. Do not feature products there if those PDP-only fields are operationally required.
+- **Shoppable video cards:** Direct add is limited to simple, available, one-variant products without gift-card recipient fields, selling plans, or minimum quantity above one. Other products route to the PDP rather than adding a hard-coded first variant or quantity one. It still cannot carry PDP-only personalization/app-block fields.
+- **Accelerated checkout:** Product and featured-product blocks can render Shopify's accelerated payment button. It provides an alternate route that can bypass the theme's cart drawer and optional cart-note/free-shipping-progress UI. This is intentional; merchants who require cart review should disable dynamic checkout and verify the actual payment methods on a development store.
+- **Cart notes:** The note is optional, so shoppers can skip it and continue to checkout. Do not use it for information required to fulfill an order.
+- **Client-side constraints:** HTML `required`/quantity attributes and the JavaScript gift-card date maximum improve normal storefront behavior but can be changed or omitted in a custom request. The theme has no backend; Shopify or an app must enforce any fulfillment-critical rule. The actual gift-card scheduling boundary still needs development-store verification.
+
 ## CRO settings target
 
 The requested **100+ CRO options are not complete yet**. Build them as meaningful, working controls attached to the relevant page/section—such as merchandising, trust, bundles/recommendations, urgency where truthful, cart progress, and content hierarchy. Do not inflate the count with duplicate or non-functional switches, and do not make unsupported skincare or shipping claims.

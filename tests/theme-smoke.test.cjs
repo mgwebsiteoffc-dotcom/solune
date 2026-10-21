@@ -185,6 +185,49 @@ test('multi-option swatch and size controls resolve variants and expose sold-out
   dom.window.close();
 });
 
+test('featured-product quantities stay associated with the form and follow variant quantity rules', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section data-product-root data-current-variant-id="11">
+      <input type="hidden" name="id" value="11" form="FeaturedProductForm" data-variant-select>
+      <label for="FeaturedQuantity">Quantity</label>
+      <input id="FeaturedQuantity" type="number" name="quantity" value="1" min="1" step="1" form="FeaturedProductForm" data-product-quantity>
+      <span data-product-price></span><s data-compare-price hidden></s>
+      <p data-variant-status data-available="Available" data-unavailable="Unavailable" data-plan-unavailable="Plan unavailable"></p>
+      <form id="FeaturedProductForm" action="/cart/add.js"><button type="submit" name="add" data-add-to-cart data-add-label="Add to bag" data-sold-out-label="Sold out" data-plan-unavailable-label="Plan unavailable"></button></form>
+      <script type="application/json" data-product-variants></script>
+      <script type="application/json" data-product-quantity-rules></script>
+    </section>
+  </body></html>`);
+  const { window } = dom;
+  const root = window.document.querySelector('[data-product-root]');
+  root.dataset.moneyFormat = '${{amount}}';
+  root.querySelector('[data-product-variants]').textContent = JSON.stringify([
+    { id: 11, options: ['Cream'], price: 1000, compare_at_price: 1000, available: true },
+    { id: 22, options: ['Refill'], price: 1800, compare_at_price: 1800, available: true }
+  ]);
+  root.querySelector('[data-product-quantity-rules]').textContent = JSON.stringify([
+    { id: 11, min: 1, increment: 1, max: 0 },
+    { id: 22, min: 3, increment: 2, max: 8 }
+  ]);
+  window.eval(themeScript);
+
+  const form = window.document.getElementById('FeaturedProductForm');
+  const variantId = root.querySelector('[data-variant-select]');
+  const quantity = root.querySelector('[data-product-quantity]');
+  assert.equal(new window.FormData(form).get('id'), '11');
+  assert.equal(new window.FormData(form).get('quantity'), '1');
+
+  variantId.value = '22';
+  variantId.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(quantity.min, '3');
+  assert.equal(quantity.step, '2');
+  assert.equal(quantity.max, '7');
+  assert.equal(quantity.value, '3');
+  assert.equal(new window.FormData(form).get('id'), '22');
+  assert.equal(new window.FormData(form).get('quantity'), '3');
+  dom.window.close();
+});
+
 test('product modal and story viewer return focus to their openers', () => {
   const dom = createDom(`<!doctype html><html><body>
     <button id="modal-trigger" type="button" aria-controls="product-modal" data-product-modal-trigger>Details</button>

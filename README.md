@@ -61,7 +61,7 @@ The suite uses development-only `jsdom`, excluded from the Shopify theme package
 - All customer-facing theme UI is localized through `locales/`.
 - Optional app features must not be required for the core theme to work.
 
-See [`docs/MERCHANT-GUIDE.md`](docs/MERCHANT-GUIDE.md) for store setup and theme-editor guidance, plus `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, and `SUBMISSION-CHECKLIST.md` for development rules, product data, source provenance, and outstanding review work.
+See [`docs/MERCHANT-GUIDE.md`](docs/MERCHANT-GUIDE.md) for store setup and theme-editor guidance, plus `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, `PAGE-BY-PAGE-AUDIT.md`, and `SUBMISSION-CHECKLIST.md` for development rules, product data, source provenance, route/bypass review, and outstanding work.
 
 ## Before submission
 
