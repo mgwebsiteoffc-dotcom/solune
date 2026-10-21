@@ -428,6 +428,17 @@
     ]
   },
   {
+    "name": "t:general.delivery_availability",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "delivery_serviceable_pincodes",
+        "label": "t:labels.delivery_serviceable_pincodes",
+        "info": "t:labels.delivery_serviceable_pincodes_info"
+      }
+    ]
+  },
+  {
     "name": "t:general.social_media",
     "settings": [
       {

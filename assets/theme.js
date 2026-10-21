@@ -872,6 +872,61 @@
     toggles.forEach(updateGiftCardRecipient);
   };
 
+  const initializePincodeCheckers = (scope = document) => {
+    const checkers = [];
+    if (scope.matches?.('[data-pincode-checker]')) checkers.push(scope);
+    checkers.push(...scope.querySelectorAll('[data-pincode-checker]'));
+    checkers.forEach((checker) => {
+      if (checker.dataset.pincodeInitialized === 'true') return;
+      const form = checker.querySelector('[data-pincode-form]');
+      const input = checker.querySelector('[data-pincode-input]');
+      const status = checker.querySelector('[data-pincode-status]');
+      if (!form || !input || !status) return;
+      checker.dataset.pincodeInitialized = 'true';
+
+      const showStatus = (message, state) => {
+        status.textContent = message;
+        status.dataset.state = state;
+        status.hidden = false;
+      };
+
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        status.hidden = true;
+        status.textContent = '';
+        delete status.dataset.state;
+      });
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const pincode = input.value.trim();
+        input.value = pincode;
+        input.removeAttribute('aria-invalid');
+
+        if (!/^[1-9][0-9]{5}$/.test(pincode)) {
+          input.setAttribute('aria-invalid', 'true');
+          showStatus(checker.dataset.invalidMessage || 'Enter a valid six-digit Indian PIN code.', 'error');
+          return;
+        }
+
+        const serviceablePincodes = (checker.dataset.serviceablePincodes || '')
+          .split(/[\s,;]+/)
+          .map((value) => value.trim())
+          .filter((value) => /^[1-9][0-9]{5}$/.test(value));
+        if (serviceablePincodes.length === 0) {
+          showStatus(checker.dataset.unconfiguredMessage || 'Delivery coverage has not been configured.', 'error');
+          return;
+        }
+
+        if (serviceablePincodes.includes(pincode)) {
+          showStatus(checker.dataset.availableMessage || 'This PIN code is listed for delivery.', 'success');
+        } else {
+          showStatus(checker.dataset.unavailableMessage || 'This PIN code is not in the configured coverage list.', 'error');
+        }
+      });
+    });
+  };
+
   const initializeStickyProductBars = (scope = document) => {
     const bars = [];
     if (scope.matches?.('[data-product-sticky-bar]')) bars.push(scope);
@@ -906,6 +961,7 @@
   initializeStoryDialogs();
   initializeProducts();
   initializeGiftCardRecipients();
+  initializePincodeCheckers();
   initializeStickyProductBars();
 
   const loadRecommendations = async (element) => {
@@ -956,6 +1012,7 @@
     initializeProductInfoBlocks(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);
+    initializePincodeCheckers(event.target);
     initializeStickyProductBars(event.target);
     observeRecommendations(event.target);
   });

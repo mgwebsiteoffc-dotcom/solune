@@ -52,7 +52,7 @@
   {% assign show_gallery_dots = true %}
 {% endif %}
 {% render 'breadcrumbs', mode: 'visible' %}
-<section class="page-width" id="Product-{{ section.id }}" data-product-root data-current-variant-id="{{ current_variant.id }}" data-money-format="{% if settings.show_currency_code %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
+<section class="page-width" id="Product-{{ section.id }}" data-product-root data-current-variant-id="{{ current_variant.id }}" data-money-format="{% render 'money-format-string' %}" data-sold-out-label="{{ 'general.sold_out' | t | escape }}" aria-label="{{ product.title | escape }}">
   <div class="product-layout" style="--product-info-width: {{ section.settings.product_info_width }}%;">
     <div class="product-gallery-container" data-desktop-layout="{{ product_media_layout }}" data-mobile-layout="{{ product_mobile_layout }}" data-mobile-controls="{{ product_mobile_controls }}" data-has-thumbnails="{{ product_gallery_has_thumbnails }}" {% if product_media_block != blank %}{{ product_media_block.shopify_attributes }}{% endif %}>
       {% if product_media_layout == 'thumbnails_left' and product.media.size > 1 %}
@@ -255,6 +255,8 @@
                 {% render 'product-info-merchandising', block: block, product: product, current_variant: current_variant, current_price: current_price, current_compare_at_price: current_compare_at_price, show_pickup_availability: section.settings.show_pickup_availability, pickup_container_id: pickup_container_id %}
               {% when 'product_image', 'button', 'modal', 'share_buttons', 'more_information', 'offers', 'feature_with_icon', 'collapsible_text' %}
                 {% render 'product-info-content', block: block, product: product, section_id: section.id %}
+              {% when 'pincode_checker' %}
+                {% render 'pincode-checker', block: block, section_id: section.id %}
               {% when 'line_item_property' %}
                 {% render 'product-line-item-property', block: block, section_id: section.id, product_form_id: product_form_id %}
               {% when 'complementary_products' %}
@@ -656,6 +658,15 @@
       ]
     },
     {
+      "type": "pincode_checker",
+      "name": "t:blocks.pincode_checker",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:labels.heading", "default": "Check delivery to your area" },
+        { "type": "page", "id": "policy_page", "label": "t:labels.delivery_policy_page" }
+      ]
+    },
+    {
       "type": "line_item_property",
       "name": "t:blocks.line_item_property",
       "settings": [
@@ -760,6 +771,7 @@
         { "type": "variant_picker" },
         { "type": "quantity_selector" },
         { "type": "buy_buttons" },
+        { "type": "pincode_checker" },
         { "type": "pickup_availability" },
         { "type": "description" },
         { "type": "ingredients" },

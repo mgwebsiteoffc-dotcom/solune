@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-21
 
-- **50 of 74 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **52 of 77 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, publishing the merchant docs URL, and implementing/verifying 100+ meaningful CRO controls.
 - The owner supplied the official support email and it is set in Theme Info; no authenticated Shopify store session is available, so the store-dependent tests below remain open and no upload or live storefront QA is claimed.
 
@@ -14,13 +14,14 @@ This project is a development foundation. A checked implementation item means co
 - [x] Build an original, responsive skincare visual system with a curated section library and merchant-facing settings.
 - [x] Add a development-only JSDOM smoke suite for selected storefront interactions; fixtures and mocked Shopify requests are not live-store or real-browser QA.
 - [x] Add five original theme style presets, a 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
-- [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
+- [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Delivery availability, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
 - [x] Add a native AJAX cart drawer with quantity adjustment/removal, cart totals, optional free-shipping progress, and a cart-page fallback.
 - [x] Add a scroll-aware PDP sticky add-to-cart bar synchronized with variant price and availability.
+- [x] Add a configurable Indian PIN-code coverage list and PDP checker; the feature is client-side information only, not courier integration or checkout enforcement.
 - [x] Expose Title H1–H4 visual styles and configurable sold-out, selector, swatch, variant-image, and size-chart controls in the product blocks.
-- [x] Add editable Image with text, manually curated Instagram stories, and shoppable video/product carousel sections to the homepage template, with demo-image fallbacks.
-- [x] Make Shopify-hosted UGC videos play inline and open story videos in an in-site viewer; story-card clicks do not navigate away from the storefront.
+- [x] Add editable Image with text, manually curated Instagram story/post/reel cards in a shared portrait-card style, a shoppable video carousel, and an editable FAQ section to the homepage template.
+- [x] Make selected Shopify-hosted social videos play in the on-site story viewer; story/post/reel tile clicks stay on the storefront, while the external Instagram profile link remains separate.
 - [x] Add cart-drawer order-note saving through Shopify Ajax, cart-line unit prices and discount comparisons, and a single cart-page savings total.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
@@ -38,8 +39,9 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
-- [x] Run Shopify Theme Check with valid Theme Info metadata; the 2026-10-21 run inspected 68 files with no offenses after the owner supplied the support address.
+- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-21 run inspected 71 files with no offenses.
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
+- [ ] Verify the PIN-code setting/block, FAQ question blocks, and story/post/reel content-type/media/profile-link controls in Theme Editor; then test their populated storefront output on desktop and mobile.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
 ## Pre-submission verification
@@ -60,8 +62,9 @@ This project is a development foundation. A checked implementation item means co
 - [x] Verify with JSDOM that collection price-range controls update visible/ARIA values, clamp crossing bounds, and sorting auto-submits; no Shopify-generated facets or server filtering were tested.
 - [x] Exercise predictive-search request parameters, short-query handling, mock result/empty states for product, collection, page, and article items, keyboard selection, Escape/focus return, and live status; requests and result HTML are mocked.
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data.
-- [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation.
-- [ ] Verify in-site UGC playback, focus restoration, pagination, reduced motion, and no story-card redirects on real desktop/mobile browsers.
+- [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation; the same viewer hooks serve the curated story/post/reel card types.
+- [x] Test the PIN checker in JSDOM for valid and invalid six-digit Indian PINs, configured-listed/unlisted coverage, and the blank/unconfigured list state; no courier API or Shopify checkout was tested.
+- [ ] Verify story/post/reel on-site playback, focus restoration, pagination, reduced motion, and no tile redirects on real desktop/mobile browsers.
 - [x] Run a mocked cart-note save test covering the `/cart/update.js` payload, submit-button busy state, and live confirmation.
 - [ ] Verify Shopify line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
 - [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths, form-associated submission, and variant min/increment/max enforcement including rounding to a valid cart quantity.
@@ -90,7 +93,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
 - [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
 - [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
-- [x] Package with Shopify CLI and inspect the generated ZIP for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of the development-only test/package files (85 theme files); this local preflight is not a Theme Store review.
+- [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (88 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.

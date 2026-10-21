@@ -148,6 +148,7 @@
         "story_treatment": {
           "type": "story",
           "settings": {
+            "content_type": "post",
             "caption": "A moment to treat"
           }
         },
@@ -172,8 +173,45 @@
       ],
       "settings": {
         "eyebrow": "FROM THE STUDIO",
-        "heading": "Stories from the ritual.",
-        "profile_handle": "@yourbrand"
+        "heading": "Stories, posts & reels",
+        "profile_handle": "@yourbrand",
+        "cards_per_row": "4"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "routine_question": {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose products for my routine?",
+            "answer": "<p>Review each product's ingredients, intended use, and directions before adding it to your routine. If you have individual skin concerns or a condition, speak with a qualified healthcare professional.</p>"
+          }
+        },
+        "delivery_question": {
+          "type": "question",
+          "settings": {
+            "question": "Can I check delivery to my area?",
+            "answer": "<p>Use the PIN code checker on a product page. It uses the store's configured coverage list; final shipping availability and rates are confirmed at checkout.</p>"
+          }
+        },
+        "ingredient_question": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I find ingredient information?",
+            "answer": "<p>Review the ingredient details and packaging information provided by the store. Contact the store if you need clarification about a specific formula.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "routine_question",
+        "delivery_question",
+        "ingredient_question"
+      ],
+      "settings": {
+        "eyebrow": "GOOD TO KNOW",
+        "heading": "Questions, answered.",
+        "body": "<p>Clear information for your skincare routine and delivery.</p>"
       }
     },
     "shoppable_videos": {
@@ -226,6 +264,7 @@
     "routine",
     "instagram_stories",
     "shoppable_videos",
+    "faq",
     "newsletter"
   ]
 }

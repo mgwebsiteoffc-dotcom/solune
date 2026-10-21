@@ -217,9 +217,27 @@
       "demo_image_alt": "A botanical skincare still life used as a theme preview image."
     },
     "instagram_stories": {
-      "demo_image_alt": "A theme preview image for a curated skincare story.",
+      "demo_image_alt": "A theme preview image for a curated skincare social post.",
       "preview_story": "Preview story",
-      "open_story": "Open story: {{ caption }}"
+      "open_content": "Open {{ type }}: {{ caption }}",
+      "content_types": {
+        "story": "Story",
+        "post": "Instagram post",
+        "reel": "Reel"
+      }
+    },
+    "pincode_checker": {
+      "heading": "Check delivery to your area",
+      "label": "Indian PIN code",
+      "placeholder": "6-digit PIN",
+      "submit": "Check",
+      "invalid": "Enter a valid six-digit Indian PIN code.",
+      "available": "This PIN code is in the store's delivery coverage list. Final availability and shipping rates are confirmed at checkout.",
+      "unavailable": "This PIN code is not in the store's configured coverage list. Contact the store to confirm delivery.",
+      "unconfigured": "Delivery coverage has not been configured yet. Please contact the store to confirm.",
+      "disclaimer": "This check uses the store's PIN code list only, not a live courier service. Checkout confirms final availability and shipping rates.",
+      "no_script": "This delivery checker needs JavaScript. Check final shipping availability and rates at checkout.",
+      "policy_link": "Read the delivery policy"
     },
     "shoppable_video_carousel": {
       "demo_image_alt": "A theme preview image used as a shoppable video poster."

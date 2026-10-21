@@ -689,44 +689,55 @@ label {
 
 .instagram-stories__list {
   display: flex;
-  gap: clamp(0.85rem, 2vw, 1.5rem);
+  gap: 1rem;
   overflow-x: auto;
-  padding: 0.4rem 0.2rem 1rem;
+  padding: 0.25rem 0.2rem 1rem;
+  overscroll-behavior-x: contain;
   scrollbar-width: thin;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: x mandatory;
 }
 
 .instagram-story-item {
-  position: relative;
   min-width: 0;
-  flex: 0 0 clamp(6.5rem, 9vw, 8.5rem);
+  flex: 0 0 calc((100% - 3rem) / 4);
   scroll-snap-align: start;
+}
+
+.instagram-stories-section[data-cards-per-row='2'] .instagram-story-item {
+  flex-basis: calc((100% - 1rem) / 2);
+}
+
+.instagram-stories-section[data-cards-per-row='3'] .instagram-story-item {
+  flex-basis: calc((100% - 2rem) / 3);
+}
+
+.instagram-stories-section[data-cards-per-row='5'] .instagram-story-item {
+  flex-basis: calc((100% - 4rem) / 5);
 }
 
 .instagram-story {
   display: grid;
   width: 100%;
-  justify-items: center;
-  gap: 0.55rem;
+  height: 100%;
+  grid-template-rows: auto 1fr;
   margin: 0;
-  border: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
   padding: 0;
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-foreground);
   cursor: pointer;
   font: inherit;
-  text-align: center;
+  text-align: left;
 }
 
 .instagram-story__image {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  border: 1px solid var(--color-accent);
-  border-radius: 50%;
-  padding: 0.2rem;
   background: var(--color-surface);
 }
 
@@ -734,15 +745,19 @@ label {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: inherit;
   object-fit: cover;
+  transition: transform var(--motion-duration, 160ms) ease;
+}
+
+.instagram-story:hover .instagram-story__image img {
+  transform: scale(1.025);
 }
 
 .instagram-story__image .demo-media-label {
-  right: 0.2rem;
-  bottom: 0.2rem;
-  padding: 0.2rem 0.3rem;
-  font-size: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.6rem;
 }
 
 .instagram-story__play {
@@ -750,41 +765,58 @@ label {
   top: 50%;
   left: 50%;
   display: grid;
-  width: 2.65rem;
-  height: 2.65rem;
+  width: 3.2rem;
+  height: 3.2rem;
   place-items: center;
   transform: translate(-50%, -50%);
-  border: 1px solid rgb(255 255 255 / 82%);
+  border: 1px solid rgb(255 255 255 / 88%);
   border-radius: 50%;
-  background: rgb(24 34 29 / 66%);
+  background: rgb(24 34 29 / 70%);
   color: #fff;
-  box-shadow: 0 0.3rem 1rem rgb(0 0 0 / 14%);
+  box-shadow: 0 0.3rem 1rem rgb(0 0 0 / 16%);
 }
 
 .instagram-story__play svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.2rem;
+  height: 1.2rem;
   margin-left: 0.12rem;
 }
 
+.instagram-story__content {
+  display: grid;
+  min-height: 9rem;
+  align-content: start;
+  gap: 0.45rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  color: var(--color-surface-ink, var(--color-foreground));
+}
+
+.instagram-story__type {
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .instagram-story__caption {
-  max-width: 12ch;
-  font-size: 0.78rem;
-  line-height: 1.35;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1.25;
 }
 
 .instagram-story__handle {
   color: var(--color-muted);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
+}
+
+.instagram-story:hover {
+  border-color: var(--color-accent);
 }
 
 .instagram-story:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 4px;
-}
-
-.no-js .instagram-story__play {
-  display: none;
 }
 
 .story-viewer {
@@ -1084,6 +1116,125 @@ label {
 
 .shoppable-video-card__form .button:focus-visible {
   outline-color: currentColor;
+}
+
+.faq-list {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq-item__question {
+  position: relative;
+  display: flex;
+  min-height: 4.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  list-style: none;
+}
+
+.faq-item__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item__question::after {
+  content: '+';
+  flex: 0 0 auto;
+  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.faq-item[open] > .faq-item__question::after {
+  content: '−';
+}
+
+.faq-item__question:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.faq-item__answer {
+  max-width: 65ch;
+  padding: 0 2.75rem 1.25rem 0;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.faq-item__answer > :first-child {
+  margin-top: 0;
+}
+
+.pincode-checker {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1rem;
+  background: var(--color-surface);
+}
+
+.pincode-checker__heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.pincode-checker__form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.pincode-checker__controls {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.pincode-checker__controls input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.pincode-checker__controls .button {
+  flex: 0 0 auto;
+  min-width: max-content;
+}
+
+.pincode-checker__note,
+.pincode-checker__status {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.pincode-checker__note {
+  color: var(--color-muted);
+}
+
+.pincode-checker__status[data-state='success'] {
+  color: var(--color-accent);
+}
+
+.pincode-checker__status[data-state='error'] {
+  color: var(--color-error, #a12e26);
+}
+
+.pincode-checker__policy-link {
+  width: fit-content;
+  font-size: 0.8rem;
+  text-underline-offset: 0.2em;
 }
 
 .image-with-text__action {
@@ -3659,7 +3810,8 @@ label {
     align-items: flex-start;
   }
 
-  .shoppable-video-section[data-cards-per-row] .shoppable-video-card {
+  .shoppable-video-section[data-cards-per-row] .shoppable-video-card,
+  .instagram-stories-section[data-cards-per-row] .instagram-story-item {
     flex-basis: min(82vw, 22rem);
   }
 

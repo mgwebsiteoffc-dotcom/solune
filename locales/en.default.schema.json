@@ -5,6 +5,7 @@
     "blog": "Blog",
     "branding": "Branding",
     "cart": "Cart",
+    "delivery_availability": "Delivery availability",
     "collections_grid": "Collections grid",
     "colors": "Colors",
     "footer": "Footer",
@@ -110,6 +111,9 @@
     "cart_show_tax_notice": "Show tax-included notice",
     "cart_show_shipping_note": "Show shipping-at-checkout notice",
     "cart_show_continue_shopping": "Show continue-shopping link when cart is empty",
+    "delivery_serviceable_pincodes": "Serviceable Indian PIN codes",
+    "delivery_serviceable_pincodes_info": "Enter exact six-digit PIN codes separated by commas, spaces, or new lines. This storefront checker uses this list only; Shopify checkout shipping rates remain authoritative.",
+    "delivery_policy_page": "Delivery policy page",
     "custom_css": "Custom CSS",
     "custom_css_info": "Add theme-wide CSS. Use only if you are comfortable editing CSS.",
     "theme_style_info": "Choose one of the built-in styles with the Theme style control in the editor: Solune, Dew, Petal, Grove, or Dusk.",
@@ -162,6 +166,8 @@
     "open_new_tab": "Open link in a new tab",
     "trigger_label": "Modal trigger label",
     "heading": "Heading",
+    "question": "Question",
+    "answer": "Answer",
     "show_native_share": "Show native share where supported",
     "show_facebook_share": "Show Facebook share link",
     "show_pinterest_share": "Show Pinterest share link",
@@ -467,21 +473,50 @@
       }
     },
     "instagram_stories": {
-      "name": "Instagram stories",
+      "name": "Stories, posts & reels",
       "blocks": {
-        "story": "Story"
+        "story": "Story, Instagram post, or reel"
       },
       "settings": {
         "eyebrow": "Eyebrow",
         "heading": "Heading",
         "profile_handle": "Instagram handle",
         "profile_url": "Instagram profile link",
-        "profile_url_info": "Optional follow link, displayed separately from the in-site story viewer.",
-        "story": "Story",
+        "profile_url_info": "Optional external follow link. Story, post, and reel cards open on this storefront.",
+        "content_type": "Content type",
+        "content_types": {
+          "story": "Story",
+          "post": "Instagram post",
+          "reel": "Reel"
+        },
+        "cards_per_row": "Cards per row on desktop",
         "caption": "Caption",
-        "image": "Story cover image",
-        "video": "Story video",
-        "video_info": "Choose a Shopify-hosted video. Visitors play stories in the storefront without being sent to Instagram."
+        "image": "Image or poster",
+        "video": "Shopify-hosted video",
+        "video_info": "Select a Shopify-hosted video for stories or reels. It plays in the on-site viewer; this theme does not import posts from Instagram automatically."
+      }
+    },
+    "pincode_checker": {
+      "heading": "Check delivery to your area",
+      "label": "Indian PIN code",
+      "placeholder": "Six-digit PIN",
+      "submit": "Check",
+      "invalid": "Enter a valid six-digit Indian PIN code.",
+      "available": "This PIN code is in the store's delivery coverage list. Final availability and shipping rates are confirmed at checkout.",
+      "unavailable": "This PIN code is not in the store's configured coverage list. Contact the store to confirm delivery.",
+      "unconfigured": "Delivery coverage has not been configured yet. Please contact the store to confirm.",
+      "disclaimer": "This check uses the store's PIN code list only, not a live courier service. Checkout confirms final availability and shipping rates.",
+      "policy_link": "Read the delivery policy"
+    },
+    "faq": {
+      "name": "FAQ",
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction"
+      },
+      "blocks": {
+        "question": "Question and answer"
       }
     },
     "shoppable_video_carousel": {
@@ -522,6 +557,7 @@
     "more_information": "More information",
     "offers": "Offers",
     "pickup_availability": "Pickup availability",
+    "pincode_checker": "PIN code checker",
     "price": "Price",
     "product_image": "Image",
     "product_title": "Title",

@@ -1,23 +1,29 @@
-<section class="page-width section-space instagram-stories-section" aria-labelledby="InstagramStoriesTitle-{{ section.id }}">
+{% assign instagram_profile_url = section.settings.profile_url | default: settings.social_instagram_link %}
+<section class="page-width section-space instagram-stories-section" data-cards-per-row="{{ section.settings.cards_per_row | default: '4' }}" aria-labelledby="InstagramStoriesTitle-{{ section.id }}">
   <div class="section-intro instagram-stories__intro">
     <div class="section-intro__copy">
       {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
       <h2 id="InstagramStoriesTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
     </div>
-    {% if section.settings.profile_url != blank %}
-      <a class="button button--text" href="{{ section.settings.profile_url }}">
+    {% if instagram_profile_url != blank %}
+      <a class="button button--text" href="{{ instagram_profile_url }}" target="_blank" rel="noopener noreferrer">
         {{ 'social.follow_instagram' | t }}{% if section.settings.profile_handle != blank %} {{ section.settings.profile_handle | escape }}{% endif %}
       </a>
     {% endif %}
   </div>
 
-  <div class="instagram-stories__list" role="list">
+  <div class="instagram-stories__list" role="list" aria-label="{{ section.settings.heading | escape }}">
     {% for block in section.blocks %}
       {% assign story_caption = block.settings.caption | default: 'sections.instagram_stories.preview_story' %}
       {% if block.settings.caption == blank %}{% assign story_caption = 'sections.instagram_stories.preview_story' | t %}{% endif %}
+      {% assign story_type = block.settings.content_type | default: 'story' %}
+      {% assign story_type_key = 'sections.instagram_stories.content_types.' | append: story_type %}
+      {% assign story_type_label = story_type_key | t %}
       {% assign story_image = block.settings.image %}
       {% if story_image == blank and block.settings.video != blank %}{% assign story_image = block.settings.video.preview_image %}{% endif %}
       {% assign story_image_alt = story_image.alt | default: story_caption | default: shop.name %}
+      {% assign story_has_video = false %}
+      {% if block.settings.video != blank %}{% assign story_has_video = true %}{% endif %}
       {% assign story_demo_asset = 'demo-ingredient.jpg' %}
       {% case forloop.index0 %}
         {% when 1 %}{% assign story_demo_asset = 'demo-product.jpg' %}
@@ -28,22 +34,25 @@
       {% assign story_title_id = 'InstagramStoryTitle-' | append: section.id | append: '-' | append: block.id %}
 
       <div class="instagram-story-item" role="listitem" {{ block.shopify_attributes }}>
-        <button class="instagram-story" type="button" data-story-open aria-controls="{{ story_dialog_id }}" aria-label="{{ 'sections.instagram_stories.open_story' | t: caption: story_caption | escape }}">
+        <button class="instagram-story" type="button" data-story-open aria-controls="{{ story_dialog_id }}" aria-label="{{ 'sections.instagram_stories.open_content' | t: type: story_type_label, caption: story_caption | escape }}">
           <span class="instagram-story__image">
             {% if story_image != blank %}
-              {{ story_image | image_url: width: 480 | image_tag: alt: story_image_alt, widths: '160, 240, 320, 480', sizes: '112px', loading: 'lazy' }}
+              {{ story_image | image_url: width: 640 | image_tag: alt: story_image_alt, widths: '240, 320, 480, 640', sizes: '(min-width: 1025px) 22vw, (min-width: 681px) 30vw, 78vw', loading: 'lazy' }}
             {% else %}
-              <img src="{{ story_demo_asset | asset_url }}" alt="{{ 'sections.instagram_stories.demo_image_alt' | t | escape }}" width="480" height="480" loading="lazy" decoding="async">
+              <img src="{{ story_demo_asset | asset_url }}" alt="{{ 'sections.instagram_stories.demo_image_alt' | t | escape }}" width="480" height="600" loading="lazy" decoding="async">
               <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
             {% endif %}
-            {% if block.settings.video != blank %}
+            {% if story_has_video %}
               <span class="instagram-story__play" aria-hidden="true">
                 <svg viewBox="0 0 24 24" focusable="false"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></svg>
               </span>
             {% endif %}
           </span>
-          <span class="instagram-story__caption">{{ story_caption | escape }}</span>
-          {% if section.settings.profile_handle != blank %}<span class="instagram-story__handle">{{ section.settings.profile_handle | escape }}</span>{% endif %}
+          <span class="instagram-story__content">
+            <span class="instagram-story__type">{{ story_type_label | escape }}</span>
+            <span class="instagram-story__caption">{{ story_caption | escape }}</span>
+            {% if section.settings.profile_handle != blank %}<span class="instagram-story__handle">{{ section.settings.profile_handle | escape }}</span>{% endif %}
+          </span>
         </button>
 
         <dialog id="{{ story_dialog_id }}" class="story-viewer" data-story-dialog aria-labelledby="{{ story_title_id }}">
@@ -52,7 +61,7 @@
               <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
             </button>
             <div class="story-viewer__media">
-              {% if block.settings.video != blank %}
+              {% if story_has_video %}
                 {{ block.settings.video | video_tag: image_size: '1200x', controls: true, preload: 'metadata', loop: false, muted: false, playsinline: true }}
               {% elsif story_image != blank %}
                 {{ story_image | image_url: width: 1200 | image_tag: alt: story_image_alt, widths: '480, 720, 960, 1200', sizes: '(min-width: 681px) 28rem, 100vw', loading: 'lazy' }}
@@ -61,6 +70,7 @@
               {% endif %}
             </div>
             <div class="story-viewer__caption">
+              <p class="story-viewer__type">{{ story_type_label | escape }}</p>
               <h3 id="{{ story_title_id }}">{{ story_caption | escape }}</h3>
               {% if section.settings.profile_handle != blank %}<p>{{ section.settings.profile_handle | escape }}</p>{% endif %}
             </div>
@@ -77,18 +87,41 @@
   "max_blocks": 8,
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "t:sections.instagram_stories.settings.eyebrow", "default": "FROM THE STUDIO" },
-    { "type": "text", "id": "heading", "label": "t:sections.instagram_stories.settings.heading", "default": "Stories from the ritual." },
+    { "type": "text", "id": "heading", "label": "t:sections.instagram_stories.settings.heading", "default": "Stories, posts & reels" },
     { "type": "text", "id": "profile_handle", "label": "t:sections.instagram_stories.settings.profile_handle" },
-    { "type": "url", "id": "profile_url", "label": "t:sections.instagram_stories.settings.profile_url", "info": "t:sections.instagram_stories.settings.profile_url_info" }
+    { "type": "url", "id": "profile_url", "label": "t:sections.instagram_stories.settings.profile_url", "info": "t:sections.instagram_stories.settings.profile_url_info" },
+    {
+      "type": "select",
+      "id": "cards_per_row",
+      "label": "t:sections.instagram_stories.settings.cards_per_row",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    }
   ],
   "blocks": [
     {
       "type": "story",
       "name": "t:sections.instagram_stories.blocks.story",
       "settings": [
+        {
+          "type": "select",
+          "id": "content_type",
+          "label": "t:sections.instagram_stories.settings.content_type",
+          "options": [
+            { "value": "story", "label": "t:sections.instagram_stories.settings.content_types.story" },
+            { "value": "post", "label": "t:sections.instagram_stories.settings.content_types.post" },
+            { "value": "reel", "label": "t:sections.instagram_stories.settings.content_types.reel" }
+          ],
+          "default": "story"
+        },
         { "type": "video", "id": "video", "label": "t:sections.instagram_stories.settings.video", "info": "t:sections.instagram_stories.settings.video_info" },
         { "type": "image_picker", "id": "image", "label": "t:sections.instagram_stories.settings.image" },
-        { "type": "text", "id": "caption", "label": "t:sections.instagram_stories.settings.caption", "default": "Preview story" }
+        { "type": "text", "id": "caption", "label": "t:sections.instagram_stories.settings.caption", "default": "A moment in the routine" }
       ]
     }
   ],
@@ -97,8 +130,8 @@
       "name": "t:sections.instagram_stories.name",
       "blocks": [
         { "type": "story" },
-        { "type": "story" },
-        { "type": "story" },
+        { "type": "story", "settings": { "content_type": "post" } },
+        { "type": "story", "settings": { "content_type": "reel" } },
         { "type": "story" }
       ]
     }

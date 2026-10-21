@@ -10,14 +10,14 @@
 
 Solune is an original, skincare-focused Online Store 2.0 theme with warm mineral colors, editorial typography, accessible shopping flows, and product education built around merchant-supplied facts. Prestige is a quality reference only; no Prestige code, layouts, assets, or branding are used.
 
-The theme editor includes five original theme styles—Solune, Dew, Petal, Grove, and Dusk—with distinct color palettes and coordinated page widths, section spacing, swatches, corner radii, and product-card image proportions. Global settings are grouped into Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Social media, Favicon, Custom CSS, and Theme style. The color panel exposes page/surface, input, overlay, sale, and rating colors; merchants can also control currency codes, motion, swatch shape/size, product-card behavior, and cart details.
+The theme editor includes five original theme styles—Solune, Dew, Petal, Grove, and Dusk—with distinct color palettes and coordinated page widths, section spacing, swatches, corner radii, and product-card image proportions. Global settings are grouped into Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Delivery availability, Social media, Favicon, Custom CSS, and Theme style. The color panel exposes page/surface, input, overlay, sale, and rating colors; merchants can also control currency codes, motion, swatch shape/size, product-card behavior, and cart details.
 
 The project starts from Shopify Skeleton Theme **v1.0.0** and preserves its MIT license. The MIT notice is retained for the upstream code; the intended commercial distribution channel for this theme remains the Shopify Theme Store. See `UPSTREAM.md` for source provenance and license details.
 
 ## Current foundation
 
-- Responsive editorial homepage sections, collection merchandising, routines, ingredient storytelling, newsletter signup, and Custom Liquid.
-- Product pages with reorderable blocks and app blocks, separate option selectors with native color/image swatches, variant-aware media and pricing, a scroll-aware sticky add-to-cart bar, selling plans, Shop Pay Installments, dynamic checkout, pickup availability, skincare metafields, and related/complementary recommendations.
+- Responsive editorial homepage sections, collection merchandising, routines, ingredient storytelling, manually curated Instagram stories/posts/reels with an on-site viewer, a product video carousel, editable FAQ, newsletter signup, and Custom Liquid.
+- Product pages with reorderable blocks and app blocks, separate option selectors with native color/image swatches, variant-aware media and pricing, a scroll-aware sticky add-to-cart bar, manual Indian PIN coverage check, selling plans, Shop Pay Installments, dynamic checkout, pickup availability, skincare metafields, and related/complementary recommendations.
 - Gift card recipient fields, scheduled delivery, cart property display, a Shopify-hosted QR code, and Apple Wallet support.
 - Collection and search storefront filters, sorting, predictive search, configurable product cards, metafield-backed product ratings and sale badges, an AJAX cart drawer with quantity controls, free-shipping progress, discounts and taxes, accelerated checkout, and a responsive cart page.
 - Customer account navigation, Follow on Shop, social media icons, favicon support, country/language selectors, localization-ready UI, product/article structured data, and canonical/social metadata.
@@ -42,9 +42,9 @@ To upload a persistent, unpublished preview theme (never make the live theme the
 shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
 ```
 
-Shopify Theme Check now passes: the 2026-10-21 run inspected 68 files with no offenses after the owner supplied `akestechinfotech@gmail.com` for the required `theme_support_email` in Theme Info. Earlier checks failed only because that field was blank. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing.
+Shopify Theme Check passes on the latest working tree: the 2026-10-21 run inspected 71 files with no offenses. The owner supplied `akestechinfotech@gmail.com` for the required `theme_support_email` in Theme Info; earlier checks failed only because that field was blank. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing.
 
-Run the fixture-based DOM smoke suite for single/multi-option variant and quantity updates, optional/required selling-plan state, sticky-cart behavior, price-filter and sorting controls, mocked predictive search and pickup responses, dialogs/story focus return, gift-card form properties/date limits, carousel controls, mocked cart requests/note saves/error feedback, and native cart-form fallback with:
+Run the fixture-based DOM smoke suite for single/multi-option variant and quantity updates, optional/required selling-plan state, sticky-cart behavior, manual PIN-code coverage validation, price-filter and sorting controls, mocked predictive search and pickup responses, dialogs/story focus return, gift-card form properties/date limits, carousel controls, mocked cart requests/note saves/error feedback, and native cart-form fallback with:
 
 ```sh
 npm ci

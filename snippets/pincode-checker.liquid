@@ -1,0 +1,39 @@
+{% assign pincode_heading = block.settings.heading %}
+{% if pincode_heading == blank %}{% assign pincode_heading = 'sections.pincode_checker.heading' | t %}{% endif %}
+{% assign pincode_input_id = 'PincodeInput-' | append: section_id | append: '-' | append: block.id %}
+{% assign pincode_note_id = 'PincodeNote-' | append: section_id | append: '-' | append: block.id %}
+{% assign pincode_status_id = 'PincodeStatus-' | append: section_id | append: '-' | append: block.id %}
+<div
+  class="pincode-checker"
+  data-pincode-checker
+  data-serviceable-pincodes="{{ settings.delivery_serviceable_pincodes | escape }}"
+  data-invalid-message="{{ 'sections.pincode_checker.invalid' | t | escape }}"
+  data-available-message="{{ 'sections.pincode_checker.available' | t | escape }}"
+  data-unavailable-message="{{ 'sections.pincode_checker.unavailable' | t | escape }}"
+  data-unconfigured-message="{{ 'sections.pincode_checker.unconfigured' | t | escape }}"
+>
+  <h3 class="pincode-checker__heading">{{ pincode_heading | escape }}</h3>
+  <form class="pincode-checker__form" data-pincode-form novalidate>
+    <label for="{{ pincode_input_id }}">{{ 'sections.pincode_checker.label' | t }}</label>
+    <div class="pincode-checker__controls">
+      <input
+        id="{{ pincode_input_id }}"
+        type="text"
+        inputmode="numeric"
+        autocomplete="postal-code"
+        maxlength="6"
+        pattern="[1-9][0-9]{5}"
+        placeholder="{{ 'sections.pincode_checker.placeholder' | t | escape }}"
+        aria-describedby="{{ pincode_note_id }} {{ pincode_status_id }}"
+        data-pincode-input
+      >
+      <button class="button button--secondary" type="submit">{{ 'sections.pincode_checker.submit' | t }}</button>
+    </div>
+  </form>
+  <p class="pincode-checker__note" id="{{ pincode_note_id }}">{{ 'sections.pincode_checker.disclaimer' | t }}</p>
+  <p class="pincode-checker__status" id="{{ pincode_status_id }}" data-pincode-status role="status" aria-live="polite" hidden></p>
+  <noscript><p class="pincode-checker__note">{{ 'sections.pincode_checker.no_script' | t }}</p></noscript>
+  {% if block.settings.policy_page != blank %}
+    <a class="pincode-checker__policy-link" href="{{ block.settings.policy_page.url }}">{{ 'sections.pincode_checker.policy_link' | t }}</a>
+  {% endif %}
+</div>

@@ -228,6 +228,54 @@ test('featured-product quantities stay associated with the form and follow varia
   dom.window.close();
 });
 
+test('pincode checker validates Indian PINs and uses only the configured coverage list', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <div data-pincode-checker data-serviceable-pincodes="201001, 110001\n560001" data-invalid-message="Enter a valid PIN." data-available-message="Listed for delivery." data-unavailable-message="Not listed." data-unconfigured-message="Coverage is not configured.">
+      <form data-pincode-form novalidate>
+        <input data-pincode-input maxlength="6" pattern="[1-9][0-9]{5}">
+        <button type="submit">Check</button>
+      </form>
+      <p data-pincode-status role="status" aria-live="polite" hidden></p>
+    </div>
+  </body></html>`);
+  const { window } = dom;
+  window.eval(themeScript);
+  const form = window.document.querySelector('[data-pincode-form]');
+  const input = window.document.querySelector('[data-pincode-input]');
+  const status = window.document.querySelector('[data-pincode-status]');
+  const submit = () => {
+    const event = new window.Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(event);
+    assert.equal(event.defaultPrevented, true);
+  };
+
+  input.value = '012345';
+  submit();
+  assert.equal(input.getAttribute('aria-invalid'), 'true');
+  assert.equal(status.textContent, 'Enter a valid PIN.');
+  assert.equal(status.dataset.state, 'error');
+
+  input.value = '201001';
+  input.dispatchEvent(new window.Event('input', { bubbles: true }));
+  submit();
+  assert.equal(input.hasAttribute('aria-invalid'), false);
+  assert.equal(status.textContent, 'Listed for delivery.');
+  assert.equal(status.dataset.state, 'success');
+
+  input.value = '700001';
+  input.dispatchEvent(new window.Event('input', { bubbles: true }));
+  submit();
+  assert.equal(status.textContent, 'Not listed.');
+  assert.equal(status.dataset.state, 'error');
+
+  window.document.querySelector('[data-pincode-checker]').dataset.serviceablePincodes = '  \n ';
+  input.value = '201001';
+  input.dispatchEvent(new window.Event('input', { bubbles: true }));
+  submit();
+  assert.equal(status.textContent, 'Coverage is not configured.');
+  dom.window.close();
+});
+
 test('product modal and story viewer return focus to their openers', () => {
   const dom = createDom(`<!doctype html><html><body>
     <button id="modal-trigger" type="button" aria-controls="product-modal" data-product-modal-trigger>Details</button>
