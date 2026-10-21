@@ -506,10 +506,39 @@ test('gift-card recipient toggle enforces email and local 90-day date bounds acr
   dom.window.close();
 });
 
+test('cart forms keep their native fallback when the drawer is absent or action is not add-to-cart', () => {
+  const fallbackDom = createDom(`<!doctype html><html><body>
+    <form id="ProductForm" action="/cart/add" method="post"><input name="id" value="variant-1"></form>
+    <button type="submit" form="ProductForm">Add</button>
+  </body></html>`);
+  let fetchCalls = 0;
+  fallbackDom.window.fetch = () => { fetchCalls += 1; throw new Error('Fallback should not issue an Ajax request.'); };
+  fallbackDom.window.eval(cartScript);
+  const productForm = fallbackDom.window.document.getElementById('ProductForm');
+  const nativeAdd = new fallbackDom.window.Event('submit', { bubbles: true, cancelable: true });
+  productForm.dispatchEvent(nativeAdd);
+  assert.equal(nativeAdd.defaultPrevented, false);
+  assert.equal(fetchCalls, 0);
+  fallbackDom.window.close();
+
+  const checkoutDom = createDom(`<!doctype html><html><body>
+    <dialog data-cart-drawer data-add-url="/cart/add.js" data-change-url="/cart/change.js" data-update-url="/cart/update.js" data-cart-url="/cart.js" data-section-url="/cart?section_id=cart-drawer"></dialog>
+    <form id="CheckoutForm" action="/cart" method="post"><button name="checkout" type="submit">Checkout</button></form>
+  </body></html>`);
+  checkoutDom.window.fetch = () => { fetchCalls += 1; throw new Error('Checkout fallback should not issue an Ajax add.'); };
+  checkoutDom.window.eval(cartScript);
+  const checkoutForm = checkoutDom.window.document.getElementById('CheckoutForm');
+  const nativeCheckout = new checkoutDom.window.Event('submit', { bubbles: true, cancelable: true });
+  checkoutForm.dispatchEvent(nativeCheckout);
+  assert.equal(nativeCheckout.defaultPrevented, false);
+  assert.equal(fetchCalls, 0);
+  checkoutDom.window.close();
+});
+
 test('mock Ajax cart handles an external form-associated submit, changes, removes, announces, and closes', async () => {
   const dom = createDom(`<!doctype html><html><body>
     <span data-cart-count>0</span>
-    <dialog data-cart-drawer data-add-url="/cart/add.js" data-change-url="/cart/change.js" data-update-url="/cart/update.js" data-cart-url="/cart.js" data-section-url="/cart?section_id=cart-drawer" data-added-label="Added to bag" data-update-error="Cart update failed">
+    <dialog data-cart-drawer data-add-url="/cart/add.js" data-change-url="/cart/change.js" data-update-url="/cart/update.js" data-cart-url="/cart.js" data-section-url="/cart?section_id=cart-drawer" data-added-label="Added to bag" data-note-saved-label="Order note saved." data-update-error="Cart update failed">
       <button type="button" data-cart-drawer-close>Close</button>
       <div data-cart-drawer-body><p data-cart-drawer-empty>Empty bag</p></div>
       <p data-cart-drawer-status role="status" aria-live="polite"></p>
@@ -520,11 +549,12 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
   const { window } = dom;
   let itemCount = 0;
   let quantity = 0;
+  let savedNote = '';
   const jsonResponse = (value) => ({ ok: true, json: async () => value });
   const htmlResponse = (value) => ({ ok: true, text: async () => value });
   const sectionMarkup = () => {
     const content = itemCount
-      ? `<ul><li data-cart-line data-line-key="line-1"><input type="number" value="${quantity}" data-cart-quantity data-line-key="line-1" aria-label="Quantity"><button type="button" data-cart-quantity-step="up" data-line-key="line-1">+</button><a href="/cart/change?line=1&amp;quantity=0" data-cart-remove data-line-key="line-1">Remove</a></li></ul>`
+      ? `<ul><li data-cart-line data-line-key="line-1"><input type="number" value="${quantity}" data-cart-quantity data-line-key="line-1" aria-label="Quantity"><button type="button" data-cart-quantity-step="up" data-line-key="line-1">+</button><a href="/cart/change?line=1&amp;quantity=0" data-cart-remove data-line-key="line-1">Remove</a></li></ul><form action="/cart" method="post" data-cart-note-form><textarea name="note"></textarea><button type="submit" name="update">Save note</button></form>`
       : '<p data-cart-drawer-empty>Empty bag</p>';
     return `<dialog data-cart-drawer><button type="button" data-cart-drawer-close>Close</button><div data-cart-drawer-body>${content}</div><p data-cart-drawer-status role="status" aria-live="polite"></p></dialog>`;
   };
@@ -539,6 +569,10 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
     if (url.pathname === '/cart/change.js') {
       quantity = Number(init.body.get('quantity'));
       itemCount = quantity;
+      return jsonResponse({ item_count: itemCount });
+    }
+    if (url.pathname === '/cart/update.js') {
+      savedNote = init.body.get('note');
       return jsonResponse({ item_count: itemCount });
     }
     if (url.pathname === '/cart.js') return jsonResponse({ item_count: itemCount });
@@ -562,6 +596,20 @@ test('mock Ajax cart handles an external form-associated submit, changes, remove
   window.document.querySelector('[data-cart-quantity-step="up"]').click();
   await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '2'
     && window.document.querySelector('[data-cart-quantity]')?.value === '2');
+
+  const noteForm = drawer.querySelector('[data-cart-note-form]');
+  const noteField = noteForm.querySelector('[name="note"]');
+  const noteSubmit = noteForm.querySelector('[type="submit"]');
+  let noteSubmitEvent;
+  noteForm.addEventListener('submit', (event) => { noteSubmitEvent = event; });
+  noteField.value = 'Please include a routine card.';
+  noteForm.requestSubmit(noteSubmit);
+  assert.equal(noteSubmitEvent.defaultPrevented, true);
+  await waitFor(() => window.document.querySelector('[data-cart-drawer-status]').textContent === 'Order note saved.');
+  assert.equal(savedNote, 'Please include a routine card.');
+  assert.equal(noteSubmit.disabled, false);
+  assert.equal(noteSubmit.hasAttribute('aria-busy'), false);
+
   window.document.querySelector('[data-cart-remove]').click();
   await waitFor(() => window.document.querySelector('[data-cart-count]').textContent === '0');
   assert.ok(window.document.querySelector('[data-cart-drawer-empty]'));

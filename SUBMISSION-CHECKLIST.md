@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-21
 
-- **42 of 67 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **44 of 69 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is the official Theme Info support email (needed for a clean current Theme Check), authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 - No authenticated Shopify store session is available in this workspace, so the store-dependent tests below remain open; no upload or live storefront QA is claimed.
 
@@ -58,8 +58,10 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data.
 - [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation.
 - [ ] Verify in-site UGC playback, focus restoration, pagination, reduced motion, and no story-card redirects on real desktop/mobile browsers.
-- [ ] Test line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
-- [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths and external form-associated submission.
+- [x] Run a mocked cart-note save test covering the `/cart/update.js` payload, submit-button busy state, and live confirmation.
+- [ ] Verify Shopify line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.
+- [x] Run mocked AJAX-cart JSDOM tests for add/change/remove/count/empty/cancel paths, cart-note saving, and external form-associated submission.
+- [x] Verify in JSDOM that native product/cart form submissions remain un-intercepted when the optional drawer is absent or the form is a checkout action.
 - [ ] Test AJAX cart drawer behavior against Shopify for section refresh, free-shipping progress, keyboard dismissal, and cart-page fallback.
 - [x] Run JSDOM fixture tests for sticky PDP bar visibility and variant price/availability synchronization; the external form-associated submit path is covered in the mocked cart test.
 - [ ] Verify sticky PDP add-to-cart and form association in a real Shopify storefront.
