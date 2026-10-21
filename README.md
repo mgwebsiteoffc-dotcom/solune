@@ -44,7 +44,7 @@ shopify theme push --store your-development-store.myshopify.com --unpublished --
 
 A prior Theme Check run passed using Shopify CLI via `npx` (66 files inspected, no offenses). The latest run inspected 68 files and reported one `ValidJSON` error because `theme_support_email` is blank; Shopify requires the owner's valid support-email address, which has not been supplied. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing.
 
-Run the fixture-based DOM smoke suite for variant/quantity updates, optional/required selling-plan state, sticky-cart behavior, price-filter and sorting controls, mocked predictive search and pickup responses, dialogs/story focus return, gift-card date limits, carousel controls, mocked cart requests/note saves, and native cart-form fallback with:
+Run the fixture-based DOM smoke suite for single/multi-option variant and quantity updates, optional/required selling-plan state, sticky-cart behavior, price-filter and sorting controls, mocked predictive search and pickup responses, dialogs/story focus return, gift-card form properties/date limits, carousel controls, mocked cart requests/note saves/error feedback, and native cart-form fallback with:
 
 ```sh
 npm ci

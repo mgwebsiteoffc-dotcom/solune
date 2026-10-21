@@ -113,6 +113,78 @@ test('variant and sticky-cart changes sync price, sold-out state, URL, SKU, quan
   dom.window.close();
 });
 
+test('multi-option swatch and size controls resolve variants and expose sold-out/media changes', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section data-product-root data-current-variant-id="101" data-sold-out-label="Sold out">
+      <select data-variant-select>
+        <option value="101" selected>Rose, 30 ml</option><option value="102">Rose, 60 ml</option>
+        <option value="201">Blue, 30 ml</option><option value="202">Blue, 60 ml</option>
+      </select>
+      <fieldset data-product-option-group data-option-index="0" data-hide-sold-out="false">
+        <legend>Color <span data-option-current-value>Rose</span></legend>
+        <input type="radio" name="color" value="Rose" data-product-option data-option-index="0" checked><label>Rose</label>
+        <input type="radio" name="color" value="Blue" data-product-option data-option-index="0"><label>Blue</label>
+      </fieldset>
+      <div data-product-option-group data-option-index="1" data-hide-sold-out="false">
+        <label>Size <span data-option-current-value>30 ml</span></label>
+        <select data-product-option data-option-index="1">
+          <option value="30 ml" selected data-option-base-label="30 ml">30 ml</option>
+          <option value="60 ml" data-option-base-label="60 ml">60 ml</option>
+        </select>
+      </div>
+      <span data-product-price></span><s data-compare-price hidden></s>
+      <p data-variant-status data-available="Available" data-unavailable="Unavailable" data-plan-unavailable="Plan unavailable"></p>
+      <button data-add-to-cart data-add-label="Add to bag" data-sold-out-label="Sold out" data-plan-unavailable-label="Plan unavailable"></button>
+      <div data-media-id="502"></div><div data-media-id="504"></div>
+      <script type="application/json" data-product-variants></script>
+      <script type="application/json" data-product-quantity-rules>[]</script>
+    </section>
+  </body></html>`, 'https://shop.example/products/serum');
+  const { window } = dom;
+  const root = window.document.querySelector('[data-product-root]');
+  root.dataset.moneyFormat = '${{amount}}';
+  root.querySelector('[data-product-variants]').textContent = JSON.stringify([
+    { id: 101, options: ['Rose', '30 ml'], price: 1200, compare_at_price: 1200, available: true, sku: 'R-30', featured_media: { id: 501 } },
+    { id: 102, options: ['Rose', '60 ml'], price: 1800, compare_at_price: 1800, available: false, sku: 'R-60', featured_media: { id: 502 } },
+    { id: 201, options: ['Blue', '30 ml'], price: 1300, compare_at_price: 1300, available: true, sku: 'B-30', featured_media: { id: 503 } },
+    { id: 202, options: ['Blue', '60 ml'], price: 1900, compare_at_price: 1900, available: true, sku: 'B-60', featured_media: { id: 504 } }
+  ]);
+  const scrolledMedia = [];
+  root.querySelectorAll('[data-media-id]').forEach((media) => {
+    media.scrollIntoView = (options) => scrolledMedia.push({ id: media.dataset.mediaId, options });
+  });
+  window.eval(themeScript);
+
+  const sizeSelect = root.querySelector('[data-product-option-group][data-option-index="1"] select');
+  sizeSelect.value = '60 ml';
+  sizeSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(root.dataset.currentVariantId, '102');
+  assert.equal(root.querySelector('[data-variant-status]').textContent, 'Unavailable');
+  assert.equal(root.querySelector('[data-product-price]').textContent, '$18.00');
+  assert.equal(root.querySelector('[data-add-to-cart]').disabled, true);
+  assert.equal(root.querySelector('[data-add-to-cart]').textContent, 'Sold out');
+  assert.equal(sizeSelect.selectedOptions[0].dataset.optionAvailable, 'false');
+  assert.equal(sizeSelect.selectedOptions[0].textContent, '60 ml — Sold out');
+  assert.equal(root.querySelector('[data-option-index="0"][value="Rose"] + label').classList.contains('is-sold-out'), true);
+  assert.equal(root.querySelector('[data-option-current-value]').textContent, 'Rose');
+  assert.equal(scrolledMedia.at(-1).id, '502');
+  assert.equal(scrolledMedia.at(-1).options.behavior, 'auto');
+  assert.equal(new URL(window.location.href).searchParams.get('variant'), '102');
+
+  const blueSwatch = root.querySelector('[data-option-index="0"][value="Blue"]');
+  assert.equal(blueSwatch.dataset.optionAvailable, 'true');
+  blueSwatch.checked = true;
+  blueSwatch.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(root.dataset.currentVariantId, '202');
+  assert.equal(root.querySelector('[data-variant-status]').textContent, 'Available');
+  assert.equal(root.querySelector('[data-product-price]').textContent, '$19.00');
+  assert.equal(root.querySelector('[data-add-to-cart]').disabled, false);
+  assert.equal(root.querySelector('[data-option-current-value]').textContent, 'Blue');
+  assert.equal(scrolledMedia.at(-1).id, '504');
+  assert.equal(new URL(window.location.href).searchParams.get('variant'), '202');
+  dom.window.close();
+});
+
 test('product modal and story viewer return focus to their openers', () => {
   const dom = createDom(`<!doctype html><html><body>
     <button id="modal-trigger" type="button" aria-controls="product-modal" data-product-modal-trigger>Details</button>
@@ -464,8 +536,9 @@ test('pickup availability ignores stale variant responses and hides unavailable 
   dom.window.close();
 });
 
-test('gift-card recipient toggle enforces email and local 90-day date bounds across DST', () => {
+test('gift-card recipient toggle enforces email, form properties, and local 90-day date bounds across DST', () => {
   const dom = createDom(`<!doctype html><html><body>
+    <form id="gift-card-form">
     <div data-gift-card-recipient>
       <input type="checkbox" data-gift-card-recipient-toggle>
       <div data-gift-card-recipient-fields>
@@ -474,6 +547,7 @@ test('gift-card recipient toggle enforces email and local 90-day date bounds acr
         <input type="hidden" name="properties[__shopify_offset]" data-gift-card-timezone>
       </div>
     </div>
+    </form>
   </body></html>`);
   const { window } = dom;
   const RealDate = window.Date;
@@ -485,6 +559,7 @@ test('gift-card recipient toggle enforces email and local 90-day date bounds acr
   window.Date = FrozenDate;
   window.eval(themeScript);
 
+  const form = window.document.getElementById('gift-card-form');
   const toggle = window.document.querySelector('[data-gift-card-recipient-toggle]');
   const fields = window.document.querySelector('[data-gift-card-recipient-fields]');
   const email = fields.querySelector('input[type="email"]');
@@ -493,16 +568,54 @@ test('gift-card recipient toggle enforces email and local 90-day date bounds acr
   assert.equal(sendDate.min, '2026-03-07');
   assert.equal(sendDate.max, '2026-06-05');
   assert.equal(timezone.value, '300');
+  assert.equal(new window.FormData(form).has('properties[Recipient email]'), false);
 
   toggle.checked = true;
   toggle.dispatchEvent(new window.Event('change', { bubbles: true }));
   assert.equal(fields.hidden, false);
   assert.equal(email.disabled, false);
   assert.equal(email.required, true);
+  email.value = 'customer@example.test';
+  sendDate.value = '2026-06-05';
+  const properties = new window.FormData(form);
+  assert.equal(properties.get('properties[Recipient email]'), 'customer@example.test');
+  assert.equal(properties.get('properties[Send on]'), '2026-06-05');
+  assert.equal(properties.get('properties[__shopify_offset]'), '300');
   toggle.checked = false;
   toggle.dispatchEvent(new window.Event('change', { bubbles: true }));
   assert.equal(fields.hidden, true);
   assert.equal(email.disabled, true);
+  const disabledProperties = new window.FormData(form);
+  assert.equal(disabledProperties.has('properties[Recipient email]'), false);
+  assert.equal(disabledProperties.has('properties[Send on]'), false);
+  assert.equal(disabledProperties.has('properties[__shopify_offset]'), false);
+  dom.window.close();
+});
+
+test('cart add failures announce an accessible error and restore the submit button', async () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <dialog data-cart-drawer data-add-url="/cart/add.js" data-change-url="/cart/change.js" data-update-url="/cart/update.js" data-cart-url="/cart.js" data-section-url="/cart?section_id=cart-drawer" data-update-error="Cart update failed"></dialog>
+    <form id="ProductForm" action="/cart/add.js" method="post"><input name="id" value="variant-sold-out"><button type="submit" name="add">Add to bag</button></form>
+  </body></html>`);
+  const { window } = dom;
+  window.fetch = async () => ({ ok: false, json: async () => ({ description: 'This option is no longer available.' }) });
+  window.eval(cartScript);
+
+  const form = window.document.getElementById('ProductForm');
+  const submit = form.querySelector('[name="add"]');
+  let submitEvent;
+  form.addEventListener('submit', (event) => { submitEvent = event; });
+  form.requestSubmit(submit);
+  assert.equal(submitEvent.defaultPrevented, true);
+  await waitFor(() => Boolean(form.querySelector('[data-cart-form-error]')));
+  const error = form.querySelector('[data-cart-form-error]');
+  assert.equal(error.getAttribute('role'), 'alert');
+  assert.equal(error.textContent, 'This option is no longer available.');
+  assert.equal(submit.disabled, false);
+  assert.equal(submit.hasAttribute('aria-busy'), false);
+  assert.equal(form.dataset.cartDrawerSubmitting, undefined);
+  assert.equal(window.document.activeElement, submit);
+  assert.equal(window.document.querySelector('[data-cart-drawer]').open, false);
   dom.window.close();
 });
 

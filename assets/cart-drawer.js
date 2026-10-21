@@ -223,6 +223,7 @@
     submitter?.setAttribute('aria-busy', 'true');
     if (submitter) submitter.disabled = true;
     form.querySelector('[data-cart-form-error]')?.remove();
+    let shouldRefocusSubmitter = false;
 
     try {
       const response = await fetch(getUrl('addUrl'), {
@@ -246,7 +247,7 @@
       }
     } catch (error) {
       showFormError(form, error.message || drawer.dataset.updateError || 'Could not add this item.');
-      submitter?.focus();
+      shouldRefocusSubmitter = true;
     } finally {
       if (submitter) {
         submitter.disabled = wasDisabled;
@@ -254,5 +255,6 @@
       }
       delete form.dataset.cartDrawerSubmitting;
     }
+    if (shouldRefocusSubmitter && submitter && !submitter.disabled) submitter.focus();
   });
 })();
