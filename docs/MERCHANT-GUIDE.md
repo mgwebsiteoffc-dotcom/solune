@@ -1,0 +1,69 @@
+---
+layout: default
+title: Solune merchant guide
+permalink: /merchant-guide/
+description: Store setup and product-content guidance for the Solune skincare Shopify theme.
+---
+
+# Solune merchant guide
+
+Solune is an original Shopify Online Store 2.0 theme for skincare brands. This guide explains how to configure the theme without inventing product facts. Solune is still a development theme: its Shopify storefront behavior, Theme Editor experience, and Theme Store readiness have not yet been verified in an authenticated development store.
+
+## 1. Preview the correct theme
+
+1. In Shopify Admin, open **Online Store → Themes** and use **Customize** on the Solune preview theme you intend to edit.
+2. Make changes in that theme's editor and press **Save**.
+3. Use that same theme's **Preview** link to review the result. Do not expect edits to an unpublished preview to change the currently published storefront.
+4. For code changes, upload/push to the intended unpublished theme first; a local code change alone does not update a Shopify theme.
+
+Keep the preview unpublished while preparing the store. Use real products, policies, navigation, and brand-approved copy before presenting it to customers.
+
+## 2. Brand appearance and storefront settings
+
+In the theme editor, use **Theme settings** to choose a theme style and adjust colors, typography, currency display, motion, swatches, product cards, cart behavior, social links, favicon, and custom CSS. The typography controls use Shopify's font picker. Changing a setting only changes the theme being edited; verify the saved preview before assuming a change is live.
+
+Replace demo imagery with licensed, brand-owned product and editorial photography before launch. Set useful alt text and review focal points and crops on desktop and mobile. The bundled `demo-*.jpg` files are visual fallbacks, not real product photography or claims about a product.
+
+## 3. Product data and the product page
+
+Create products in Shopify Admin and provide accurate titles, prices, inventory, variants, media, descriptions, and policies. Product media is drawn from the product's Shopify media gallery. The separate **Image** product-information block is additional editorial content; it does not replace or configure the gallery.
+
+The Product section has a reorderable media block and product-information blocks, including title, vendor, rating, price, variants, quantity, buy buttons, description, ingredients, skin profile, usage, image, collapsible text, modal, button, share links, SKU, badges, separators, line-item properties, inventory, pickup availability, complementary products, offers, feature-with-icon, and more-information content. Add only content that is accurate for that product. The default rating and pickup blocks may render no visible content until Shopify supplies the relevant data or availability.
+
+Use the metafields in [`METAFIELDS.md`](https://github.com/mgwebsiteoffc-dotcom/solune/blob/arena/b7b66b26-solune/METAFIELDS.md) for optional skincare information such as skin types, concerns, routine step, ingredients, usage, cautions, formula notes, and texture. These fields are merchant-entered content; the theme does not substantiate clinical, efficacy, safety, certification, or regulatory claims.
+
+### Variants, subscriptions, and quick add
+
+- Configure option names, values, images, swatches, stock, and prices on the Shopify product. The theme reads Shopify's variants and availability; it does not create missing options.
+- The variant picker can use buttons or a dropdown and can expose swatches, named option-image choices, sold-out handling, and a size-chart page.
+- Selling-plan choices appear when Shopify provides plans and the Product section allows them or the product requires a plan. Test actual optional- and required-plan products before launch.
+- The complementary-products block uses manually chosen products. Its **Show quick add** option is also subject to the global **Product card → Enable quick add** setting. A simple one-variant product can be added from the card; products that need a variant or selling-plan choice lead to their product page instead.
+- The product-card rating reads Shopify's standard `reviews.rating` and `reviews.rating_count` metafields. Ratings are hidden if the values are absent; no review app is required just to display values already supplied in those metafields.
+
+## 4. Collections and search
+
+Create and populate Shopify collections, then configure the collection section's description, filters, price-filter style, filter-value style, counts, sorting, product-card options, and page size. Shopify controls which storefront filters are available; configure product/collection metafields and filters in Shopify's Search & Discovery tools where appropriate. Check empty collections and no-result search pages after catalog setup.
+
+## 5. Cart and checkout
+
+The theme's cart drawer is a native Shopify Ajax enhancement with a cart-page fallback. In **Theme settings → Cart**, merchants can enable the drawer, optionally enable free-shipping progress, set a threshold, and control cart images, vendor, order note, tax/shipping notes, and the continue-shopping link. Set any threshold to match the store's actual shipping policy and currency. The theme cannot change Shopify's checkout policy or promise shipping terms that the merchant has not configured.
+
+Gift cards and their recipient/scheduled-delivery fields use Shopify's gift-card flow. Pickup availability depends on Shopify locations and inventory. Test both with the store's actual products and locations.
+
+## 6. Homepage stories and video
+
+Instagram-story tiles are manually curated content, not an Instagram API feed. A story tile opens the on-site viewer; the separate profile link is the external social link. The shoppable video carousel uses Shopify-hosted video media and an optional product per card. Replace demo/fallback content with licensed video, poster images, captions, and the correct product. Review playback, captions, motion preferences, and add-to-cart behavior on real devices.
+
+## 7. Optional apps and custom content
+
+Product and featured-product sections expose optional Shopify app blocks. The theme also includes Custom Liquid insertion points. These are extension points, not dependencies of the core theme. If an app is installed, review its markup, performance, accessibility, privacy behavior, and support requirements separately.
+
+## 8. SEO, localization, and launch review
+
+Set page titles, descriptions, product data, navigation, domain, policies, and translations in Shopify. Solune outputs canonical/social metadata, product/article structured data, and route-aware breadcrumbs from the available Shopify data. Validate the rendered storefront after content is added; structured data does not replace accurate page content or guarantee search features.
+
+Before publication, test product variants and quantity rules, subscriptions, gift cards, pickup, collection/search, video/story playback, cart/discount/tax flows, keyboard and screen-reader behavior, responsive layouts, and current desktop/mobile browsers. Run Lighthouse on populated home, product, and collection pages. A Theme Check pass is static validation, not live storefront QA or Theme Store approval.
+
+## Support status
+
+An official merchant support URL/contact has not yet been supplied for this development theme. The final Theme Store documentation and support links must be set to stable, merchant-facing resources before submission. Do not send passwords, API keys, or customer data when requesting support.

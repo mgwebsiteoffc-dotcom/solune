@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ page.description | default: site.description | escape }}">
+    <title>{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}</title>
+    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">Solune <span>Merchant Guide</span></a>
+      <nav aria-label="Main navigation">
+        <a href="{{ '/' | relative_url }}">Overview</a>
+        <a href="{{ '/merchant-guide/' | relative_url }}">Setup guide</a>
+      </nav>
+    </header>
+    <main id="main" class="page-content">
+      {{ content }}
+    </main>
+    <footer class="site-footer">
+      <p>Solune is a development theme and is not yet approved or listed in the Shopify Theme Store.</p>
+      <p>Use only accurate, merchant-approved product information. Do not send passwords, API keys, or customer data when requesting support.</p>
+    </footer>
+  </body>
+</html>

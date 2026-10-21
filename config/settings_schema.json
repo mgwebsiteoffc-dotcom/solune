@@ -4,8 +4,8 @@
     "theme_name": "Solune",
     "theme_version": "0.1.0",
     "theme_author": "Sani Kumar",
-    "theme_documentation_url": "https://github.com/mgwebsiteoffc-dotcom/solune#readme",
-    "theme_support_url": "https://github.com/mgwebsiteoffc-dotcom/solune/issues"
+    "theme_documentation_url": "https://github.com/mgwebsiteoffc-dotcom/solune/blob/arena/b7b66b26-solune/docs/MERCHANT-GUIDE.md",
+    "theme_support_email": ""
   },
   {
     "name": "t:general.appearance",

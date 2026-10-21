@@ -4,8 +4,9 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-16
 
-- **29 of 53 tracked checklist items are marked implemented/prepared; 24 remain open.** This is a checklist count, not a theme-readiness percentage.
-- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
+- **32 of 57 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- The largest pending work is the official Theme Info support email (needed for a clean current Theme Check), authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
+- No authenticated Shopify store session is available in this workspace, so the store-dependent tests below remain open; no upload or live storefront QA is claimed.
 
 ## Current implementation
 
@@ -34,7 +35,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run `node --check` on storefront JavaScript assets.
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
-- [x] Run Shopify Theme Check with Shopify CLI via `npx` (66 files inspected with no offenses; product picker, product-block renderers, and homepage sections included).
+- [x] Run Shopify Theme Check with Shopify CLI via `npx` (66 files inspected; the pre-metadata-edit run had no offenses).
+- [ ] Pass the latest Theme Check with valid theme metadata; the latest run scans 66 files and reports one `ValidJSON` error because the required `theme_support_email` is blank pending the owner's official support address.
 - [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 
@@ -52,7 +54,8 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test AJAX cart drawer add/change/remove flows, free-shipping progress, section refresh, keyboard dismissal, and cart-page fallback.
 - [ ] Test sticky PDP add-to-cart visibility, variant price/availability synchronization, and submission from the external form-associated button.
 - [ ] Test customer account navigation, Follow on Shop, country/language selectors, and payment/social icons on eligible shops.
-- [ ] Test app blocks and Custom Liquid insertion points; confirm the core theme works without apps.
+- [x] Static code audit confirms app blocks and Custom Liquid are optional extension points and the core theme has no required app dependency; this is not runtime QA.
+- [ ] Test app-block and Custom Liquid insertion behavior in Shopify's Theme Editor.
 - [ ] Finish the page-by-page PDP, collection, cart, blog/SEO, contact, and mobile design audit in a real development-store preview.
 - [ ] Complete and verify the requested 100+ meaningful, working CRO controls across relevant theme sections; do not count duplicate or inert settings.
 
@@ -62,12 +65,14 @@ This project is a development foundation. A checked implementation item means co
 - [x] Record owner's pricing and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test.
 - [ ] Configure the final listing price and confirm Shopify's then-current listing and payout requirements.
 - [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets.
-- [ ] Replace the development GitHub README/Issues endpoints with stable merchant-facing documentation and support resources before submission.
+- [x] Add a pre-release merchant guide and remove development-only README/Issues links from theme metadata.
+- [ ] Replace the provisional branch-specific guide URL with the permanent docs URL, enable the prepared GitHub Pages workflow if desired, and set the official support email; the current support-email field is blank.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.
 - [ ] Validate keyboard/screen-reader behavior, focus order, contrast, reduced motion, form labels/errors, all image ratios/focal points, and realistic long/short content.
 - [ ] Test latest supported desktop/mobile browsers and relevant social-app webviews.
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
-- [ ] Verify font, image, icon, and third-party asset licenses; confirm no external libraries or app-like features are required.
+- [x] Inventory static asset and dependency use: no npm/pip package dependencies or remote third-party UI libraries/icon sets; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
+- [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
 - [x] Package with Shopify CLI and inspect the generated ZIP for standard theme structure, key templates/configuration, and the included upstream license notice; this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements.
 

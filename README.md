@@ -42,7 +42,7 @@ To upload a persistent, unpublished preview theme (never make the live theme the
 shopify theme push --store your-development-store.myshopify.com --unpublished --theme "Solune Development Preview"
 ```
 
-Theme Check passed using Shopify CLI via `npx` (57 files inspected, no offenses). Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No development store is connected to this workspace yet. Liquid rendering, theme-editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
+A prior Theme Check run passed using Shopify CLI via `npx` (66 files inspected, no offenses). The latest run still inspects 66 files but reports one `ValidJSON` error because Shopify now requires a valid `theme_support_email`; the field is blank until the owner supplies an official merchant-support address. Static JavaScript syntax, PostCSS parsing, JSON/embedded-schema parsing, translation-key, settings-data, and palette-contrast checks have also passed; they do not replace real Shopify storefront testing. No authenticated development-store preview has been tested from this workspace. Liquid rendering, Theme Editor behavior, checkout flows, storefront filtering, pickup availability, app blocks, gift-card delivery/QR rendering, and Lighthouse scores still need testing on a real development store.
 
 ## Project conventions
 
@@ -52,8 +52,8 @@ Theme Check passed using Shopify CLI via `npx` (57 files inspected, no offenses)
 - All customer-facing theme UI is localized through `locales/`.
 - Optional app features must not be required for the core theme to work.
 
-See `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, and `SUBMISSION-CHECKLIST.md` for development rules, product data, source provenance, and outstanding review work.
+See [`docs/MERCHANT-GUIDE.md`](docs/MERCHANT-GUIDE.md) for store setup and theme-editor guidance, plus `AGENTS.md`, `METAFIELDS.md`, `UPSTREAM.md`, and `SUBMISSION-CHECKLIST.md` for development rules, product data, source provenance, and outstanding review work.
 
 ## Before submission
 
-The Shopify theme author field is set to Sani Kumar to respect Shopify's 25-character limit; this README records Akestech Infotech Pvt Ltd as the company. The final public theme name, Shopify Partner account identity, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. The current GitHub README and Issues URLs are development documentation/support endpoints, not final merchant-facing support resources. This repository is a development foundation, not an approved or submission-ready theme.
+The Shopify theme author field is set to Sani Kumar to respect Shopify's 25-character limit; this README records Akestech Infotech Pvt Ltd as the company. The final public theme name, Shopify Partner account identity, trademark availability, demo-store products/images, product support process, and Theme Store listing assets still need confirmation. A pre-release merchant guide is available at `docs/MERCHANT-GUIDE.md`, and theme metadata links directly to its public repository page. A GitHub Pages workflow is prepared; a repository admin must enable Pages with **GitHub Actions** as the build source and run **Deploy merchant documentation** to publish `https://mgwebsiteoffc-dotcom.github.io/solune/`. Until then, the branch-specific guide link is provisional. Development-only Issues links have been removed; the required theme support email is intentionally blank until the owner supplies an official merchant-support address. This repository is a development foundation, not an approved or submission-ready theme.

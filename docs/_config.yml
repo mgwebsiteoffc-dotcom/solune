@@ -1,0 +1,8 @@
+title: Solune Merchant Guide
+description: Store setup and product-content guidance for the Solune skincare Shopify theme.
+url: https://mgwebsiteoffc-dotcom.github.io
+baseurl: /solune
+markdown: kramdown
+kramdown:
+  input: GFM
+permalink: pretty
