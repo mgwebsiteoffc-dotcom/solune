@@ -25,7 +25,13 @@
                   {% if block.settings.show_sold_out_badge %}<span class="product-badge product-badge--sold-out" data-product-badge-sold-out{% if current_variant.available %} hidden{% endif %}>{{ 'general.sold_out' | t }}</span>{% endif %}
                 </div>
               {% when 'rating' %}
-                {% render 'product-rating', product: product, show_rating: true %}
+                {% if block.settings.review_link != blank and product.metafields.reviews.rating.value != blank and product.metafields.reviews.rating_count.value != blank %}
+                  <a class="product-rating-link" href="{{ block.settings.review_link | escape }}" aria-label="{{ 'product.read_reviews_for' | t: title: product.title | escape }}">
+                    {% render 'product-rating', product: product, show_rating: true %}
+                  </a>
+                {% else %}
+                  {% render 'product-rating', product: product, show_rating: true %}
+                {% endif %}
               {% when 'separator' %}
                 <hr class="product-divider product-divider--{{ block.settings.style }}" style="--product-divider-space: {{ block.settings.spacing }}px;" aria-hidden="true">
               {% when 'inventory' %}

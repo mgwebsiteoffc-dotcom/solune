@@ -28,7 +28,7 @@ Replace demo imagery with licensed, brand-owned product and editorial photograph
 
 Create products in Shopify Admin and provide accurate titles, prices, inventory, variants, media, descriptions, and policies. Product media is drawn from the product's Shopify media gallery. The separate **Image** product-information block is additional editorial content; it does not replace or configure the gallery.
 
-The Product section has a reorderable media block and product-information blocks, including title, vendor, rating, price, variants, quantity, buy buttons, description, ingredients, skin profile, usage, image, collapsible text, modal, button, share links, SKU, badges, separators, line-item properties, inventory, pickup availability, complementary products, offers, feature-with-icon, and more-information content. Add only content that is accurate for that product. The default rating and pickup blocks may render no visible content until Shopify supplies the relevant data or availability.
+The Product section has a reorderable media block and product-information blocks, including title, vendor, rating (optionally linked to a reviews section or page), price, variants, quantity, buy buttons, description, ingredients, skin profile, usage, image, collapsible text, modal, button, share links, SKU, badges, separators, line-item properties, inventory, pickup availability, complementary products, offers, feature-with-icon, and more-information content. Add only content that is accurate for that product. The default rating and pickup blocks may render no visible content until Shopify supplies the relevant data or availability.
 
 Use the metafields in [`METAFIELDS.md`](https://github.com/mgwebsiteoffc-dotcom/solune/blob/arena/b7b66b26-solune/METAFIELDS.md) for optional skincare information such as skin types, concerns, routine step, ingredients, usage, cautions, formula notes, and texture. These fields are merchant-entered content; the theme does not substantiate clinical, efficacy, safety, certification, or regulatory claims.
 
@@ -38,7 +38,7 @@ Use the metafields in [`METAFIELDS.md`](https://github.com/mgwebsiteoffc-dotcom/
 - The variant picker can use buttons or a dropdown and can expose swatches, named option-image choices, sold-out handling, and a size-chart page.
 - Selling-plan choices appear when Shopify provides plans and the Product section allows them or the product requires a plan. Test actual optional- and required-plan products before launch.
 - The complementary-products block uses manually chosen products. Its **Show quick add** option is also subject to the global **Product card → Enable quick add** setting. A simple one-variant product can be added from the card; products that need a variant or selling-plan choice lead to their product page instead.
-- The product-card rating reads Shopify's standard `reviews.rating` and `reviews.rating_count` metafields. Ratings are hidden if the values are absent; no review app is required just to display values already supplied in those metafields.
+- The rating block can optionally link to a reviews section/page you configure. The link is only rendered when Shopify's standard `reviews.rating` and `reviews.rating_count` metafields are present; the product-card rating is hidden without those values. No review app is required just to display values already supplied in the metafields.
 
 ## 4. Collections and search
 

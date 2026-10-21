@@ -155,6 +155,8 @@
     "image_ratio": "Image shape",
     "caption": "Caption",
     "link": "Link",
+    "review_link": "Reviews link",
+    "review_link_info": "Optional link to the reviews section or reviews page.",
     "button_label": "Button label",
     "button_style": "Button style",
     "open_new_tab": "Open link in a new tab",

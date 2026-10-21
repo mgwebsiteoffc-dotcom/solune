@@ -68,6 +68,7 @@
     "gallery_go_to_media": "Show product media {{ index }}",
     "unit_price": "Unit price",
     "rating_summary": "Rated {{ rating }} out of {{ scale }} stars from {{ count }} reviews",
+    "read_reviews_for": "Read reviews for {{ title }}",
     "taxes_included": "Taxes included.",
     "subscription_unavailable": "Subscription is unavailable for this option.",
     "size_chart": "Size chart",

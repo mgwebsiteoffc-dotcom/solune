@@ -4568,6 +4568,18 @@ label {
   margin-top: 0.3rem;
 }
 
+.product-rating-link {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.product-rating-link:hover .product-rating__count {
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
 .product-block--rating[hidden],
 .product-block--sku[hidden],
 .product-block--pickup_availability[hidden] {
