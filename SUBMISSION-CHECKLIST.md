@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-21
 
-- **38 of 63 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **42 of 67 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is the official Theme Info support email (needed for a clean current Theme Check), authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, and implementing/verifying 100+ meaningful CRO controls.
 - No authenticated Shopify store session is available in this workspace, so the store-dependent tests below remain open; no upload or live storefront QA is claimed.
 
@@ -47,11 +47,15 @@ This project is a development foundation. A checked implementation item means co
 
 - [x] Run a JSDOM fixture test for direct variant-selector changes, sold-out UI, price/SKU/variant-URL updates, and quantity-rule minimum/increment/maximum normalization.
 - [ ] Verify single- and multi-option products against real Shopify data, including swatch images/colors, unavailable combinations, variant media/prices, and quantity minimums, increments, and maximums.
-- [ ] Test selling plans and cart display on optional- and required-subscription products.
+- [x] Run JSDOM fixture checks for optional-plan discount/compare-at pricing, required-plan variant matching, and unavailable-plan add-to-cart state.
+- [ ] Test Shopify selling-plan submissions and cart display on optional- and required-subscription products.
 - [x] Run a JSDOM fixture test for recipient-field required/disabled state and the local 90-day date boundary across the New York spring-DST transition.
 - [ ] Test Shopify gift-card recipient validation, scheduled delivery/timezone handling, cart properties, QR rendering, and Apple Wallet.
-- [ ] Test pickup availability for available/unavailable locations and multiple variants.
-- [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types.
+- [x] Run mocked pickup-availability tests for variant-specific requests, stale-response protection, and hiding an empty availability block.
+- [ ] Test Shopify pickup availability for available/unavailable locations and multiple real variants.
+- [x] Verify with JSDOM that collection price-range controls update visible/ARIA values, clamp crossing bounds, and sorting auto-submits; no Shopify-generated facets or server filtering were tested.
+- [x] Exercise predictive-search request parameters, short-query handling, mock result/empty states for product, collection, page, and article items, keyboard selection, Escape/focus return, and live status; requests and result HTML are mocked.
+- [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data.
 - [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation.
 - [ ] Verify in-site UGC playback, focus restoration, pagination, reduced motion, and no story-card redirects on real desktop/mobile browsers.
 - [ ] Test line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.

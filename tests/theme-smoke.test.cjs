@@ -8,6 +8,8 @@ process.env.TZ = 'America/New_York';
 
 const themeScript = fs.readFileSync(path.join(__dirname, '../assets/theme.js'), 'utf8');
 const cartScript = fs.readFileSync(path.join(__dirname, '../assets/cart-drawer.js'), 'utf8');
+const predictiveSearchScript = fs.readFileSync(path.join(__dirname, '../assets/predictive-search.js'), 'utf8');
+const pickupAvailabilityScript = fs.readFileSync(path.join(__dirname, '../assets/pickup-availability.js'), 'utf8');
 
 const createDom = (markup, url = 'https://shop.example/') => {
   const dom = new JSDOM(markup, { url, runScripts: 'outside-only', pretendToBeVisual: true });
@@ -208,6 +210,257 @@ test('shoppable video carousel paginates, honors reduced motion, and toggles its
   assert.equal(playButton.hidden, true);
   track.querySelector('video').pause();
   assert.equal(playButton.hidden, false);
+  dom.window.close();
+});
+
+test('price filters keep accessible values in sync and sorting auto-submits', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <form id="collection-filters">
+      <div class="facet-price-slider" data-price-range>
+        <input type="range" name="filter.v.price.gte" min="0" max="100" value="20" data-price-range-min>
+        <input type="range" name="filter.v.price.lte" min="0" max="100" value="80" data-price-range-max>
+      </div>
+      <span data-price-min-output></span><span data-price-max-output></span>
+    </form>
+    <form id="collection-sort">
+      <select name="sort_by" data-auto-submit>
+        <option value="featured">Featured</option>
+        <option value="price-ascending">Price, low to high</option>
+      </select>
+    </form>
+  </body></html>`);
+  const { window } = dom;
+  const slider = window.document.querySelector('[data-price-range]');
+  slider.dataset.moneyFormat = '${{amount}}';
+  const sortingForm = window.document.getElementById('collection-sort');
+  let submitCount = 0;
+  sortingForm.addEventListener('submit', (event) => {
+    submitCount += 1;
+    event.preventDefault();
+  });
+  window.eval(themeScript);
+
+  const minimum = slider.querySelector('[data-price-range-min]');
+  const maximum = slider.querySelector('[data-price-range-max]');
+  assert.equal(window.document.querySelector('[data-price-min-output]').textContent, '$20.00');
+  assert.equal(window.document.querySelector('[data-price-max-output]').textContent, '$80.00');
+  assert.equal(minimum.getAttribute('aria-valuetext'), '$20.00');
+  assert.equal(maximum.getAttribute('aria-valuetext'), '$80.00');
+  assert.equal(slider.style.getPropertyValue('--range-start'), '20%');
+  assert.equal(slider.style.getPropertyValue('--range-end'), '80%');
+
+  minimum.value = '90';
+  minimum.dispatchEvent(new window.Event('input', { bubbles: true }));
+  assert.equal(minimum.value, '80'); // minimum cannot pass the maximum
+  assert.equal(maximum.value, '80');
+  assert.equal(minimum.getAttribute('aria-valuetext'), '$80.00');
+
+  minimum.value = '50';
+  minimum.dispatchEvent(new window.Event('input', { bubbles: true }));
+  assert.equal(window.document.querySelector('[data-price-min-output]').textContent, '$50.00');
+  assert.equal(slider.style.getPropertyValue('--range-start'), '50%');
+
+  const sort = sortingForm.querySelector('[data-auto-submit]');
+  sort.value = 'price-ascending';
+  sort.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(submitCount, 1);
+  dom.window.close();
+});
+
+test('mock predictive search requests supported resource types and exposes keyboard-accessible results', async () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <details open>
+      <summary id="search-trigger">Search</summary>
+      <predictive-search data-endpoint="/search/suggest" data-section-id="predictive-search">
+        <input type="search" role="combobox" aria-expanded="false">
+        <div data-predictive-results hidden></div>
+        <p data-predictive-status role="status" aria-live="polite" data-suggestion-one="1 suggestion" data-suggestions-many="[count] suggestions" data-no-suggestions="No suggestions"></p>
+      </predictive-search>
+    </details>
+  </body></html>`, 'https://shop.example/');
+  const { window } = dom;
+  let responseMarkup = `<div id="shopify-section-predictive-search"><ul>
+    <li id="PredictiveProduct-1" data-predictive-item role="option" aria-selected="false"><a href="/products/serum">Serum</a></li>
+    <li id="PredictiveCollection-1" data-predictive-item role="option" aria-selected="false"><a href="/collections/serums">Serums</a></li>
+    <li id="PredictivePage-1" data-predictive-item role="option" aria-selected="false"><a href="/pages/shipping">Shipping</a></li>
+    <li id="PredictiveArticle-1" data-predictive-item role="option" aria-selected="false"><a href="/blogs/journal/routine">Routine</a></li>
+  </ul></div>`;
+  const requests = [];
+  window.fetch = async (input, init) => {
+    requests.push({ url: new URL(input, window.location.href), init });
+    return { ok: true, text: async () => responseMarkup };
+  };
+  window.eval(predictiveSearchScript);
+
+  const component = window.document.querySelector('predictive-search');
+  const input = component.querySelector('input[type="search"]');
+  const results = component.querySelector('[data-predictive-results]');
+  const details = component.closest('details');
+  input.value = 'serum';
+  await component.search();
+
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url.searchParams.get('q'), 'serum');
+  assert.equal(requests[0].url.searchParams.get('section_id'), 'predictive-search');
+  assert.equal(requests[0].url.searchParams.get('resources[type]'), 'product,collection,page,article');
+  assert.equal(requests[0].url.searchParams.get('resources[limit]'), '5');
+  assert.equal(requests[0].url.searchParams.get('resources[options][unavailable_products]'), 'last');
+  assert.equal(requests[0].init.headers.Accept, 'text/html');
+  assert.equal(results.querySelectorAll('[data-predictive-item]').length, 4);
+  assert.equal(results.hidden, false);
+  assert.equal(input.getAttribute('aria-expanded'), 'true');
+  assert.equal(component.querySelector('[data-predictive-status]').textContent, '4 suggestions');
+
+  const arrowDown = new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true });
+  input.dispatchEvent(arrowDown);
+  assert.equal(arrowDown.defaultPrevented, true);
+  assert.equal(input.getAttribute('aria-activedescendant'), 'PredictiveProduct-1');
+  assert.equal(results.querySelector('#PredictiveProduct-1').getAttribute('aria-selected'), 'true');
+  const arrowUp = new window.KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true });
+  input.dispatchEvent(arrowUp);
+  assert.equal(input.getAttribute('aria-activedescendant'), 'PredictiveArticle-1'); // wraps to the last suggestion
+
+  const escape = new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+  input.dispatchEvent(escape);
+  assert.equal(escape.defaultPrevented, true);
+  assert.equal(details.open, false);
+  assert.equal(results.hidden, true);
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+  assert.equal(window.document.activeElement.id, 'search-trigger');
+
+  responseMarkup = '<div id="shopify-section-predictive-search"><p>No result items</p></div>';
+  input.value = 'unknown item';
+  await component.search();
+  assert.equal(component.querySelector('[data-predictive-status]').textContent, 'No suggestions');
+  assert.equal(results.hidden, false);
+
+  input.value = 'x';
+  await component.search();
+  assert.equal(requests.length, 2); // terms shorter than two characters do not make a request
+  assert.equal(results.hidden, true);
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+  dom.window.close();
+});
+
+test('subscription selectors update optional discounts and required-plan availability', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section id="optional-product" data-product-root data-current-variant-id="11" data-sold-out-label="Sold out">
+      <select data-variant-select><option value="11" selected>Serum</option></select>
+      <select data-selling-plan-select data-requires-selling-plan="false">
+        <option value="" data-one-time-purchase selected>One time</option>
+        <option value="optional-monthly" data-variant-id="11" data-price="900" data-compare-at-price="1000">Monthly</option>
+      </select>
+      <span data-product-price></span><s data-compare-price hidden></s>
+      <p data-variant-status data-available="Available" data-unavailable="Unavailable" data-plan-unavailable="Plan unavailable"></p>
+      <button data-add-to-cart data-add-label="Add to bag" data-sold-out-label="Sold out" data-plan-unavailable-label="Plan unavailable"></button>
+      <script type="application/json" data-product-variants></script>
+      <script type="application/json" data-product-quantity-rules>[]</script>
+    </section>
+    <section id="required-product" data-product-root data-current-variant-id="101" data-sold-out-label="Sold out">
+      <select data-variant-select><option value="101" selected>30 ml</option><option value="202">60 ml</option><option value="303">90 ml</option></select>
+      <select data-selling-plan-select data-requires-selling-plan="true" required>
+        <option value="" data-one-time-purchase disabled>One time</option>
+        <option value="required-monthly-101" data-variant-id="101" data-price="1100" data-compare-at-price="1200" selected>Monthly</option>
+        <option value="required-monthly-202" data-variant-id="202" data-price="1900" data-compare-at-price="2100">Monthly</option>
+      </select>
+      <span data-product-price></span><s data-compare-price hidden></s>
+      <p data-variant-status data-available="Available" data-unavailable="Unavailable" data-plan-unavailable="Plan unavailable"></p>
+      <button data-add-to-cart data-add-label="Add to bag" data-sold-out-label="Sold out" data-plan-unavailable-label="Plan unavailable"></button>
+      <script type="application/json" data-product-variants></script>
+      <script type="application/json" data-product-quantity-rules>[]</script>
+    </section>
+  </body></html>`);
+  const { window } = dom;
+  const optionalRoot = window.document.getElementById('optional-product');
+  optionalRoot.dataset.moneyFormat = '${{amount}}';
+  optionalRoot.querySelector('[data-product-variants]').textContent = JSON.stringify([
+    { id: 11, options: ['Serum'], price: 1000, compare_at_price: 1000, available: true }
+  ]);
+  const requiredRoot = window.document.getElementById('required-product');
+  requiredRoot.dataset.moneyFormat = '${{amount}}';
+  requiredRoot.querySelector('[data-product-variants]').textContent = JSON.stringify([
+    { id: 101, options: ['30 ml'], price: 1200, compare_at_price: 1200, available: true },
+    { id: 202, options: ['60 ml'], price: 2100, compare_at_price: 2100, available: true },
+    { id: 303, options: ['90 ml'], price: 3000, compare_at_price: 3000, available: true }
+  ]);
+  window.eval(themeScript);
+
+  const optionalPlan = optionalRoot.querySelector('[data-selling-plan-select]');
+  assert.equal(optionalPlan.value, '');
+  assert.equal(optionalRoot.querySelector('[data-product-price]').textContent, '$10.00');
+  optionalPlan.value = 'optional-monthly';
+  optionalPlan.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(optionalRoot.querySelector('[data-product-price]').textContent, '$9.00');
+  assert.equal(optionalRoot.querySelector('[data-compare-price]').textContent, '$10.00');
+  assert.equal(optionalRoot.querySelector('[data-compare-price]').hidden, false);
+
+  const requiredPlan = requiredRoot.querySelector('[data-selling-plan-select]');
+  const variantSelect = requiredRoot.querySelector('[data-variant-select]');
+  assert.equal(requiredPlan.value, 'required-monthly-101');
+  variantSelect.value = '202';
+  variantSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(requiredPlan.value, 'required-monthly-202');
+  assert.equal(requiredRoot.querySelector('[data-product-price]').textContent, '$19.00');
+  assert.equal(requiredPlan.querySelector('[data-variant-id="101"]').disabled, true);
+
+  variantSelect.value = '303';
+  variantSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(requiredPlan.disabled, true);
+  assert.equal(requiredRoot.querySelector('[data-variant-status]').textContent, 'Plan unavailable');
+  assert.equal(requiredRoot.querySelector('[data-add-to-cart]').disabled, true);
+  assert.equal(requiredRoot.querySelector('[data-add-to-cart]').textContent, 'Plan unavailable');
+
+  variantSelect.value = '101';
+  variantSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(requiredPlan.disabled, false);
+  assert.equal(requiredPlan.value, 'required-monthly-101');
+  assert.equal(requiredRoot.querySelector('[data-add-to-cart]').disabled, false);
+  dom.window.close();
+});
+
+test('pickup availability ignores stale variant responses and hides unavailable block content', async () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <div class="product-block">
+      <div data-store-availability-container data-base-url="https://shop.example/" data-variant-id="101" hidden aria-live="polite"></div>
+    </div>
+  </body></html>`);
+  const { window } = dom;
+  const pending = [];
+  window.fetch = (input, init) => new Promise((resolve) => {
+    pending.push({ url: new URL(input, window.location.href), init, resolve });
+  });
+  window.eval(pickupAvailabilityScript);
+
+  const container = window.document.querySelector('[data-store-availability-container]');
+  const block = container.closest('.product-block');
+  assert.equal(pending.length, 1);
+  assert.equal(pending[0].url.pathname, '/variants/101/');
+  assert.equal(pending[0].url.searchParams.get('section_id'), 'pickup-availability');
+  assert.equal(pending[0].init.headers.Accept, 'text/html');
+
+  const updatedRequest = window.SolunePickupAvailability.load(container, '202');
+  assert.equal(pending.length, 2);
+  assert.equal(container.dataset.variantId, '202');
+  assert.equal(container.getAttribute('aria-busy'), 'true');
+  pending[1].resolve({ ok: true, text: async () => '<div class="shopify-section"><p>Pickup available for 60 ml</p></div>' });
+  await updatedRequest;
+  assert.equal(container.hidden, false);
+  assert.equal(block.hidden, false);
+  assert.match(container.textContent, /Pickup available for 60 ml/);
+  assert.equal(container.hasAttribute('aria-busy'), false);
+
+  pending[0].resolve({ ok: true, text: async () => '<div class="shopify-section"><p>Stale pickup data for 30 ml</p></div>' });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.match(container.textContent, /Pickup available for 60 ml/);
+  assert.doesNotMatch(container.textContent, /Stale pickup data/);
+
+  const unavailableRequest = window.SolunePickupAvailability.load(container, '303');
+  assert.equal(pending.length, 3);
+  pending[2].resolve({ ok: true, text: async () => '<div class="shopify-section"></div>' });
+  await unavailableRequest;
+  assert.equal(container.hidden, true);
+  assert.equal(block.hidden, true);
+  assert.equal(container.hasAttribute('aria-busy'), false);
   dom.window.close();
 });
 
