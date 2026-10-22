@@ -1,4 +1,9 @@
 {
+  "404": {
+    "title": "Page not found",
+    "not_found": "The page you are looking for may have moved or no longer exists.",
+    "back_to_shopping": "Continue shopping"
+  },
   "accessibility": {
     "breadcrumbs": "Breadcrumbs",
     "skip_to_content": "Skip to content",
@@ -284,6 +289,18 @@
     },
     "icon_highlights": {
       "empty": "Add icon highlight blocks to share verified store or product information."
+    },
+    "routine_products": {
+      "step_label": "Step {{ number }}",
+      "choose_product": "Choose a product",
+      "choose_product_info": "Select a Shopify product in this block to link its image, title, price, and product page.",
+      "demo_image_alt": "Illustrative product placeholder for the routine-products editor."
+    },
+    "journal_articles": {
+      "demo_image_alt": "Illustrative editorial placeholder; choose a published store article.",
+      "empty": "Choose one or more published articles in the blocks to populate this section.",
+      "choose_article": "Choose an article",
+      "choose_article_info": "Select a published Shopify article in this block to connect its title, image, excerpt, and link."
     }
   },
   "pickup_availability": {
@@ -291,11 +308,6 @@
     "unavailable_at": "Pickup is unavailable at {{ location_name }}",
     "unavailable": "Pickup is not available at this location.",
     "view_locations": "View pickup locations"
-  },
-  "404": {
-    "title": "Page not found",
-    "not_found": "The page you are looking for may have moved or no longer exists.",
-    "back_to_shopping": "Continue shopping"
   },
   "blog": {
     "article_comments": "Comments",

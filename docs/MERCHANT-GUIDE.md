@@ -40,6 +40,12 @@ The **Video with text** section accepts a Shopify-hosted video and renders Shopi
 
 The **Image gallery** contains reorderable image blocks with optional alt text, captions, and links. Adjust the desktop column count, image ratio, spacing, and caption visibility; replace every demo image with a licensed, brand-approved image before publishing. The **Icon highlights** section has reorderable icon-led columns with editable, optional links. Icons are decorative: use the text for accurate store or product information and do not treat an icon as a safety, efficacy, or certification claim.
 
+### Product-linked routine cards and journal articles
+
+The homepage's **Routine products** section lets you select one Shopify product for each reorderable routine step. Product title, primary media, current starting price when variants differ, and the PDP link come from Shopify; merchants can edit the step label and add product-specific guidance. The cards link to the product page rather than bypassing its variant, personalization, subscription, and policy controls. In the Theme Editor, unassigned blocks show instructions; on the storefront, the whole section stays hidden until at least one product is selected. Review all step copy against the actual product label and directions. It is an editorial merchandising aid, not medical advice.
+
+The **Journal articles** section uses one article picker per card and can show Shopify's publication date, author, and a plain-text excerpt, with adjustable card columns and an optional link to a selected blog. Select published articles with descriptive titles, accurate summaries, and a clear link to the full article. Unassigned cards show an editor-only instruction; the live section stays hidden until an article is selected. The local static preview uses sample copy and images only—it does not connect to Shopify products, blogs, or article data. Semantic titles and useful summaries support clear discovery but do not guarantee search rankings or AI-answer placement.
+
 ## 3. Product data and the product page
 
 Create products in Shopify Admin and provide accurate titles, prices, inventory, variants, media, descriptions, and policies. Product media is drawn from the product's Shopify media gallery. The separate **Image** product-information block is additional editorial content; it does not replace or configure the gallery.

@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **67 of 92 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **69 of 94 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Partner Dashboard listing/payout confirmation, name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
 - As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner has confirmed $100, the minimum allowed. The owner has also confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
 
@@ -33,6 +33,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card; the contact page now has responsive editable store-detail cards, an optional help/FAQ link, Shopify form errors/status, and status focus management.
 - [x] Add merchant-editable skin-concern and ingredient-index sections, dedicated concern/ingredient/routine page templates, and a local static design preview; source contracts and local routes pass, but authenticated Shopify behavior remains unverified.
 - [x] Add Shopify-hosted Video with text, a responsive image gallery with merchant-set captions/links, and icon-highlight columns; include them in the homepage and populated static preview. Video playback requires a Shopify video to be selected.
+- [x] Add responsive product-linked routine merchandising with Shopify product pickers, editable step labels/guidance, Shopify-derived price/media/PDP links, editor-only unassigned placeholders, and no empty live section; the local preview uses illustrative sample cards.
+- [x] Add responsive editorial journal cards with Shopify article pickers, optional excerpt/date/author and blog link controls, editor-only empty guidance, and no empty live section; the local preview is not connected to Shopify article data.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
 - [x] Add a variant-aware quantity-selector block to Featured Product and include it in the default homepage setup.
 - [x] Add an original Shop the Look section with editable product blocks, adjustable image hotspots, responsive image/list layouts, accessible product links, eligible quick add, and populated demo placeholders; retain the existing configurable Featured Product section on the homepage.
@@ -47,7 +49,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
-- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 82 files with no offenses.
+- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 84 files with no offenses.
 - [x] Validate section range schemas and fix the collection, featured-collection, and product-recommendations mobile-column controls to expose at least three values while keeping the default at two.
 - [x] Review storefront output handling: escape reflected search terms, customer comments, merchant-provided menu/pickup labels, plain-text excerpts, and canonical/social metadata URLs; reject cross-origin cart/search/recommendation endpoints and pickup redirects; add source and DOM security tests. Merchant-authored rich-text bodies remain intentionally rendered as Shopify content.
 - [x] Pin GitHub Actions to verified full commit SHAs, disable unnecessary persisted checkout credentials, pin the CI runner to Ubuntu 24.04, and keep each workflow's `GITHUB_TOKEN` permissions scoped to required tasks.

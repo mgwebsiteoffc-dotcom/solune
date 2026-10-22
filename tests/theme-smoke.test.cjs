@@ -720,6 +720,63 @@ test('video-with-text, image gallery, and icon highlights expose native media an
   previewHome.window.close();
 });
 
+test('routine-product merchandising and editorial articles are editable, linked to Shopify data, and responsive', () => {
+  const parseSection = (sectionName) => {
+    const liquid = fs.readFileSync(path.join(__dirname, `../sections/${sectionName}.liquid`), 'utf8');
+    const start = liquid.indexOf('{% schema %}');
+    const end = liquid.indexOf('{% endschema %}');
+    assert.ok(start >= 0 && end > start, `${sectionName} must expose an editor schema`);
+    return { liquid, schema: JSON.parse(liquid.slice(start + '{% schema %}'.length, end).trim()) };
+  };
+  const routine = parseSection('routine-products');
+  const journal = parseSection('journal-articles');
+  const home = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/index.json'), 'utf8'));
+  const storefrontLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.json'), 'utf8'));
+  const schemaLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const routineBlock = routine.schema.blocks.find((block) => block.type === 'routine_product');
+  const journalBlock = journal.schema.blocks.find((block) => block.type === 'journal_article');
+  const routineSettings = new Map(routineBlock.settings.map((setting) => [setting.id, setting]));
+  const journalSettings = new Map(journalBlock.settings.map((setting) => [setting.id, setting]));
+  const journalSectionSettings = new Map(journal.schema.settings.map((setting) => [setting.id, setting]));
+  const stylesheet = fs.readFileSync(path.join(__dirname, '../assets/theme.css'), 'utf8');
+  const preview = new JSDOM(fs.readFileSync(path.join(__dirname, '../preview/index.html'), 'utf8'));
+
+  assert.equal(routine.schema.max_blocks, 4);
+  assert.equal(routineSettings.get('product')?.type, 'product');
+  assert.equal(routineSettings.get('step_label')?.type, 'text');
+  assert.equal(journal.schema.max_blocks, 4);
+  assert.equal(journalSettings.get('article')?.type, 'article');
+  assert.equal(journalSectionSettings.get('blog')?.type, 'blog');
+  assert.equal(journalSectionSettings.get('show_date')?.type, 'checkbox');
+  assert.equal(journalSectionSettings.get('show_author')?.type, 'checkbox');
+  assert.equal(journalSectionSettings.get('show_excerpt')?.type, 'checkbox');
+  assert.equal(home.sections.routine_products.type, 'routine-products');
+  assert.equal(home.sections.journal_articles.type, 'journal-articles');
+  assert.equal(home.sections.routine_products.block_order.length, 3);
+  assert.equal(home.sections.journal_articles.block_order.length, 3);
+  assert.ok(home.order.indexOf('routine') < home.order.indexOf('routine_products'));
+  assert.ok(home.order.indexOf('routine_products') < home.order.indexOf('journal_articles'));
+  assert.match(routine.liquid, /routine_product\.url \| escape/);
+  assert.match(routine.liquid, /routine_product\.price_min/);
+  assert.match(routine.liquid, /request\.design_mode/);
+  assert.match(journal.liquid, /journal_article\.excerpt_or_content \| strip_html/);
+  assert.match(journal.liquid, /journal_article\.url \| escape/);
+  assert.match(journal.liquid, /request\.design_mode/);
+  assert.ok(storefrontLocale.sections.routine_products.choose_product_info);
+  assert.ok(storefrontLocale.sections.routine_products.step_label.includes('{{ number }}'));
+  assert.ok(storefrontLocale.sections.journal_articles.empty);
+  assert.ok(schemaLocale.sections.routine_products.blocks.routine_product);
+  assert.ok(schemaLocale.sections.journal_articles.settings.article);
+  assert.match(stylesheet, /routine-products-section\[data-columns='4'\]/);
+  assert.match(stylesheet, /journal-articles-section\[data-columns='4'\]/);
+  assert.match(stylesheet, /@media \(max-width: 520px\)/);
+  const { document } = preview.window;
+  assert.ok(document.querySelector('.routine-products-grid'));
+  assert.ok(document.querySelector('.journal-articles-grid'));
+  assert.equal(document.querySelectorAll('[style]').length, 0);
+  preview.window.close();
+});
+
 test('product recommendations refuse cross-origin markup before injecting HTML', () => {
   const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
   const { window } = dom;

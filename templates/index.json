@@ -430,6 +430,71 @@
         "gap": 16,
         "show_captions": true
       }
+    },
+    "routine_products": {
+      "type": "routine-products",
+      "blocks": {
+        "cleanse": {
+          "type": "routine_product",
+          "settings": {
+            "step_label": "01 · Cleanse"
+          }
+        },
+        "apply": {
+          "type": "routine_product",
+          "settings": {
+            "step_label": "02 · Apply"
+          }
+        },
+        "moisturize": {
+          "type": "routine_product",
+          "settings": {
+            "step_label": "03 · Moisturize"
+          }
+        }
+      },
+      "block_order": [
+        "cleanse",
+        "apply",
+        "moisturize"
+      ],
+      "settings": {
+        "eyebrow": "SHOP THE ROUTINE",
+        "heading": "Products, step by step.",
+        "body": "<p>Choose a product for each step, then share formula-specific directions approved for your store.</p>",
+        "columns": "3",
+        "disclaimer": "<p>Use each product only as directed. This guide is not medical advice.</p>"
+      }
+    },
+    "journal_articles": {
+      "type": "journal-articles",
+      "blocks": {
+        "article_one": {
+          "type": "journal_article"
+        },
+        "article_two": {
+          "type": "journal_article"
+        },
+        "article_three": {
+          "type": "journal_article"
+        }
+      },
+      "block_order": [
+        "article_one",
+        "article_two",
+        "article_three"
+      ],
+      "settings": {
+        "eyebrow": "FROM THE JOURNAL",
+        "heading": "Notes for curious minds.",
+        "body": "<p>Feature store-written articles and link readers to the full information.</p>",
+        "columns": "3",
+        "show_date": true,
+        "show_author": false,
+        "show_excerpt": true,
+        "excerpt_words": 20,
+        "read_more_label": "Read article"
+      }
     }
   },
   "order": [
@@ -444,6 +509,8 @@
     "image_gallery",
     "ingredient",
     "routine",
+    "routine_products",
+    "journal_articles",
     "instagram_stories",
     "shoppable_videos",
     "faq",

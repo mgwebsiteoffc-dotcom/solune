@@ -704,6 +704,44 @@
         "link_label": "Link label",
         "link": "Link"
       }
+    },
+    "routine_products": {
+      "name": "Routine products",
+      "blocks": {
+        "routine_product": "Routine product"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "columns": "Columns on desktop",
+        "disclaimer": "Routine note or disclaimer",
+        "step_label": "Step label",
+        "product": "Product",
+        "card_body": "Product-specific guidance",
+        "link_label": "Product link label"
+      }
+    },
+    "journal_articles": {
+      "name": "Journal articles",
+      "blocks": {
+        "journal_article": "Article card"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "blog": "Blog for the optional view-all link",
+        "view_all_label": "View-all link label",
+        "columns": "Columns on desktop",
+        "show_date": "Show publication date",
+        "show_author": "Show author",
+        "show_excerpt": "Show article excerpt",
+        "excerpt_words": "Excerpt length in words",
+        "read_more_label": "Article link label",
+        "article": "Article",
+        "kicker": "Article label"
+      }
     }
   },
   "blocks": {
