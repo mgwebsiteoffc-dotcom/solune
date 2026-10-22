@@ -20,7 +20,7 @@ Keep the preview unpublished while preparing the store. Use real products, polic
 
 ## 2. Brand appearance and storefront settings
 
-In the theme editor, use **Theme settings** to choose a theme style and adjust colors, typography, currency display, motion, swatches, product cards, cart behavior, social links, favicon, and custom CSS. The typography controls use Shopify's font picker. Changing a setting only changes the theme being edited; verify the saved preview before assuming a change is live.
+In the theme editor, use **Theme settings** to choose a theme style and adjust colors, typography, currency display, motion, swatches, product cards, cart behavior, social links, favicon, and custom CSS. The typography controls use Shopify's font picker. In **Theme settings → Product card**, merchants can optionally show a second product image on hover/keyboard focus, toggle routine-step and Shopify unit-price details, and show an accurate low-stock badge for tracked stock with a configurable threshold. Touch layouts retain the primary image; unit prices appear only when Shopify provides measurement data, routine steps only when the product metafield is filled, and variants that allow selling past zero are never shown as low stock. Changing a setting only changes the theme being edited; verify the saved preview before assuming a change is live.
 
 Replace demo imagery with licensed, brand-owned product and editorial photography before launch. Set useful alt text and review focal points and crops on desktop and mobile. The bundled `demo-*.jpg` files are visual fallbacks, not real product photography or claims about a product.
 

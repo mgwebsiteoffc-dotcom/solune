@@ -11,14 +11,35 @@
 {% assign card_variant = product.selected_or_first_available_variant %}
 {% assign card_quantity_min = card_variant.quantity_rule.min | default: 1 %}
 {% assign card_media = product.featured_media.preview_image %}
+{% assign card_secondary_media = blank %}
+{% if settings.product_card_show_secondary_image %}
+  {% for media in product.media %}
+    {% if media.media_type == 'image' and media.preview_image.id != card_media.id %}
+      {% assign card_secondary_media = media.preview_image %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
 {% assign card_show_vendor = show_vendor %}
 {% if settings.product_card_show_vendor %}{% assign card_show_vendor = true %}{% endif %}
+{% assign card_low_stock_threshold = settings.product_card_low_stock_threshold | default: 3 | plus: 0 %}
+{% assign card_show_low_stock = false %}
+{% if settings.product_card_show_low_stock and card_variant.inventory_management != blank and card_variant.inventory_policy != 'continue' and card_variant.inventory_quantity > 0 and card_variant.inventory_quantity <= card_low_stock_threshold %}
+  {% assign card_show_low_stock = true %}
+{% endif %}
+{% assign card_show_sale_badge = false %}
+{% if settings.product_card_show_sale_badge and card_variant.compare_at_price > card_variant.price %}
+  {% assign card_show_sale_badge = true %}
+{% endif %}
 {% capture card_focal_style %}object-position: {{ card_media.presentation.focal_point }};{% endcapture %}
 <article class="product-card">
-  <a class="product-card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+  <a class="product-card__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}{% unless product.available %}, {{ 'general.sold_out' | t | escape }}{% else %}{% if card_show_low_stock %}, {{ 'product.inventory_low_stock' | t: count: card_variant.inventory_quantity | escape }}{% endif %}{% if card_show_sale_badge %}, {{ 'general.sale' | t | escape }}{% endif %}{% endunless %}">
     {% if card_media != blank %}
       {% assign card_alt = product.featured_media.alt | default: product.title %}
       {{ card_media | image_url: width: 1000 | image_tag: alt: card_alt, widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 1101px) 22vw, (min-width: 1025px) 30vw, 46vw', loading: loading | default: 'lazy', style: card_focal_style }}
+      {% if card_secondary_media != blank %}
+        {{ card_secondary_media | image_url: width: 1000 | image_tag: alt: '', class: 'product-card__secondary-image', widths: '240, 360, 480, 640, 800, 1000', sizes: '(min-width: 1101px) 22vw, (min-width: 1025px) 30vw, 46vw', loading: 'lazy' }}
+      {% endif %}
     {% else %}
       <img
         src="{{ 'demo-product.jpg' | asset_url }}"
@@ -30,17 +51,26 @@
       >
       <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
     {% endif %}
-    {% unless product.available %}
-      <span class="product-card__badge">{{ 'general.sold_out' | t }}</span>
-    {% elsif settings.product_card_show_sale_badge and card_variant.compare_at_price > card_variant.price %}
-      <span class="product-card__badge product-card__badge--sale">{{ 'general.sale' | t }}</span>
-    {% endunless %}
+    {% if product.available == false or card_show_low_stock or card_show_sale_badge %}
+      <span class="product-card__badges">
+        {% if product.available == false %}
+          <span class="product-card__badge">{{ 'general.sold_out' | t }}</span>
+        {% else %}
+          {% if card_show_low_stock %}
+            <span class="product-card__badge product-card__badge--low-stock">{{ 'product.inventory_low_stock' | t: count: card_variant.inventory_quantity }}</span>
+          {% endif %}
+          {% if card_show_sale_badge %}
+            <span class="product-card__badge product-card__badge--sale">{{ 'general.sale' | t }}</span>
+          {% endif %}
+        {% endif %}
+      </span>
+    {% endif %}
   </a>
   <div class="product-card__content">
     {% if card_show_vendor %}<p class="product-card__vendor">{{ product.vendor | escape }}</p>{% endif %}
     <h3 class="product-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
     {% render 'product-rating', product: product %}
-    {% if product.metafields.custom.routine_step != blank %}<p class="product-card__meta">{{ product.metafields.custom.routine_step.value | default: product.metafields.custom.routine_step | escape }}</p>{% endif %}
+    {% if settings.product_card_show_routine_step and product.metafields.custom.routine_step != blank %}<p class="product-card__meta">{{ product.metafields.custom.routine_step.value | default: product.metafields.custom.routine_step | escape }}</p>{% endif %}
     <div class="product-card__price">
       {% if card_variant.compare_at_price > card_variant.price %}
         <span class="price--sale">{% render 'format-money', amount: card_variant.price %}</span>
@@ -49,7 +79,7 @@
       {% else %}
         <span>{% if product.price_varies %}{{ 'general.from' | t }} {% endif %}{% render 'format-money', amount: product.price_min %}{% if product.price_varies %}–{% render 'format-money', amount: product.price_max %}{% endif %}</span>
       {% endif %}
-      {% if card_variant.unit_price_measurement %}
+      {% if settings.product_card_show_unit_price and card_variant.unit_price_measurement %}
         <span class="product-card__meta"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{% render 'format-money', amount: card_variant.unit_price %} / {{ card_variant.unit_price_measurement.reference_value }}{{ card_variant.unit_price_measurement.reference_unit }}</span>
       {% endif %}
     </div>

@@ -333,6 +333,20 @@
       },
       {
         "type": "checkbox",
+        "id": "product_card_show_routine_step",
+        "label": "t:labels.product_card_show_routine_step",
+        "info": "t:labels.product_card_show_routine_step_info",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_unit_price",
+        "label": "t:labels.product_card_show_unit_price",
+        "info": "t:labels.product_card_show_unit_price_info",
+        "default": true
+      },
+      {
+        "type": "checkbox",
         "id": "product_card_enable_quick_add",
         "label": "t:labels.product_card_enable_quick_add",
         "default": true
@@ -348,6 +362,30 @@
         "id": "product_card_show_sale_badge",
         "label": "t:labels.product_card_show_sale_badge",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_secondary_image",
+        "label": "t:labels.product_card_show_secondary_image",
+        "info": "t:labels.product_card_show_secondary_image_info",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_low_stock",
+        "label": "t:labels.product_card_show_low_stock",
+        "info": "t:labels.product_card_show_low_stock_info",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "product_card_low_stock_threshold",
+        "label": "t:labels.product_card_low_stock_threshold",
+        "info": "t:labels.product_card_low_stock_threshold_info",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 3
       },
       {
         "type": "select",

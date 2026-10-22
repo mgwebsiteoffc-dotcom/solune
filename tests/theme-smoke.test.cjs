@@ -276,6 +276,59 @@ test('pincode checker validates Indian PINs and uses only the configured coverag
   dom.window.close();
 });
 
+test('PIN checker initializes when Shopify loads a new section', () => {
+  const dom = createDom('<!doctype html><html><body></body></html>');
+  const { window } = dom;
+  window.eval(themeScript);
+
+  const section = window.document.createElement('section');
+  section.innerHTML = `<div data-pincode-checker data-serviceable-pincodes="201001" data-available-message="Listed for delivery." data-invalid-message="Invalid PIN." data-unavailable-message="Not listed." data-unconfigured-message="Unconfigured.">
+    <form data-pincode-form><input data-pincode-input><button type="submit">Check</button></form>
+    <p data-pincode-status role="status" aria-live="polite" hidden></p>
+  </div>`;
+  window.document.body.append(section);
+  section.dispatchEvent(new window.CustomEvent('shopify:section:load', { bubbles: true }));
+
+  const form = section.querySelector('[data-pincode-form]');
+  const input = section.querySelector('[data-pincode-input]');
+  const status = section.querySelector('[data-pincode-status]');
+  input.value = '201001';
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  assert.equal(status.textContent, 'Listed for delivery.');
+  assert.equal(status.dataset.state, 'success');
+  dom.window.close();
+});
+
+test('product cards offer optional alternate images and data-gated low-stock badges', () => {
+  const settingsSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_schema.json'), 'utf8'));
+  const localeSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const productCardGroup = settingsSchema.find((group) => group.name === 't:general.product_card');
+  const settingTypes = new Map(productCardGroup.settings.map((setting) => [setting.id, setting.type]));
+  const cardSnippet = fs.readFileSync(path.join(__dirname, '../snippets/product-card.liquid'), 'utf8');
+  const themeCss = fs.readFileSync(path.join(__dirname, '../assets/theme.css'), 'utf8');
+
+  assert.equal(settingTypes.get('product_card_show_secondary_image'), 'checkbox');
+  assert.equal(settingTypes.get('product_card_show_low_stock'), 'checkbox');
+  assert.equal(settingTypes.get('product_card_low_stock_threshold'), 'range');
+  assert.equal(settingTypes.get('product_card_show_routine_step'), 'checkbox');
+  assert.equal(settingTypes.get('product_card_show_unit_price'), 'checkbox');
+  assert.match(cardSnippet, /product_card_show_secondary_image/);
+  assert.match(cardSnippet, /product_card_show_low_stock/);
+  assert.match(cardSnippet, /product_card_show_routine_step/);
+  assert.match(cardSnippet, /product_card_show_unit_price/);
+  assert.match(cardSnippet, /inventory_management != blank/);
+  assert.match(cardSnippet, /inventory_policy != 'continue'/);
+  assert.match(cardSnippet, /product_card_low_stock_threshold/);
+  assert.match(cardSnippet, /aria-label="[^"]*product\.inventory_low_stock/s);
+  assert.match(themeCss, /product-card__secondary-image/);
+  assert.match(themeCss, /@media \(hover: hover\) and \(pointer: fine\)/);
+  assert.match(themeCss, /product-card__badge--low-stock/);
+  assert.ok(localeSchema.labels.product_card_show_secondary_image_info);
+  assert.ok(localeSchema.labels.product_card_show_low_stock_info);
+  assert.ok(localeSchema.labels.product_card_show_routine_step_info);
+  assert.ok(localeSchema.labels.product_card_show_unit_price_info);
+});
+
 test('product modal and story viewer return focus to their openers', () => {
   const dom = createDom(`<!doctype html><html><body>
     <button id="modal-trigger" type="button" aria-controls="product-modal" data-product-modal-trigger>Details</button>
