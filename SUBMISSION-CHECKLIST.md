@@ -4,9 +4,9 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **69 of 94 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **70 of 95 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Partner Dashboard listing/payout confirmation, name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
-- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner has confirmed $100, the minimum allowed. The owner has also confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
+- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner has confirmed $100, the minimum allowed. The owner has also confirmed the theme name and Partner account identity; the public GitHub Issues support URL is set in Theme Info, and the owner-provided support email remains documented separately. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified. The owner reported Theme Store validation errors for a missing `theme_support_url` and missing preset listing folders; those specific package issues are addressed, but successful Shopify acceptance and live storefront QA are not verified.
 
 ## Current implementation
 
@@ -49,7 +49,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
-- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 84 files with no offenses.
+- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 89 files with no offenses.
 - [x] Validate section range schemas and fix the collection, featured-collection, and product-recommendations mobile-column controls to expose at least three values while keeping the default at two.
 - [x] Review storefront output handling: escape reflected search terms, customer comments, merchant-provided menu/pickup labels, plain-text excerpts, and canonical/social metadata URLs; reject cross-origin cart/search/recommendation endpoints and pickup redirects; add source and DOM security tests. Merchant-authored rich-text bodies remain intentionally rendered as Shopify content.
 - [x] Pin GitHub Actions to verified full commit SHAs, disable unnecessary persisted checkout credentials, pin the CI runner to Ubuntu 24.04, and keep each workflow's `GITHUB_TOKEN` permissions scoped to required tasks.
@@ -101,9 +101,10 @@ This project is a development foundation. A checked implementation item means co
 - [x] Record owner's confirmed desired price and test-access intent: USD $100 for the paid Theme Store listing; unpublished developer preview is free to test.
 - [ ] Configure the confirmed USD $100 listing price in the Partner Dashboard and verify Shopify's then-current payout requirements. As checked 2026-10-22, $100 is the minimum of Shopify's published USD $100–$500 range in $10 increments. Published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees; account-specific payout/tax details still need Partner Dashboard confirmation.
 - [x] Record owner confirmation of public theme name **Solune** and Shopify Partner account identity **Akestech Infotech Pvt Ltd**; the theme metadata uses Solune. This confirms the owner's selection only, not name-conflict or trademark clearance.
+- [x] Add `listings/<preset-id>/listing.json` identity manifests for each of the five presets in `config/settings_data.json`; this fixes missing preset folders, not the outstanding demo-store, screenshot, or complete listing-asset work.
 - [ ] Verify trademark/name-conflict clearance for Solune and complete demo-store content, support process, and Theme Store listing assets. The author and support email are recorded; the legal and operational checks remain open.
-- [x] Add a pre-release merchant guide and remove development-only README/Issues links from theme metadata.
-- [ ] Replace the provisional branch-specific guide URL with a permanent public docs URL. The Pages workflow is present on this branch but is not listed among active repository workflows; it must reach the default branch, Pages must be enabled with GitHub Actions by a repository admin, and deployment must succeed. The official support email is set in Theme Info.
+- [x] Add the pre-release merchant guide, document the owner-provided support email, keep the branch-specific documentation URL, and configure public GitHub Issues as `theme_support_url`; Shopify's metadata schema permits either email or URL, not both.
+- [ ] Replace the provisional branch-specific guide URL with a permanent public docs URL. The Pages workflow is present on this branch but is not listed among active repository workflows; it must reach the default branch, Pages must be enabled with GitHub Actions by a repository admin, and deployment must succeed. Theme Info currently uses the public issue tracker as its one allowed support channel; the owner-provided support email is documented separately.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.
 - [ ] Validate keyboard/screen-reader behavior, focus order, contrast, reduced motion, form labels/errors, all image ratios/focal points, and realistic long/short content.
 - [ ] Test latest supported desktop/mobile browsers and relevant social-app webviews.

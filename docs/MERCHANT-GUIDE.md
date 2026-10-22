@@ -86,7 +86,7 @@ Product and featured-product sections expose optional Shopify app blocks. The th
 
 ### Contact page
 
-The contact template uses Shopify's native contact form and supports editable email, phone, address, and hours blocks plus an optional help/FAQ page link. The form keeps name and phone optional and requires email and a message. Replace the sample introduction with store-approved copy. Submit test messages and verify delivery to the store's configured contact inbox, validation, keyboard access, and success/error feedback before launch. The theme developer support email in Theme Info is separate from the brand's customer-service contact details; don't expose it on the storefront unless it is also the store's intended public address.
+The contact template uses Shopify's native contact form and supports editable email, phone, address, and hours blocks plus an optional help/FAQ page link. The form keeps name and phone optional and requires email and a message. Replace the sample introduction with store-approved copy. Submit test messages and verify delivery to the store's configured contact inbox, validation, keyboard access, and success/error feedback before launch. The theme developer support email documented in this guide is separate from the brand's customer-service contact details; don't expose it on the storefront unless it is also the store's intended public address.
 
 ## 8. SEO, localization, and launch review
 
@@ -96,4 +96,4 @@ Before publication, test product variants and quantity rules, subscriptions, gif
 
 ## Support status
 
-The official support email `akestechinfotech@gmail.com` is set in Theme Info. The merchant guide URL remains branch-specific until a permanent public documentation URL is enabled. Do not send passwords, API keys, or customer data when requesting support.
+The owner-provided support email is `akestechinfotech@gmail.com`. Theme Info uses the public GitHub Issues page for this repository as `theme_support_url`; Shopify's theme metadata schema accepts a support URL or support email, not both. Public issue comments are visible to others: do not post passwords, API keys, private shop URLs, or customer data. The merchant guide URL remains branch-specific until a permanent public documentation URL is enabled.

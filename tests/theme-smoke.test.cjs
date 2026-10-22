@@ -353,6 +353,25 @@ test('PIN checker initializes when Shopify loads a new section', () => {
   dom.window.close();
 });
 
+test('Theme Store metadata has a support URL and a listing manifest for every configured style preset', () => {
+  const settingsSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_schema.json'), 'utf8'));
+  const settingsData = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_data.json'), 'utf8'));
+  const themeInfo = settingsSchema.find((group) => group.name === 'theme_info');
+  const presetNames = Object.keys(settingsData.presets || {});
+
+  assert.match(themeInfo?.theme_support_url || '', /^https:\/\//);
+  assert.equal(themeInfo?.theme_support_email, undefined); // Theme Check's Theme Info schema allows exactly one of URL or email.
+  assert.ok(presetNames.length > 0);
+  for (const name of presetNames) {
+    const presetId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const manifestPath = path.join(__dirname, `../listings/${presetId}/listing.json`);
+    assert.ok(fs.existsSync(manifestPath), `Missing listing folder for ${name}`);
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    assert.equal(manifest.name, name);
+    assert.equal(manifest.preset_id, presetId);
+  }
+});
+
 test('product cards offer optional alternate images, accurate savings, and data-gated low-stock badges', () => {
   const settingsSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_schema.json'), 'utf8'));
   const localeSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
