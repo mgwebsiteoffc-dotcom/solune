@@ -103,6 +103,6 @@ This project is a development foundation. A checked implementation item means co
 - [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
 - [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
 - [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (89 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
-- [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements.
+- [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements; verify codebase eligibility/originality and confirm the manually curated Instagram story/post/reel modules comply with restrictions on app-dependent or API-dependent app-like features.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.
