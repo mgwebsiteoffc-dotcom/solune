@@ -470,6 +470,9 @@ test('collection, featured-collection, and recommendation grids expose responsiv
       assert.equal(settings.get(id)?.type, 'range', `${sectionName} ${id} should be an editor range`);
       assert.equal(settings.get(id)?.default, defaultValue, `${sectionName} ${id} should preserve its responsive default`);
     });
+    const mobileColumns = settings.get('grid_columns_mobile');
+    assert.equal(mobileColumns.max, 3, `${sectionName} mobile columns should offer at least three valid range values`);
+    assert.ok((mobileColumns.max - mobileColumns.min) / mobileColumns.step >= 2);
     assert.match(liquid, /class="product-grid" style="[^"]*--product-grid-columns-desktop:/);
     assert.match(liquid, /--product-grid-columns-tablet:/);
     assert.match(liquid, /--product-grid-columns-mobile:/);
