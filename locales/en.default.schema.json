@@ -158,6 +158,9 @@
     "size_chart_page_info": "Linked next to any product option whose name includes “size”.",
     "vendor_style": "Vendor style",
     "price_style": "Price style",
+    "show_product_savings": "Show savings for discounted variants",
+    "show_product_savings_info": "Updates with the selected variant or purchase plan; shown only when a valid compare-at price exceeds the current price.",
+    "product_savings_display": "Savings format",
     "quantity_style": "Quantity input style",
     "description_presentation": "Description presentation",
     "description_heading": "Description heading",
@@ -286,6 +289,10 @@
     "price_style": {
       "regular": "Regular",
       "large": "Large"
+    },
+    "product_savings_display": {
+      "amount": "Amount saved",
+      "percentage": "Percentage saved"
     },
     "quantity_style": {
       "field": "Number field",

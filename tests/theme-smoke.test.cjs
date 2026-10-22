@@ -113,6 +113,60 @@ test('variant and sticky-cart changes sync price, sold-out state, URL, SKU, quan
   dom.window.close();
 });
 
+test('PDP savings follow variant and selling-plan prices and hide without a valid compare-at discount', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section data-product-root data-current-variant-id="11">
+      <select data-variant-select><option value="11" selected>20 ml</option><option value="22">40 ml</option><option value="33">10 ml</option></select>
+      <select data-selling-plan-select data-requires-selling-plan="false">
+        <option value="" data-one-time-purchase selected>One-time purchase</option>
+        <option value="monthly-33" data-variant-id="33" data-price="900" data-compare-at-price="1100">Monthly</option>
+      </select>
+      <span data-product-price></span><s data-compare-price hidden></s>
+      <span data-product-savings data-savings-display="amount" data-save-label="Save" data-percent-template="Save __PERCENT__%"></span>
+      <script type="application/json" data-product-variants></script>
+      <script type="application/json" data-product-quantity-rules>[]</script>
+    </section>
+  </body></html>`);
+  const { window } = dom;
+  const root = window.document.querySelector('[data-product-root]');
+  root.dataset.moneyFormat = '${{amount}}';
+  root.querySelector('[data-product-variants]').textContent = JSON.stringify([
+    { id: 11, options: ['20 ml'], price: 1200, compare_at_price: 1500, available: true },
+    { id: 22, options: ['40 ml'], price: 2000, compare_at_price: 2000, available: true },
+    { id: 33, options: ['10 ml'], price: 800, compare_at_price: 1200, available: true }
+  ]);
+  window.eval(themeScript);
+
+  const variantSelect = root.querySelector('[data-variant-select]');
+  const savings = root.querySelector('[data-product-savings]');
+  assert.equal(root.querySelector('[data-product-price]').textContent, '$12.00');
+  assert.equal(savings.textContent.trim(), 'Save $3.00');
+  assert.equal(savings.hidden, false);
+
+  variantSelect.value = '22';
+  variantSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(savings.hidden, true);
+
+  savings.dataset.savingsDisplay = 'percentage';
+  variantSelect.value = '33';
+  variantSelect.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(root.querySelector('[data-product-price]').textContent, '$8.00');
+  assert.equal(savings.textContent.trim(), 'Save 33%');
+  assert.equal(savings.hidden, false);
+
+  const sellingPlan = root.querySelector('[data-selling-plan-select]');
+  sellingPlan.value = 'monthly-33';
+  sellingPlan.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(root.querySelector('[data-product-price]').textContent, '$9.00');
+  assert.equal(root.querySelector('[data-compare-price]').textContent, '$11.00');
+  assert.equal(savings.textContent.trim(), 'Save 18%');
+
+  savings.dataset.savingsDisplay = 'amount';
+  sellingPlan.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.equal(savings.textContent.trim(), 'Save $2.00');
+  dom.window.close();
+});
+
 test('multi-option swatch and size controls resolve variants and expose sold-out/media changes', () => {
   const dom = createDom(`<!doctype html><html><body>
     <section data-product-root data-current-variant-id="101" data-sold-out-label="Sold out">
@@ -342,6 +396,29 @@ test('product cards offer optional alternate images, accurate savings, and data-
   assert.deepEqual(Object.keys(localeSchema.options.product_card_savings_display).sort(), ['amount', 'none', 'percentage']);
   assert.equal(storefrontLocale.general.save, 'Save');
   assert.equal(storefrontLocale.general.save_percent, 'Save {{ percent }}%');
+});
+
+test('PDP price block exposes optional localized savings display controls', () => {
+  const productSection = fs.readFileSync(path.join(__dirname, '../sections/product.liquid'), 'utf8');
+  const schemaStart = productSection.indexOf('{% schema %}');
+  const schemaEnd = productSection.indexOf('{% endschema %}');
+  const schema = JSON.parse(productSection.slice(schemaStart + '{% schema %}'.length, schemaEnd).trim());
+  const priceBlock = schema.blocks.find((block) => block.type === 'price');
+  const settings = new Map(priceBlock.settings.map((setting) => [setting.id, setting]));
+  const savingsSnippet = fs.readFileSync(path.join(__dirname, '../snippets/product-price-savings.liquid'), 'utf8');
+  const localeSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const themeCss = fs.readFileSync(path.join(__dirname, '../assets/theme.css'), 'utf8');
+
+  assert.equal(settings.get('show_savings')?.type, 'checkbox');
+  assert.equal(settings.get('show_savings')?.default, false);
+  assert.equal(settings.get('savings_display')?.type, 'select');
+  assert.deepEqual(settings.get('savings_display')?.options.map((option) => option.value), ['amount', 'percentage']);
+  assert.match(productSection, /render 'product-price-savings'/);
+  assert.match(savingsSnippet, /data-product-savings data-savings-display=/);
+  assert.match(savingsSnippet, /compare_at_price > current_price/);
+  assert.match(themeCss, /product-price__savings/);
+  assert.ok(localeSchema.labels.show_product_savings_info);
+  assert.deepEqual(Object.keys(localeSchema.options.product_savings_display).sort(), ['amount', 'percentage']);
 });
 
 test('collection, featured-collection, and recommendation grids expose responsive column controls', () => {

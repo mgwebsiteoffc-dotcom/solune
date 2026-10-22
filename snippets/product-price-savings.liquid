@@ -1,0 +1,15 @@
+{% if show_savings %}
+  {% assign product_price_savings_amount = 0 %}
+  {% assign product_price_savings_percentage = 0 %}
+  {% if compare_at_price > current_price %}
+    {% assign product_price_savings_amount = compare_at_price | minus: current_price %}
+    {% assign product_price_savings_percentage = product_price_savings_amount | times: 100.0 | divided_by: compare_at_price | round %}
+  {% endif %}
+  <span class="product-price__savings" data-product-savings data-savings-display="{{ savings_display | default: 'amount' }}" data-save-label="{{ 'general.save' | t | escape }}" data-percent-template="{{ 'general.save_percent' | t: percent: '__PERCENT__' | escape }}"{% unless compare_at_price > current_price %} hidden{% endunless %}>
+    {% if savings_display == 'percentage' %}
+      {{ 'general.save_percent' | t: percent: product_price_savings_percentage }}
+    {% else %}
+      {{ 'general.save' | t }} {% render 'format-money', amount: product_price_savings_amount %}
+    {% endif %}
+  </span>
+{% endif %}

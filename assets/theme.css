@@ -2511,6 +2511,13 @@ label {
   font-size: 1.1rem;
 }
 
+.product-price__savings {
+  flex-basis: 100%;
+  color: var(--color-sale, var(--color-foreground));
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
 .product-price--large {
   font-size: clamp(1.3rem, 2.2vw, 1.75rem);
 }

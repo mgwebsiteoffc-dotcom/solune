@@ -490,6 +490,20 @@
       comparePrice.hidden = !hasDiscount;
       if (hasDiscount) comparePrice.textContent = formatMoney(compareValue, moneyFormat);
     }
+
+    const savings = root.querySelector('[data-product-savings]');
+    if (savings) {
+      savings.hidden = !hasDiscount;
+      if (hasDiscount) {
+        if (savings.dataset.savingsDisplay === 'percentage') {
+          const percentage = Math.round(((compareValue - priceValue) * 100) / compareValue);
+          savings.textContent = (savings.dataset.percentTemplate || 'Save __PERCENT__%').replace('__PERCENT__', String(percentage));
+        } else {
+          const saveLabel = savings.dataset.saveLabel || 'Save';
+          savings.textContent = `${saveLabel} ${formatMoney(compareValue - priceValue, moneyFormat)}`;
+        }
+      }
+    }
   };
 
   const updateVariant = (root, select, updateUrl = true) => {

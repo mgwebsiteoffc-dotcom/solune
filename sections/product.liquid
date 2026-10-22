@@ -149,6 +149,7 @@
                 <div class="price-line product-price product-price--{{ block.settings.style | default: 'regular' | escape }}">
                   <span class="price__sale{% if current_compare_at_price > current_price %} price--sale{% endif %}" data-product-price>{% render 'format-money', amount: current_price %}</span>
                   <s class="price__compare" data-compare-price{% unless current_compare_at_price > current_price %} hidden{% endunless %}>{% render 'format-money', amount: current_compare_at_price %}</s>
+                  {% render 'product-price-savings', show_savings: block.settings.show_savings, savings_display: block.settings.savings_display, current_price: current_price, compare_at_price: current_compare_at_price %}
                 </div>
                 <p class="product-card__meta" data-unit-price{% unless current_variant.unit_price_measurement %} hidden{% endunless %}>
                   <span class="visually-hidden">{{ 'product.unit_price' | t }} </span>
@@ -476,6 +477,23 @@
             { "value": "large", "label": "t:options.price_style.large" }
           ],
           "default": "regular"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_savings",
+          "label": "t:labels.show_product_savings",
+          "info": "t:labels.show_product_savings_info",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "savings_display",
+          "label": "t:labels.product_savings_display",
+          "options": [
+            { "value": "amount", "label": "t:options.product_savings_display.amount" },
+            { "value": "percentage", "label": "t:options.product_savings_display.percentage" }
+          ],
+          "default": "amount"
         }
       ]
     },
