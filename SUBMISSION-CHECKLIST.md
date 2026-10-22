@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **54 of 79 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **57 of 82 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, publishing the merchant docs URL, and implementing/verifying 100+ meaningful CRO controls.
 - The owner supplied the official support email and it is set in Theme Info; no authenticated Shopify store session is available, so the store-dependent tests below remain open and no upload or live storefront QA is claimed.
 
@@ -17,6 +17,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Delivery availability, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
 - [x] Add optional product-card secondary-image hover/focus, routine-step and unit-price visibility, and data-gated low-stock badges using Shopify-tracked inventory with a merchant-set threshold.
+- [x] Add an off-by-default product-card savings display for selected variants, showing a localized money amount or rounded percentage only when Shopify's compare-at price exceeds its current price.
+- [x] Add per-section desktop/tablet/mobile product-grid column controls to Collection, Featured Collection, and Product Recommendations sections.
 - [x] Add a native AJAX cart drawer with quantity adjustment/removal, cart totals, optional free-shipping progress, and a cart-page fallback.
 - [x] Add a scroll-aware PDP sticky add-to-cart bar synchronized with variant price and availability.
 - [x] Add a configurable Indian PIN-code coverage list and PDP checker; the feature is client-side information only, not courier integration or checkout enforcement.
@@ -62,10 +64,11 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test Shopify pickup availability for available/unavailable locations and multiple real variants.
 - [x] Verify with JSDOM that collection price-range controls update visible/ARIA values, clamp crossing bounds, and sorting auto-submits; no Shopify-generated facets or server filtering were tested.
 - [x] Exercise predictive-search request parameters, short-query handling, mock result/empty states for product, collection, page, and article items, keyboard selection, Escape/focus return, and live status; requests and result HTML are mocked.
-- [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data; verify the product-card image, routine-step, unit-price, and tracked low-stock controls with real products in Theme Editor.
+- [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data; verify responsive column controls at real breakpoints and the product-card image, routine-step, unit-price, savings-display, and tracked low-stock controls with real products in Theme Editor.
 - [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation; the same viewer hooks serve the curated story/post/reel card types.
 - [x] Test the PIN checker in JSDOM for valid and invalid six-digit Indian PINs, configured-listed/unlisted coverage, and the blank/unconfigured list state; no courier API or Shopify checkout was tested.
-- [x] Extend tests for PIN-checker initialization on Shopify section load and source-contract coverage of secondary-image, routine-step, unit-price, and low-stock product-card settings, inventory safety gates, translations, and CSS.
+- [x] Extend tests for PIN-checker initialization on Shopify section load and source-contract coverage of secondary-image, routine-step, unit-price, savings, and low-stock product-card settings, compare-at/inventory gates, translations, and CSS.
+- [x] Add source-contract coverage for responsive grid schema defaults, inline settings, translations, and desktop/tablet/mobile CSS.
 - [ ] Verify story/post/reel on-site playback, focus restoration, pagination, reduced motion, and no tile redirects on real desktop/mobile browsers.
 - [x] Run a mocked cart-note save test covering the `/cart/update.js` payload, submit-button busy state, and live confirmation.
 - [ ] Verify Shopify line/order discounts, tax-inclusive prices, cart notes, quantity changes, unit prices, and accelerated checkout.

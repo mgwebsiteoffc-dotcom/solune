@@ -299,11 +299,13 @@ test('PIN checker initializes when Shopify loads a new section', () => {
   dom.window.close();
 });
 
-test('product cards offer optional alternate images and data-gated low-stock badges', () => {
+test('product cards offer optional alternate images, accurate savings, and data-gated low-stock badges', () => {
   const settingsSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_schema.json'), 'utf8'));
   const localeSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const storefrontLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.json'), 'utf8'));
   const productCardGroup = settingsSchema.find((group) => group.name === 't:general.product_card');
   const settingTypes = new Map(productCardGroup.settings.map((setting) => [setting.id, setting.type]));
+  const savingsSetting = productCardGroup.settings.find((setting) => setting.id === 'product_card_savings_display');
   const cardSnippet = fs.readFileSync(path.join(__dirname, '../snippets/product-card.liquid'), 'utf8');
   const themeCss = fs.readFileSync(path.join(__dirname, '../assets/theme.css'), 'utf8');
 
@@ -312,6 +314,9 @@ test('product cards offer optional alternate images and data-gated low-stock bad
   assert.equal(settingTypes.get('product_card_low_stock_threshold'), 'range');
   assert.equal(settingTypes.get('product_card_show_routine_step'), 'checkbox');
   assert.equal(settingTypes.get('product_card_show_unit_price'), 'checkbox');
+  assert.equal(settingTypes.get('product_card_savings_display'), 'select');
+  assert.equal(savingsSetting.default, 'none');
+  assert.deepEqual(savingsSetting.options.map((option) => option.value), ['none', 'amount', 'percentage']);
   assert.match(cardSnippet, /product_card_show_secondary_image/);
   assert.match(cardSnippet, /product_card_show_low_stock/);
   assert.match(cardSnippet, /product_card_show_routine_step/);
@@ -319,14 +324,60 @@ test('product cards offer optional alternate images and data-gated low-stock bad
   assert.match(cardSnippet, /inventory_management != blank/);
   assert.match(cardSnippet, /inventory_policy != 'continue'/);
   assert.match(cardSnippet, /product_card_low_stock_threshold/);
+  assert.match(cardSnippet, /product_card_savings_display/);
+  assert.match(cardSnippet, /card_savings_percentage/);
+  assert.match(cardSnippet, /product-card__savings/);
+  assert.match(cardSnippet, /card_variant\.compare_at_price > card_variant\.price and settings\.product_card_savings_display == 'amount'/);
+  assert.match(cardSnippet, /card_variant\.compare_at_price > card_variant\.price and settings\.product_card_savings_display == 'percentage'/);
   assert.match(cardSnippet, /aria-label="[^"]*product\.inventory_low_stock/s);
   assert.match(themeCss, /product-card__secondary-image/);
   assert.match(themeCss, /@media \(hover: hover\) and \(pointer: fine\)/);
   assert.match(themeCss, /product-card__badge--low-stock/);
+  assert.match(themeCss, /product-card__savings/);
   assert.ok(localeSchema.labels.product_card_show_secondary_image_info);
   assert.ok(localeSchema.labels.product_card_show_low_stock_info);
   assert.ok(localeSchema.labels.product_card_show_routine_step_info);
   assert.ok(localeSchema.labels.product_card_show_unit_price_info);
+  assert.ok(localeSchema.labels.product_card_savings_display_info);
+  assert.deepEqual(Object.keys(localeSchema.options.product_card_savings_display).sort(), ['amount', 'none', 'percentage']);
+  assert.equal(storefrontLocale.general.save, 'Save');
+  assert.equal(storefrontLocale.general.save_percent, 'Save {{ percent }}%');
+});
+
+test('collection, featured-collection, and recommendation grids expose responsive column controls', () => {
+  const sections = ['collection', 'featured-collection', 'product-recommendations'];
+  const expectedDefaults = {
+    grid_columns_desktop: 4,
+    grid_columns_tablet: 3,
+    grid_columns_mobile: 2
+  };
+  const themeCss = fs.readFileSync(path.join(__dirname, '../assets/theme.css'), 'utf8');
+  const localeSchema = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+
+  sections.forEach((sectionName) => {
+    const liquid = fs.readFileSync(path.join(__dirname, `../sections/${sectionName}.liquid`), 'utf8');
+    const schemaStart = liquid.indexOf('{% schema %}');
+    const schemaEnd = liquid.indexOf('{% endschema %}');
+    assert.ok(schemaStart >= 0 && schemaEnd > schemaStart, `${sectionName} must expose a section schema`);
+    const schemaText = liquid.slice(schemaStart + '{% schema %}'.length, schemaEnd).trim();
+    const schema = JSON.parse(schemaText);
+    const settings = new Map(schema.settings.map((setting) => [setting.id, setting]));
+
+    Object.entries(expectedDefaults).forEach(([id, defaultValue]) => {
+      assert.equal(settings.get(id)?.type, 'range', `${sectionName} ${id} should be an editor range`);
+      assert.equal(settings.get(id)?.default, defaultValue, `${sectionName} ${id} should preserve its responsive default`);
+    });
+    assert.match(liquid, /class="product-grid" style="[^"]*--product-grid-columns-desktop:/);
+    assert.match(liquid, /--product-grid-columns-tablet:/);
+    assert.match(liquid, /--product-grid-columns-mobile:/);
+  });
+
+  assert.ok(themeCss.includes('grid-template-columns: repeat(var(--product-grid-columns-desktop, 4)'));
+  assert.ok(themeCss.includes('grid-template-columns: repeat(var(--product-grid-columns-tablet, 3)'));
+  assert.ok(themeCss.includes('grid-template-columns: repeat(var(--product-grid-columns-mobile, 2)'));
+  assert.ok(localeSchema.labels.grid_columns_desktop);
+  assert.ok(localeSchema.labels.grid_columns_tablet);
+  assert.ok(localeSchema.labels.grid_columns_mobile);
 });
 
 test('product modal and story viewer return focus to their openers', () => {

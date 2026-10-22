@@ -79,6 +79,14 @@
       {% else %}
         <span>{% if product.price_varies %}{{ 'general.from' | t }} {% endif %}{% render 'format-money', amount: product.price_min %}{% if product.price_varies %}–{% render 'format-money', amount: product.price_max %}{% endif %}</span>
       {% endif %}
+      {% if card_variant.compare_at_price > card_variant.price and settings.product_card_savings_display == 'amount' %}
+        {% assign card_savings_amount = card_variant.compare_at_price | minus: card_variant.price %}
+        <span class="product-card__savings">{{ 'general.save' | t }} {% render 'format-money', amount: card_savings_amount %}</span>
+      {% elsif card_variant.compare_at_price > card_variant.price and settings.product_card_savings_display == 'percentage' %}
+        {% assign card_savings_amount = card_variant.compare_at_price | minus: card_variant.price %}
+        {% assign card_savings_percentage = card_savings_amount | times: 100.0 | divided_by: card_variant.compare_at_price | round %}
+        <span class="product-card__savings">{{ 'general.save_percent' | t: percent: card_savings_percentage }}</span>
+      {% endif %}
       {% if settings.product_card_show_unit_price and card_variant.unit_price_measurement %}
         <span class="product-card__meta"><span class="visually-hidden">{{ 'product.unit_price' | t }} </span>{% render 'format-money', amount: card_variant.unit_price %} / {{ card_variant.unit_price_measurement.reference_value }}{{ card_variant.unit_price_measurement.reference_unit }}</span>
       {% endif %}

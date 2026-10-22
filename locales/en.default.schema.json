@@ -46,6 +46,9 @@
     "page_width": "Maximum page width",
     "products_per_page": "Products per page",
     "products_to_show": "Products to show",
+    "grid_columns_desktop": "Product columns on desktop",
+    "grid_columns_tablet": "Product columns on tablet",
+    "grid_columns_mobile": "Product columns on mobile",
     "section_spacing": "Section spacing",
     "show_article_author": "Show article author",
     "show_article_comments": "Show article comments",
@@ -108,6 +111,8 @@
     "product_card_enable_quick_add": "Enable quick add on product cards",
     "product_card_show_rating": "Show product ratings",
     "product_card_show_sale_badge": "Show sale badge",
+    "product_card_savings_display": "Product-card savings display",
+    "product_card_savings_display_info": "Uses the selected variant's Shopify compare-at price; savings show only when that price is higher than its current price.",
     "product_card_show_secondary_image": "Show a second product image on hover/focus",
     "product_card_show_secondary_image_info": "Uses the next product image when available; touch devices retain the primary image.",
     "product_card_show_low_stock": "Show a low-stock badge",
@@ -223,6 +228,11 @@
     "product_card_hover_effect": {
       "none": "None",
       "zoom": "Subtle zoom"
+    },
+    "product_card_savings_display": {
+      "none": "Off",
+      "amount": "Amount saved",
+      "percentage": "Percentage saved"
     },
     "price_filter_style": {
       "range_slider": "Dual range slider",

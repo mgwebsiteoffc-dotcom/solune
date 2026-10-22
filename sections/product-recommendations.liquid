@@ -8,7 +8,7 @@
           <h2 id="RecommendationsTitle-{{ section.id }}" class="section-heading">{{ recommendation_title | escape }}</h2>
         </div>
       </div>
-      <div class="product-grid">
+      <div class="product-grid" style="--product-grid-columns-desktop: {{ section.settings.grid_columns_desktop | default: 4 }}; --product-grid-columns-tablet: {{ section.settings.grid_columns_tablet | default: 3 }}; --product-grid-columns-mobile: {{ section.settings.grid_columns_mobile | default: 2 }};">
         {% for recommended_product in recommendations.products %}
           {% render 'product-card', product: recommended_product, show_vendor: section.settings.show_vendor, show_quick_add: false, loading: 'lazy' %}
         {% endfor %}
@@ -27,6 +27,9 @@
       { "value": "complementary", "label": "t:sections.recommendations.settings.complementary" }
     ]},
     { "type": "range", "id": "products_to_show", "label": "t:labels.products_to_show", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "grid_columns_desktop", "label": "t:labels.grid_columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "range", "id": "grid_columns_tablet", "label": "t:labels.grid_columns_tablet", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "grid_columns_mobile", "label": "t:labels.grid_columns_mobile", "min": 1, "max": 2, "step": 1, "default": 2 },
     { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false }
   ],
   "presets": [{ "name": "t:sections.recommendations.name" }]

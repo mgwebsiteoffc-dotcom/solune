@@ -364,6 +364,18 @@
         "default": true
       },
       {
+        "type": "select",
+        "id": "product_card_savings_display",
+        "label": "t:labels.product_card_savings_display",
+        "info": "t:labels.product_card_savings_display_info",
+        "options": [
+          { "value": "none", "label": "t:options.product_card_savings_display.none" },
+          { "value": "amount", "label": "t:options.product_card_savings_display.amount" },
+          { "value": "percentage", "label": "t:options.product_card_savings_display.percentage" }
+        ],
+        "default": "none"
+      },
+      {
         "type": "checkbox",
         "id": "product_card_show_secondary_image",
         "label": "t:labels.product_card_show_secondary_image",

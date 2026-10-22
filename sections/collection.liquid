@@ -53,7 +53,7 @@
       <div>
         {% paginate collection.products by section.settings.products_per_page %}
           {% if collection.products.size > 0 %}
-            <div class="product-grid">
+            <div class="product-grid" style="--product-grid-columns-desktop: {{ section.settings.grid_columns_desktop | default: 4 }}; --product-grid-columns-tablet: {{ section.settings.grid_columns_tablet | default: 3 }}; --product-grid-columns-mobile: {{ section.settings.grid_columns_mobile | default: 2 }};">
               {% for product in collection.products %}
                 {% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_quick_add: section.settings.show_quick_add, loading: 'lazy' %}
               {% endfor %}
@@ -106,6 +106,9 @@
     { "type": "checkbox", "id": "show_sort", "label": "t:labels.show_sort", "default": true },
     { "type": "checkbox", "id": "show_vendor", "label": "t:labels.show_vendor", "default": false },
     { "type": "checkbox", "id": "show_quick_add", "label": "t:labels.show_quick_add", "default": true },
+    { "type": "range", "id": "grid_columns_desktop", "label": "t:labels.grid_columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "range", "id": "grid_columns_tablet", "label": "t:labels.grid_columns_tablet", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "grid_columns_mobile", "label": "t:labels.grid_columns_mobile", "min": 1, "max": 2, "step": 1, "default": 2 },
     { "type": "range", "id": "products_per_page", "label": "t:labels.products_per_page", "min": 8, "max": 40, "step": 4, "default": 16 }
   ],
   "presets": [{ "name": "t:sections.collection.name" }]

@@ -28,6 +28,8 @@
     "continue_shopping": "Continue shopping",
     "from": "From",
     "sale": "On sale",
+    "save": "Save",
+    "save_percent": "Save {{ percent }}%",
     "sold_out": "Sold out",
     "newsletter_success": "Thanks for subscribing.",
     "no_image": "Add an image in the theme editor",
