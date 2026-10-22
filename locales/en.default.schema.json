@@ -523,6 +523,37 @@
         "video_info": "Select a Shopify-hosted video for stories or reels. It plays in the on-site viewer; this theme does not import posts from Instagram automatically."
       }
     },
+    "shop_the_look": {
+      "name": "Shop the look",
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "image": "Look image",
+        "image_alt": "Alternative text (optional)",
+        "image_ratio": "Image shape",
+        "image_position": "Image position on desktop",
+        "show_vendor": "Show product vendors",
+        "show_quick_add": "Show quick add for eligible single-variant products"
+      },
+      "blocks": {
+        "product": "Look product",
+        "product_setting": "Product",
+        "horizontal_position": "Hotspot horizontal position",
+        "vertical_position": "Hotspot vertical position"
+      },
+      "options": {
+        "image_ratio": {
+          "landscape": "Landscape",
+          "square": "Square",
+          "portrait": "Portrait"
+        },
+        "image_position": {
+          "left": "Image left",
+          "right": "Image right"
+        }
+      }
+    },
     "pincode_checker": {
       "heading": "Check delivery to your area",
       "label": "Indian PIN code",

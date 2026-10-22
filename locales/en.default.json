@@ -218,6 +218,16 @@
     "image_with_text": {
       "demo_image_alt": "A botanical skincare still life used as a theme preview image."
     },
+    "shop_the_look": {
+      "view_product": "View {{ product }}",
+      "products_label": "Products in this look",
+      "hotspots_label": "Shop the products shown",
+      "demo_image_alt": "Skincare products arranged for a daily ritual.",
+      "demo_product_alt": "Example skincare product placeholder.",
+      "look_item": "Look item {{ number }}",
+      "choose_product": "Choose a product",
+      "choose_product_info": "Add a product in the theme editor to connect this item to a look marker."
+    },
     "instagram_stories": {
       "demo_image_alt": "A theme preview image for a curated skincare social post.",
       "preview_story": "Preview story",

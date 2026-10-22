@@ -68,6 +68,46 @@
         "show_payment_terms": true
       }
     },
+    "shop_the_look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "look_cleanse": {
+          "type": "look_product",
+          "settings": {
+            "horizontal_position": 31,
+            "vertical_position": 38
+          }
+        },
+        "look_treatment": {
+          "type": "look_product",
+          "settings": {
+            "horizontal_position": 65,
+            "vertical_position": 54
+          }
+        },
+        "look_moisture": {
+          "type": "look_product",
+          "settings": {
+            "horizontal_position": 42,
+            "vertical_position": 77
+          }
+        }
+      },
+      "block_order": [
+        "look_cleanse",
+        "look_treatment",
+        "look_moisture"
+      ],
+      "settings": {
+        "eyebrow": "RITUAL, IN CONTEXT",
+        "heading": "Shop the ritual",
+        "body": "<p>Explore the products selected for this everyday routine.</p>",
+        "image_position": "left",
+        "image_ratio": "landscape",
+        "show_vendor": false,
+        "show_quick_add": true
+      }
+    },
     "ingredient": {
       "type": "ingredient-story",
       "settings": {
@@ -259,6 +299,7 @@
     "hero",
     "featured",
     "featured_product",
+    "shop_the_look",
     "image_with_text",
     "ingredient",
     "routine",

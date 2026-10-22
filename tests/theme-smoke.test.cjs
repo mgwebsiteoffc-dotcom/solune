@@ -486,6 +486,77 @@ test('collection, featured-collection, and recommendation grids expose responsiv
   assert.ok(localeSchema.labels.grid_columns_mobile);
 });
 
+test('Shop the Look provides accessible product hotspots, editable products, and responsive cards alongside Featured Product', () => {
+  const shopTheLook = fs.readFileSync(path.join(__dirname, '../sections/shop-the-look.liquid'), 'utf8');
+  const featuredProduct = fs.readFileSync(path.join(__dirname, '../sections/featured-product.liquid'), 'utf8');
+  const productCard = fs.readFileSync(path.join(__dirname, '../snippets/product-card.liquid'), 'utf8');
+  const homeTemplate = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/index.json'), 'utf8'));
+  const schemaStart = shopTheLook.indexOf('{% schema %}');
+  const schemaEnd = shopTheLook.indexOf('{% endschema %}');
+  assert.ok(schemaStart >= 0 && schemaEnd > schemaStart);
+  const schema = JSON.parse(shopTheLook.slice(schemaStart + '{% schema %}'.length, schemaEnd).trim());
+  const lookProductBlock = schema.blocks.find((block) => block.type === 'look_product');
+  const blockSettings = new Map(lookProductBlock.settings.map((setting) => [setting.id, setting]));
+  assert.equal(blockSettings.get('product')?.type, 'product');
+  for (const position of ['horizontal_position', 'vertical_position']) {
+    const setting = blockSettings.get(position);
+    assert.equal(setting?.type, 'range');
+    assert.equal(setting?.min, 0);
+    assert.equal(setting?.max, 100);
+    assert.ok((setting.max - setting.min) / setting.step >= 2);
+  }
+  assert.equal(schema.max_blocks, 4);
+  assert.match(shopTheLook, /role="group" aria-label=/);
+  assert.match(shopTheLook, /href="\{\{ look_product\.url \| escape \}\}"/);
+  assert.match(shopTheLook, /render 'product-card', product: look_product/);
+  assert.match(shopTheLook, /show_vendor_override: section\.settings\.show_vendor/);
+  assert.match(shopTheLook, /show_quick_add: section\.settings\.show_quick_add/);
+  assert.match(productCard, /show_vendor_override == false/);
+  assert.match(shopTheLook, /demo-hero\.jpg/);
+  assert.match(shopTheLook, /data-image-position=/);
+  assert.match(shopTheLook, /data-image-ratio=/);
+  assert.match(featuredProduct, /render 'product-variant-picker'/);
+  assert.match(featuredProduct, /form 'product', featured_product/);
+  assert.equal(homeTemplate.sections.shop_the_look.type, 'shop-the-look');
+  assert.equal(homeTemplate.sections.shop_the_look.block_order.length, 3);
+  assert.ok(homeTemplate.order.indexOf('featured_product') < homeTemplate.order.indexOf('shop_the_look'));
+  assert.ok(homeTemplate.order.includes('shop_the_look'));
+});
+
+test('PIN, FAQ, and story editor schemas expose requested controls in the default homepage (source check only)', () => {
+  const parseSection = (sectionName) => {
+    const liquid = fs.readFileSync(path.join(__dirname, `../sections/${sectionName}.liquid`), 'utf8');
+    const start = liquid.indexOf('{% schema %}');
+    const end = liquid.indexOf('{% endschema %}');
+    assert.ok(start >= 0 && end > start, `${sectionName} must have an editor schema`);
+    return { liquid, schema: JSON.parse(liquid.slice(start + '{% schema %}'.length, end).trim()) };
+  };
+  const product = parseSection('product');
+  const faq = parseSection('faq');
+  const stories = parseSection('instagram-stories');
+  const themeSettings = JSON.parse(fs.readFileSync(path.join(__dirname, '../config/settings_schema.json'), 'utf8'));
+  const home = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/index.json'), 'utf8'));
+  const pinBlock = product.schema.blocks.find((block) => block.type === 'pincode_checker');
+  const faqBlock = faq.schema.blocks.find((block) => block.type === 'question');
+  const storyBlock = stories.schema.blocks.find((block) => block.type === 'story');
+  const coverageSetting = themeSettings.flatMap((group) => group.settings || []).find((setting) => setting.id === 'delivery_serviceable_pincodes');
+  const storySettings = new Map(stories.schema.settings.map((setting) => [setting.id, setting]));
+  const storyBlockSettings = new Map(storyBlock.settings.map((setting) => [setting.id, setting]));
+  const faqBlockSettings = new Map(faqBlock.settings.map((setting) => [setting.id, setting]));
+
+  assert.ok(pinBlock);
+  assert.ok(pinBlock.settings.some((setting) => setting.id === 'policy_page'));
+  assert.ok(coverageSetting);
+  assert.equal(faqBlockSettings.get('question')?.type, 'text');
+  assert.equal(faqBlockSettings.get('answer')?.type, 'richtext');
+  assert.equal(storySettings.get('profile_url')?.type, 'url');
+  assert.equal(storyBlockSettings.get('content_type')?.type, 'select');
+  assert.deepEqual(storyBlockSettings.get('content_type')?.options.map((option) => option.value), ['story', 'post', 'reel']);
+  assert.equal(storyBlockSettings.get('image')?.type, 'image_picker');
+  assert.equal(storyBlockSettings.get('video')?.type, 'video');
+  assert.ok(home.sections.faq && home.sections.instagram_stories);
+});
+
 test('product recommendations refuse cross-origin markup before injecting HTML', () => {
   const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
   const { window } = dom;

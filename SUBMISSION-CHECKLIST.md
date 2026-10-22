@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **62 of 87 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **64 of 89 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, publishing the merchant docs URL, and implementing/verifying 100+ meaningful CRO controls.
 - The owner supplied the official support email and it is set in Theme Info; no authenticated Shopify store session is available, so the store-dependent tests below remain open and no upload or live storefront QA is claimed.
 
@@ -33,6 +33,8 @@ This project is a development foundation. A checked implementation item means co
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
 - [x] Add a variant-aware quantity-selector block to Featured Product and include it in the default homepage setup.
+- [x] Add an original Shop the Look section with editable product blocks, adjustable image hotspots, responsive image/list layouts, accessible product links, eligible quick add, and populated demo placeholders; retain the existing configurable Featured Product section on the homepage.
+- [x] Add source-contract tests for the PIN coverage setting/block, FAQ question/answer blocks, and story/post/reel media/profile-link schema; real Theme Editor/browser validation remains open.
 - [x] Add a customizable product-page block library for SKU, badges, ratings with an optional reviews link, separators, product variations, line-item properties, inventory, pickup, complementary products with block-level quick-add control, offers, icon features, text/collapsible text, an extra image, buttons, share links, on-site modals, and more-information content.
 - [x] Implement gift card recipient email/name/message, scheduled delivery and timezone data, cart property display, QR code, gift card code, and Apple Wallet link.
 - [x] Implement collection and search facets, sorting, responsive product results, predictive search, line/order discounts, tax-included messaging, cart notes, variant-rule-aware cart quantity edits, and accelerated cart checkout.
@@ -43,7 +45,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
-- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 72 files with no offenses.
+- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 73 files with no offenses.
 - [x] Validate section range schemas and fix the collection, featured-collection, and product-recommendations mobile-column controls to expose at least three values while keeping the default at two.
 - [x] Review storefront output handling: escape reflected search terms, customer comments, merchant-provided menu/pickup labels, plain-text excerpts, and canonical/social metadata URLs; reject cross-origin cart/search/recommendation endpoints and pickup redirects; add source and DOM security tests. Merchant-authored rich-text bodies remain intentionally rendered as Shopify content.
 - [x] Pin GitHub Actions to verified full commit SHAs, disable unnecessary persisted checkout credentials, pin the CI runner to Ubuntu 24.04, and keep each workflow's `GITHUB_TOKEN` permissions scoped to required tasks.
@@ -103,7 +105,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
 - [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
 - [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
-- [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (89 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
+- [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (90 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements; verify codebase eligibility/originality and confirm the manually curated Instagram story/post/reel modules comply with restrictions on app-dependent or API-dependent app-like features.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.

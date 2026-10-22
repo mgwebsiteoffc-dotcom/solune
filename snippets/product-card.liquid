@@ -4,6 +4,7 @@
   and a minimum quantity of one; other products link to their product page.
   @param {product} product
   @param {boolean} [show_vendor]
+  @param {boolean} [show_vendor_override]
   @param {boolean} [show_quick_add]
   @param {string} [loading]
 {% enddoc %}
@@ -22,6 +23,7 @@
 {% endif %}
 {% assign card_show_vendor = show_vendor %}
 {% if settings.product_card_show_vendor %}{% assign card_show_vendor = true %}{% endif %}
+{% if show_vendor_override == true %}{% assign card_show_vendor = true %}{% elsif show_vendor_override == false %}{% assign card_show_vendor = false %}{% endif %}
 {% assign card_low_stock_threshold = settings.product_card_low_stock_threshold | default: 3 | plus: 0 %}
 {% assign card_show_low_stock = false %}
 {% if settings.product_card_show_low_stock and card_variant.inventory_management != blank and card_variant.inventory_policy != 'continue' and card_variant.inventory_quantity > 0 and card_variant.inventory_quantity <= card_low_stock_threshold %}

@@ -683,6 +683,203 @@ label {
   margin-inline: auto;
 }
 
+/* Editorial Shop the Look: interactive, numbered product links over a merchant image. */
+.shop-the-look__intro {
+  align-items: center;
+}
+
+.shop-the-look__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  align-items: start;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.shop-the-look[data-image-position='right'] .shop-the-look__visual {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.shop-the-look[data-image-position='right'] .shop-the-look__products {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.shop-the-look__visual {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  aspect-ratio: 1.45 / 1;
+  background: var(--color-surface);
+}
+
+.shop-the-look[data-image-ratio='square'] .shop-the-look__visual {
+  aspect-ratio: 1 / 1;
+}
+
+.shop-the-look[data-image-ratio='portrait'] .shop-the-look__visual {
+  aspect-ratio: 4 / 5;
+}
+
+.shop-the-look__visual > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-the-look__hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shop-the-look__hotspot {
+  position: absolute;
+  top: var(--hotspot-y, 50%);
+  left: var(--hotspot-x, 50%);
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  transform: translate(-50%, -50%);
+  place-items: center;
+  border: 2px solid var(--color-background);
+  border-radius: 50%;
+  outline: 1px solid var(--color-foreground);
+  outline-offset: 0.15rem;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: transform var(--motion-duration, 160ms) ease, background-color var(--motion-duration, 160ms) ease;
+}
+
+.shop-the-look__hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.shop-the-look__hotspot:focus-visible {
+  outline: 3px solid var(--color-foreground);
+  outline-offset: 0.35rem;
+}
+
+.shop-the-look__hotspot--demo {
+  opacity: 0.82;
+}
+
+.shop-the-look__products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shop-the-look__product {
+  position: relative;
+  min-width: 0;
+}
+
+.shop-the-look__product-number {
+  position: absolute;
+  z-index: 3;
+  top: 0.55rem;
+  left: 0.55rem;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-size: 0.72rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.shop-the-look__placeholder {
+  min-width: 0;
+}
+
+.shop-the-look__placeholder-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--product-card-aspect, 0.82);
+  border-radius: var(--radius-card, 2px);
+  background: var(--color-surface);
+}
+
+.shop-the-look__placeholder-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-the-look__placeholder-copy {
+  display: grid;
+  gap: 0.35rem;
+  padding-block: 0.9rem 0.5rem;
+}
+
+.shop-the-look__placeholder-copy .eyebrow {
+  margin: 0;
+}
+
+.shop-the-look__placeholder-copy h3,
+.shop-the-look__placeholder-copy p:not(.eyebrow) {
+  margin: 0;
+}
+
+.shop-the-look__placeholder-copy h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.shop-the-look__placeholder-copy p:not(.eyebrow) {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .shop-the-look__layout,
+  .shop-the-look[data-image-position='right'] .shop-the-look__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shop-the-look[data-image-position='right'] .shop-the-look__visual,
+  .shop-the-look[data-image-position='right'] .shop-the-look__products {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .shop-the-look__layout {
+    gap: 1rem;
+  }
+
+  .shop-the-look__products {
+    gap: 0.8rem;
+  }
+
+  .shop-the-look__hotspot {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
 .instagram-stories__intro {
   align-items: center;
 }
