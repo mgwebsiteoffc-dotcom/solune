@@ -4,9 +4,9 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **64 of 89 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
-- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, owner/Partner-account decisions on a valid listing price and public name, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
-- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner's earlier $50 target is outside that range. The official support email is set in Theme Info, but no authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
+- **65 of 90 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, resolving the listing-price conflict and name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
+- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner's confirmed $50 target is outside that range. The owner has confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
 
 ## Current implementation
 
@@ -94,9 +94,10 @@ This project is a development foundation. A checked implementation item means co
 ### Quality and listing readiness
 
 - [x] Record author and company identity supplied by the owner: Sani Kumar / Akestech Infotech Pvt Ltd.
-- [x] Record owner's previous price target and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test.
-- [ ] Configure the final listing price and confirm Shopify's then-current listing and payout requirements. As checked 2026-10-22, Shopify's published listing guidance allows USD $100–$500 in $10 increments, so the prior $50 target is outside the range; published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees. The valid price and account-specific payout/tax details still need Partner Dashboard confirmation.
-- [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets. Solune remains a working name; author/company identity and support email are recorded, but this is not a trademark or Partner-account verification.
+- [x] Record owner's confirmed desired price and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test. The price is outside Shopify's currently published listing range and remains unconfigured.
+- [ ] Configure an eligible final listing price and confirm Shopify's then-current listing and payout requirements. As checked 2026-10-22, Shopify's published listing guidance allows USD $100–$500 in $10 increments, so the owner-confirmed $50 target is outside the range; published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees. The valid price and account-specific payout/tax details still need Partner Dashboard confirmation.
+- [x] Record owner confirmation of public theme name **Solune** and Shopify Partner account identity **Akestech Infotech Pvt Ltd**; the theme metadata uses Solune. This confirms the owner's selection only, not name-conflict or trademark clearance.
+- [ ] Verify trademark/name-conflict clearance for Solune and complete demo-store content, support process, and Theme Store listing assets. The author and support email are recorded; the legal and operational checks remain open.
 - [x] Add a pre-release merchant guide and remove development-only README/Issues links from theme metadata.
 - [ ] Replace the provisional branch-specific guide URL with a permanent public docs URL. The Pages workflow is present on this branch but is not listed among active repository workflows; it must reach the default branch, Pages must be enabled with GitHub Actions by a repository admin, and deployment must succeed. The official support email is set in Theme Info.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.

@@ -1,9 +1,9 @@
 # Solune — Shopify skincare theme
 
-- **Working name:** Solune
+- **Owner-confirmed public theme name:** Solune
 - **Author:** Sani Kumar
-- **Company:** Akestech Infotech Pvt Ltd
-- **Owner's previous price target:** USD $50 (Shopify's currently published Theme Store listing guidance specifies USD $100–$500 in $10 increments, so $50 is not an eligible listing price; final price remains an owner/Partner Dashboard decision and is not hardcoded in theme code)
+- **Company / Shopify Partner account:** Akestech Infotech Pvt Ltd
+- **Owner-confirmed desired listing price:** USD $50 (not within Shopify's currently published USD $100–$500 range in $10 increments; cannot be configured for a Theme Store listing under that guidance and is not hardcoded in theme code)
 - **Testing:** unpublished development-store preview; no customer purchase required
 - **Status:** development foundation; not yet tested on a Shopify development store or ready for Theme Store submission
 - **Distribution:** Shopify Theme Store submission only; no direct theme sales are planned
@@ -67,7 +67,7 @@ See [`docs/MERCHANT-GUIDE.md`](docs/MERCHANT-GUIDE.md) for store setup and theme
 
 ## Before submission
 
-The Shopify theme author field is set to Sani Kumar to respect Shopify's 25-character limit; this README records Akestech Infotech Pvt Ltd as the company. `Solune` remains a working name, not a cleared final listing name. Shopify's current [theme naming rules](https://shopify.dev/docs/storefronts/themes/store/requirements#18-naming-themes-and-theme-presets) require 1–2 words, fewer than 30 characters, and a name distinct from existing themes, Shopify products, the company, and Partner account; repository notes or a basic web search do not establish trademark availability. The Partner account identity, final name, support process, demo-store content, and listing assets still need owner confirmation.
+The Shopify theme author field is set to Sani Kumar to respect Shopify's 25-character limit. The owner confirmed **Solune** as the public theme name and **Akestech Infotech Pvt Ltd** as the Shopify Partner account identity. The theme metadata already uses `Solune`. Shopify's current [theme naming rules](https://shopify.dev/docs/storefronts/themes/store/requirements#18-naming-themes-and-theme-presets) require 1–2 words, fewer than 30 characters, and a name distinct from existing themes, Shopify products, the company, and Partner account; Solune meets the basic length and company-name checks, but trademark availability and full name-conflict clearance have not been verified. The support process, demo-store content, and listing assets still need completion.
 
 As checked on 2026-10-22, Shopify's published [Theme Store listing guidance](https://shopify.dev/docs/storefronts/themes/store/review-process/listings#theme-price) sets theme prices from USD $100 to $500 in $10 increments. The owner's earlier USD $50 target is outside that range. Shopify's [revenue-share guidance](https://shopify.dev/docs/storefronts/themes/store/revenue-share) states a 15% share of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees. Account eligibility, payout method/timing, tax information, and the fees shown for this Partner account still need confirmation in the Partner Dashboard; this repository cannot configure or verify them.
 
