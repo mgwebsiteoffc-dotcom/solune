@@ -650,6 +650,60 @@
         "link_label": "Product link label",
         "link": "Custom link"
       }
+    },
+    "video_with_text": {
+      "name": "Video with text",
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "video": "Shopify-hosted video",
+        "poster": "Fallback poster image",
+        "video_position": "Video position",
+        "video_ratio": "Video shape",
+        "media_width": "Media width",
+        "text_alignment": "Text alignment",
+        "autoplay": "Autoplay video (muted)",
+        "autoplay_info": "Autoplay is muted and remains visible with native video controls. Leave off unless it supports your content.",
+        "loop": "Loop video",
+        "button_label": "Button label",
+        "button_link": "Button link"
+      }
+    },
+    "image_gallery": {
+      "name": "Image gallery",
+      "blocks": {
+        "image": "Gallery image"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "columns": "Columns on desktop",
+        "image_ratio": "Image shape",
+        "gap": "Space between images",
+        "show_captions": "Show captions",
+        "image": "Image",
+        "image_alt": "Alternative text (optional)",
+        "caption": "Caption",
+        "link": "Image link"
+      }
+    },
+    "icon_highlights": {
+      "name": "Icon highlights",
+      "blocks": {
+        "highlight": "Icon highlight"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "columns": "Columns on desktop",
+        "card_heading": "Card heading",
+        "card_body": "Card description",
+        "link_label": "Link label",
+        "link": "Link"
+      }
     }
   },
   "blocks": {

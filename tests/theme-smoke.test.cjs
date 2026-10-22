@@ -663,6 +663,63 @@ test('skincare discovery sections, page templates, and static preview are presen
   }
 });
 
+test('video-with-text, image gallery, and icon highlights expose native media and merchant controls', () => {
+  const parseSection = (sectionName) => {
+    const liquid = fs.readFileSync(path.join(__dirname, `../sections/${sectionName}.liquid`), 'utf8');
+    const start = liquid.indexOf('{% schema %}');
+    const end = liquid.indexOf('{% endschema %}');
+    assert.ok(start >= 0 && end > start, `${sectionName} must expose an editor schema`);
+    return { liquid, schema: JSON.parse(liquid.slice(start + '{% schema %}'.length, end).trim()) };
+  };
+  const video = parseSection('video-with-text');
+  const gallery = parseSection('image-gallery');
+  const highlights = parseSection('icon-highlights');
+  const themeHome = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/index.json'), 'utf8'));
+  const schemaLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const storefrontLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.json'), 'utf8'));
+  const videoSettings = new Map(video.schema.settings.map((setting) => [setting.id, setting]));
+  const galleryBlock = gallery.schema.blocks.find((block) => block.type === 'image');
+  const gallerySettings = new Map(galleryBlock.settings.map((setting) => [setting.id, setting]));
+  const highlightBlock = highlights.schema.blocks.find((block) => block.type === 'highlight');
+  const highlightSettings = new Map(highlightBlock.settings.map((setting) => [setting.id, setting]));
+  const iconSnippet = fs.readFileSync(path.join(__dirname, '../snippets/skincare-icon.liquid'), 'utf8');
+  const previewHome = new JSDOM(fs.readFileSync(path.join(__dirname, '../preview/index.html'), 'utf8'));
+
+  assert.equal(videoSettings.get('video')?.type, 'video');
+  assert.equal(videoSettings.get('poster')?.type, 'image_picker');
+  assert.equal(videoSettings.get('autoplay')?.default, false);
+  assert.match(video.liquid, /video_tag: class: 'video-with-text__video'/);
+  assert.match(video.liquid, /controls: true/);
+  assert.match(video.liquid, /muted: section\.settings\.autoplay/);
+  assert.doesNotMatch(video.liquid, /youtube\.com|vimeo\.com|<iframe/i);
+  assert.equal(gallery.schema.max_blocks, 12);
+  assert.equal(gallerySettings.get('image')?.type, 'image_picker');
+  assert.equal(gallerySettings.get('link')?.type, 'url');
+  assert.equal(gallerySettings.get('image_alt')?.type, 'text');
+  assert.match(gallery.liquid, /image_tag: alt: gallery_alt/);
+  assert.match(gallery.liquid, /block\.settings\.link \| escape/);
+  assert.equal(highlightSettings.get('icon')?.type, 'select');
+  assert.equal(highlightSettings.get('link')?.type, 'url');
+  assert.match(highlights.liquid, /render 'skincare-icon'/);
+  for (const icon of ['drop', 'sun', 'shield', 'clock', 'sparkle']) assert.ok(iconSnippet.includes(`when '${icon}'`));
+  assert.match(iconSnippet, /\{% else %\}/); // The default branch renders the leaf icon.
+  assert.equal(themeHome.sections.video_with_text.type, 'video-with-text');
+  assert.equal(themeHome.sections.image_gallery.type, 'image-gallery');
+  assert.equal(themeHome.sections.icon_highlights.type, 'icon-highlights');
+  assert.ok(themeHome.order.indexOf('skin_concerns') < themeHome.order.indexOf('icon_highlights'));
+  assert.ok(themeHome.order.indexOf('image_with_text') < themeHome.order.indexOf('video_with_text'));
+  assert.ok(schemaLocale.sections.video_with_text.settings.video);
+  assert.ok(schemaLocale.sections.image_gallery.blocks.image);
+  assert.ok(schemaLocale.sections.icon_highlights.blocks.highlight);
+  assert.ok(storefrontLocale.sections.video_with_text.demo_image_alt);
+  const { document } = previewHome.window;
+  assert.ok(document.querySelector('.video-with-text'));
+  assert.ok(document.querySelector('.image-gallery-grid'));
+  assert.ok(document.querySelector('.icon-highlight-grid'));
+  assert.equal(document.querySelectorAll('[style]').length, 0);
+  previewHome.window.close();
+});
+
 test('product recommendations refuse cross-origin markup before injecting HTML', () => {
   const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
   const { window } = dom;

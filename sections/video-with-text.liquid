@@ -1,0 +1,78 @@
+{% assign video_with_text_poster = section.settings.poster %}
+{% assign video_with_text_alt = video_with_text_poster.alt | default: section.settings.heading %}
+<section class="page-width section-space video-with-text-section" aria-labelledby="VideoWithTextTitle-{{ section.id }}">
+  <div class="video-with-text" data-video-position="{{ section.settings.video_position | escape }}" data-video-ratio="{{ section.settings.video_ratio | escape }}" data-text-alignment="{{ section.settings.text_alignment | escape }}" style="--video-with-text-media-width: {{ section.settings.media_width }}%;">
+    <div class="video-with-text__media" data-video-ratio="{{ section.settings.video_ratio | escape }}">
+      {% if section.settings.video != blank %}
+        {{ section.settings.video | video_tag: class: 'video-with-text__video', image_size: '1600x', controls: true, autoplay: section.settings.autoplay, loop: section.settings.loop, muted: section.settings.autoplay, playsinline: true, preload: 'metadata' }}
+      {% elsif video_with_text_poster != blank %}
+        {{ video_with_text_poster | image_url: width: 1800 | image_tag: alt: video_with_text_alt, widths: '480, 640, 800, 1000, 1200, 1500, 1800', sizes: '(min-width: 1025px) 55vw, 100vw', loading: 'lazy' }}
+        <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+      {% else %}
+        <img src="{{ 'demo-hero.jpg' | asset_url }}" alt="{{ 'sections.video_with_text.demo_image_alt' | t | escape }}" width="1264" height="848" loading="lazy" decoding="async">
+        <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+      {% endif %}
+    </div>
+    <div class="video-with-text__copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="VideoWithTextTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.body != blank %}<div class="rich-text video-with-text__body">{{ section.settings.body }}</div>{% endif %}
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <p class="video-with-text__action"><a class="button button--secondary" href="{{ section.settings.button_link | escape }}">{{ section.settings.button_label | escape }}</a></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.video_with_text.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.video_with_text.settings.eyebrow", "default": "STORY IN MOTION" },
+    { "type": "text", "id": "heading", "label": "t:sections.video_with_text.settings.heading", "default": "A closer look, in motion." },
+    { "type": "richtext", "id": "body", "label": "t:sections.video_with_text.settings.body", "default": "<p>Add a Shopify-hosted video and share product or brand information alongside it.</p>" },
+    { "type": "video", "id": "video", "label": "t:sections.video_with_text.settings.video" },
+    { "type": "image_picker", "id": "poster", "label": "t:sections.video_with_text.settings.poster" },
+    {
+      "type": "select",
+      "id": "video_position",
+      "label": "t:sections.video_with_text.settings.video_position",
+      "options": [
+        { "value": "left", "label": "t:options.image_with_text_position.left" },
+        { "value": "right", "label": "t:options.image_with_text_position.right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "t:sections.video_with_text.settings.video_ratio",
+      "options": [
+        { "value": "adapt", "label": "t:options.image_with_text_ratio.adapt" },
+        { "value": "square", "label": "t:options.image_with_text_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_with_text_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_with_text_ratio.landscape" }
+      ],
+      "default": "landscape"
+    },
+    { "type": "range", "id": "media_width", "label": "t:sections.video_with_text.settings.media_width", "min": 35, "max": 65, "step": 5, "unit": "%", "default": 50 },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.video_with_text.settings.text_alignment",
+      "options": [
+        { "value": "left", "label": "t:options.image_with_text_alignment.left" },
+        { "value": "center", "label": "t:options.image_with_text_alignment.center" }
+      ],
+      "default": "left"
+    },
+    { "type": "checkbox", "id": "autoplay", "label": "t:sections.video_with_text.settings.autoplay", "info": "t:sections.video_with_text.settings.autoplay_info", "default": false },
+    { "type": "checkbox", "id": "loop", "label": "t:sections.video_with_text.settings.loop", "default": false },
+    { "type": "text", "id": "button_label", "label": "t:sections.video_with_text.settings.button_label", "default": "Explore the formula" },
+    { "type": "url", "id": "button_link", "label": "t:sections.video_with_text.settings.button_link" }
+  ],
+  "presets": [
+    { "name": "t:sections.video_with_text.name" }
+  ]
+}
+{% endschema %}

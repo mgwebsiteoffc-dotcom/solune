@@ -274,6 +274,16 @@
     "ingredient_index": {
       "empty": "Add ingredient blocks to build this index.",
       "product_link": "Explore a related product"
+    },
+    "video_with_text": {
+      "demo_image_alt": "Illustrative skincare video poster; select a Shopify-hosted video to enable playback."
+    },
+    "image_gallery": {
+      "demo_image_alt": "Illustrative skincare gallery image; replace with brand-approved photography.",
+      "empty": "Add image blocks to build this gallery."
+    },
+    "icon_highlights": {
+      "empty": "Add icon highlight blocks to share verified store or product information."
     }
   },
   "pickup_availability": {

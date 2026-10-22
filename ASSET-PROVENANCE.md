@@ -1,6 +1,7 @@
 # Asset provenance and license register
 
-**Audit date:** 2026-10-22  
+**Audit date:** 2026-10-22
+
 **Status:** Inventory only; this document is not a license grant or legal clearance. Items marked unverified must not be represented as cleared for a Theme Store demo, listing, or merchant store.
 
 ## Theme source

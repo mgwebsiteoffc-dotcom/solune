@@ -1,0 +1,106 @@
+<section class="page-width section-space image-gallery-section" aria-labelledby="ImageGalleryTitle-{{ section.id }}">
+  <div class="section-intro">
+    <div class="section-intro__copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="ImageGalleryTitle-{{ section.id }}" class="section-heading">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.body != blank %}<div class="section-intro__body rich-text">{{ section.settings.body }}</div>{% endif %}
+    </div>
+  </div>
+
+  {% if section.blocks.size > 0 %}
+    <div class="image-gallery-grid" data-columns="{{ section.settings.columns | escape }}" data-image-ratio="{{ section.settings.image_ratio | escape }}" data-show-captions="{{ section.settings.show_captions }}" style="--image-gallery-gap: {{ section.settings.gap }}px;" role="list" aria-label="{{ section.settings.heading | escape }}">
+      {% for block in section.blocks %}
+        {% assign gallery_image = block.settings.image %}
+        {% assign gallery_caption = block.settings.caption | strip %}
+        {% assign gallery_alt = block.settings.image_alt | default: gallery_image.alt | default: gallery_caption | default: section.settings.heading %}
+        {% assign gallery_demo_index = forloop.index0 | modulo: 3 %}
+        {% assign gallery_demo_asset = 'demo-ingredient.jpg' %}
+        {% assign gallery_demo_width = 928 %}
+        {% assign gallery_demo_height = 1152 %}
+        {% case gallery_demo_index %}
+          {% when 1 %}{% assign gallery_demo_asset = 'demo-product.jpg' %}
+          {% when 2 %}
+            {% assign gallery_demo_asset = 'demo-hero.jpg' %}
+            {% assign gallery_demo_width = 1264 %}
+            {% assign gallery_demo_height = 848 %}
+        {% endcase %}
+        <figure class="image-gallery-item" role="listitem" {{ block.shopify_attributes }}>
+          {% if block.settings.link != blank %}<a class="image-gallery-item__link" href="{{ block.settings.link | escape }}" aria-label="{{ gallery_alt | escape }}">{% endif %}
+            <div class="image-gallery-item__media" data-image-ratio="{{ section.settings.image_ratio | escape }}">
+              {% if gallery_image != blank %}
+                {% capture gallery_focal_style %}object-position: {{ gallery_image.presentation.focal_point }};{% endcapture %}
+                {{ gallery_image | image_url: width: 1400 | image_tag: alt: gallery_alt, widths: '320, 480, 640, 800, 1000, 1200, 1400', sizes: '(min-width: 1200px) 30vw, (min-width: 681px) 45vw, 92vw', loading: 'lazy', style: gallery_focal_style }}
+              {% else %}
+                <img src="{{ gallery_demo_asset | asset_url }}" alt="{{ gallery_alt | escape }}" width="{{ gallery_demo_width }}" height="{{ gallery_demo_height }}" loading="lazy" decoding="async">
+                <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
+              {% endif %}
+            </div>
+          {% if block.settings.link != blank %}</a>{% endif %}
+          {% if section.settings.show_captions and gallery_caption != blank %}<figcaption class="image-gallery-item__caption">{{ gallery_caption | escape }}</figcaption>{% endif %}
+        </figure>
+      {% endfor %}
+    </div>
+  {% elsif request.design_mode %}
+    <p class="section-empty-note">{{ 'sections.image_gallery.empty' | t }}</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.image_gallery.name",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.image_gallery.settings.eyebrow", "default": "A CLOSER LOOK" },
+    { "type": "text", "id": "heading", "label": "t:sections.image_gallery.settings.heading", "default": "The ritual, in moments." },
+    { "type": "richtext", "id": "body", "label": "t:sections.image_gallery.settings.body", "default": "<p>Curate brand-approved photography with optional captions and links.</p>" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "t:sections.image_gallery.settings.columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.image_gallery.settings.image_ratio",
+      "options": [
+        { "value": "adapt", "label": "t:options.image_with_text_ratio.adapt" },
+        { "value": "square", "label": "t:options.image_with_text_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_with_text_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_with_text_ratio.landscape" }
+      ],
+      "default": "square"
+    },
+    { "type": "range", "id": "gap", "label": "t:sections.image_gallery.settings.gap", "min": 8, "max": 40, "step": 4, "unit": "px", "default": 16 },
+    { "type": "checkbox", "id": "show_captions", "label": "t:sections.image_gallery.settings.show_captions", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "t:sections.image_gallery.blocks.image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "t:sections.image_gallery.settings.image" },
+        { "type": "text", "id": "image_alt", "label": "t:sections.image_gallery.settings.image_alt" },
+        { "type": "text", "id": "caption", "label": "t:sections.image_gallery.settings.caption" },
+        { "type": "url", "id": "link", "label": "t:sections.image_gallery.settings.link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_gallery.name",
+      "blocks": [
+        { "type": "image", "settings": { "caption": "A moment of care" } },
+        { "type": "image", "settings": { "caption": "The product, up close" } },
+        { "type": "image", "settings": { "caption": "A slower routine" } },
+        { "type": "image", "settings": { "caption": "Details in the light" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

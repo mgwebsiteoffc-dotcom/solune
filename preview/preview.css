@@ -283,6 +283,14 @@ html {
   --image-with-text-image-width: 48%;
 }
 
+.preview-video-story {
+  --video-with-text-media-width: 48%;
+}
+
+.preview-gallery {
+  --image-gallery-gap: 16px;
+}
+
 .preview-routine-story .image-with-text__copy {
   padding-block: clamp(1.5rem, 4vw, 3rem);
 }

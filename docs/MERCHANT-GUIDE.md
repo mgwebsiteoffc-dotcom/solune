@@ -34,6 +34,12 @@ Create a Shopify page, then select its template in the page's **Theme template**
 
 Starter copy is illustrative. Review it for your products and jurisdiction before publication; these educational pages are not medical advice. The repository also includes `npm run preview`, a local static design prototype of the homepage and three page layouts. It does not run Liquid, connect to Shopify, or represent a Theme Editor preview.
 
+### Video, gallery, and icon highlights
+
+The **Video with text** section accepts a Shopify-hosted video and renders Shopify's native player controls beside editable copy and an optional link. A merchant-selected poster or the local demo still appears when no video is selected; autoplay is off by default and is muted if enabled. The section does not embed YouTube or Instagram videos.
+
+The **Image gallery** contains reorderable image blocks with optional alt text, captions, and links. Adjust the desktop column count, image ratio, spacing, and caption visibility; replace every demo image with a licensed, brand-approved image before publishing. The **Icon highlights** section has reorderable icon-led columns with editable, optional links. Icons are decorative: use the text for accurate store or product information and do not treat an icon as a safety, efficacy, or certification claim.
+
 ## 3. Product data and the product page
 
 Create products in Shopify Admin and provide accurate titles, prices, inventory, variants, media, descriptions, and policies. Product media is drawn from the product's Shopify media gallery. The separate **Image** product-information block is additional editorial content; it does not replace or configure the gallery.
