@@ -12,7 +12,7 @@
         <span class="routine-step__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
         <h3 class="routine-step__title">{{ block.settings.title | escape }}</h3>
         {% if block.settings.body != blank %}<p class="routine-step__body">{{ block.settings.body | escape }}</p>{% endif %}
-        {% if block.settings.link != blank and block.settings.link_label != blank %}<a class="button button--text" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+        {% if block.settings.link != blank and block.settings.link_label != blank %}<a class="button button--text" href="{{ block.settings.link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
       </article>
     {% endfor %}
   </div>

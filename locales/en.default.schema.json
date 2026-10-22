@@ -617,6 +617,39 @@
         "caption": "Caption",
         "caption_scheme": "Caption panel color"
       }
+    },
+    "shop_by_concern": {
+      "name": "Shop by concern",
+      "blocks": {
+        "concern": "Skin concern"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "link_label": "Collection link label",
+        "image_ratio": "Card image shape",
+        "concern_title": "Topic title",
+        "concern_body": "Topic description",
+        "concern_image": "Topic image",
+        "concern_collection": "Related collection"
+      }
+    },
+    "ingredient_index": {
+      "name": "Ingredient index",
+      "blocks": {
+        "ingredient": "Ingredient"
+      },
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "Heading",
+        "body": "Introduction",
+        "name": "Ingredient name",
+        "description": "Description",
+        "product": "Related product",
+        "link_label": "Product link label",
+        "link": "Custom link"
+      }
     }
   },
   "blocks": {

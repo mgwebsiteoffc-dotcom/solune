@@ -1,9 +1,10 @@
 {
   "name": "solune-theme-validation",
   "private": true,
-  "description": "Development-only DOM smoke tests for the Solune Shopify theme.",
+  "description": "Development-only smoke tests and static design preview for the Solune Shopify theme.",
   "scripts": {
-    "test": "node --test tests/theme-smoke.test.cjs"
+    "test": "node --test tests/theme-smoke.test.cjs",
+    "preview": "node scripts/static-preview-server.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0"

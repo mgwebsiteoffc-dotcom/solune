@@ -587,6 +587,82 @@ test('contact page exposes editable support details and accessible required form
   assert.match(liquid, /tel:/);
 });
 
+test('skincare discovery sections, page templates, and static preview are present', () => {
+  const parseSection = (sectionName) => {
+    const liquid = fs.readFileSync(path.join(__dirname, `../sections/${sectionName}.liquid`), 'utf8');
+    const start = liquid.indexOf('{% schema %}');
+    const end = liquid.indexOf('{% endschema %}');
+    assert.ok(start >= 0 && end > start, `${sectionName} must expose an editor schema`);
+    return { liquid, schema: JSON.parse(liquid.slice(start + '{% schema %}'.length, end).trim()) };
+  };
+  const concerns = parseSection('shop-by-concern');
+  const ingredients = parseSection('ingredient-index');
+  const home = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/index.json'), 'utf8'));
+  const concernPage = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/page.concerns.json'), 'utf8'));
+  const ingredientPage = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/page.ingredients.json'), 'utf8'));
+  const routinePage = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/page.routine.json'), 'utf8'));
+  const storefrontLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.json'), 'utf8'));
+  const schemaLocale = JSON.parse(fs.readFileSync(path.join(__dirname, '../locales/en.default.schema.json'), 'utf8'));
+  const concernSettings = new Map(concerns.schema.settings.map((setting) => [setting.id, setting]));
+  const concernBlock = concerns.schema.blocks.find((block) => block.type === 'concern');
+  const concernBlockSettings = new Map(concernBlock.settings.map((setting) => [setting.id, setting]));
+  const ingredientBlock = ingredients.schema.blocks.find((block) => block.type === 'ingredient');
+  const ingredientBlockSettings = new Map(ingredientBlock.settings.map((setting) => [setting.id, setting]));
+  const previewCss = fs.readFileSync(path.join(__dirname, '../preview/preview.css'), 'utf8');
+  const previewServer = fs.readFileSync(path.join(__dirname, '../scripts/static-preview-server.cjs'), 'utf8');
+
+  assert.equal(concerns.schema.max_blocks, 8);
+  assert.equal(concernSettings.get('image_ratio')?.type, 'select');
+  assert.equal(concernBlockSettings.get('image')?.type, 'image_picker');
+  assert.equal(concernBlockSettings.get('collection')?.type, 'collection');
+  assert.equal(concernBlockSettings.get('body')?.type, 'richtext');
+  assert.equal(ingredientBlockSettings.get('product')?.type, 'product');
+  assert.equal(ingredientBlockSettings.get('link')?.type, 'url');
+  assert.equal(home.sections.skin_concerns.type, 'shop-by-concern');
+  assert.ok(home.order.indexOf('featured') < home.order.indexOf('skin_concerns'));
+  assert.deepEqual(concernPage.order, ['main', 'concerns', 'faq']);
+  assert.equal(concernPage.sections.concerns.blocks.sensitive_preferences.type, 'concern');
+  assert.deepEqual(ingredientPage.order, ['main', 'ingredient_index', 'faq']);
+  assert.equal(ingredientPage.sections.ingredient_index.blocks.vitamin_c.settings.name, 'Vitamin C');
+  assert.deepEqual(routinePage.order, ['main', 'routine', 'faq']);
+  assert.equal(routinePage.sections.routine.blocks.sun_care.type, 'step');
+  assert.ok(storefrontLocale.sections.shop_by_concern.demo_image_alt.includes('{{ concern }}'));
+  assert.ok(storefrontLocale.sections.ingredient_index.product_link);
+  assert.ok(schemaLocale.sections.shop_by_concern.settings.concern_collection);
+  assert.ok(schemaLocale.sections.ingredient_index.settings.product);
+  assert.match(concerns.liquid, /collection\.url \| escape/);
+  assert.match(ingredients.liquid, /product\.url \| escape/);
+  assert.match(previewCss, /@media \(max-width: 680px\)/);
+  assert.match(previewServer, /server\.listen\(requestedPort, '0\.0\.0\.0'/);
+  assert.match(previewServer, /Content-Security-Policy/);
+  const pageRoutes = new Map([
+    ['index.html', '/'],
+    ['concerns.html', '/concerns'],
+    ['ingredients.html', '/ingredients'],
+    ['routine.html', '/routine']
+  ]);
+  const servedRoutes = new Set(pageRoutes.values());
+  const allowedMedia = new Set(['/media/demo-hero.jpg', '/media/demo-ingredient.jpg', '/media/demo-product.jpg']);
+  for (const [page, route] of pageRoutes) {
+    const filePath = path.join(__dirname, `../preview/${page}`);
+    assert.ok(fs.existsSync(filePath), `${page} should be served by the local static preview`);
+    const dom = new JSDOM(fs.readFileSync(filePath, 'utf8'), { url: `https://preview.example${route}` });
+    const { document } = dom.window;
+    assert.equal(document.querySelectorAll('h1').length, 1, `${page} should have one page heading`);
+    assert.ok([...document.querySelectorAll('img')].every((image) => image.alt.trim()), `${page} images should have alt text`);
+    assert.equal(document.querySelectorAll('[style]').length, 0, `${page} should not rely on inline styles`);
+    for (const link of document.querySelectorAll('a[href]')) {
+      const destination = new URL(link.href);
+      assert.equal(destination.origin, 'https://preview.example', `${page} should not use external links`);
+      assert.ok(servedRoutes.has(destination.pathname), `${page} link ${link.getAttribute('href')} should use a served route or in-page anchor`);
+    }
+    for (const image of document.querySelectorAll('img[src]')) {
+      assert.ok(allowedMedia.has(new URL(image.src).pathname), `${page} image ${image.getAttribute('src')} should use a local preview asset`);
+    }
+    dom.window.close();
+  }
+});
+
 test('product recommendations refuse cross-origin markup before injecting HTML', () => {
   const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
   const { window } = dom;

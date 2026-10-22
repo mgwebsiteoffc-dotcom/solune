@@ -266,6 +266,14 @@
     },
     "shoppable_video_carousel": {
       "demo_image_alt": "A theme preview image used as a shoppable video poster."
+    },
+    "shop_by_concern": {
+      "demo_image_alt": "Example preview image for {{ concern }}; replace with relevant store photography.",
+      "empty": "Add concern blocks to show store-curated topics here."
+    },
+    "ingredient_index": {
+      "empty": "Add ingredient blocks to build this index.",
+      "product_link": "Explore a related product"
     }
   },
   "pickup_availability": {

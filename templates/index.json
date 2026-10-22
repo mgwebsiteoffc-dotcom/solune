@@ -22,6 +22,39 @@
         "show_all_link": true
       }
     },
+    "skin_concerns": {
+      "type": "shop-by-concern",
+      "blocks": {
+        "hydration": {
+          "type": "concern",
+          "settings": {
+            "title": "Hydration",
+            "body": "<p>Browse store-selected products and formula information for this topic.</p>"
+          }
+        },
+        "texture": {
+          "type": "concern",
+          "settings": {
+            "title": "Texture",
+            "body": "<p>Review product details and follow the directions listed for each formula.</p>"
+          }
+        },
+        "uneven_tone": {
+          "type": "concern",
+          "settings": {
+            "title": "Uneven tone",
+            "body": "<p>Explore products curated by the store and read their full ingredient information.</p>"
+          }
+        }
+      },
+      "block_order": ["hydration", "texture", "uneven_tone"],
+      "settings": {
+        "eyebrow": "EXPLORE BY TOPIC",
+        "heading": "Find a place to begin.",
+        "body": "<p>Explore store-curated topics, then review each product's formula and directions before choosing.</p>",
+        "image_ratio": "portrait"
+      }
+    },
     "featured_product": {
       "type": "featured-product",
       "blocks": {
@@ -298,6 +331,7 @@
   "order": [
     "hero",
     "featured",
+    "skin_concerns",
     "featured_product",
     "shop_the_look",
     "image_with_text",

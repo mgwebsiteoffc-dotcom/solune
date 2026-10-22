@@ -1,0 +1,73 @@
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {}
+    },
+    "routine": {
+      "type": "routine-steps",
+      "blocks": {
+        "cleanse": {
+          "type": "step",
+          "settings": {
+            "title": "Cleanse",
+            "body": "Follow the directions on the selected cleanser's product page and packaging."
+          }
+        },
+        "treat": {
+          "type": "step",
+          "settings": {
+            "title": "Apply your chosen formula",
+            "body": "Use products only as directed. Review ingredient information and cautions for each formula."
+          }
+        },
+        "moisturize": {
+          "type": "step",
+          "settings": {
+            "title": "Moisturize",
+            "body": "Choose and use a moisturizer according to its product details and directions."
+          }
+        },
+        "sun_care": {
+          "type": "step",
+          "settings": {
+            "title": "Daytime sun care",
+            "body": "For daytime use, follow the label directions for your chosen sun protection product."
+          }
+        }
+      },
+      "block_order": ["cleanse", "treat", "moisturize", "sun_care"],
+      "settings": {
+        "eyebrow": "A FLEXIBLE ROUTINE GUIDE",
+        "heading": "A simple order, made yours.",
+        "body": "<p>This is a general page structure, not personal or medical advice. Use products only as directed and follow the instructions for each formula. Edit these steps to match the products and guidance your store can support.</p>"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "directions": {
+          "type": "question",
+          "settings": {
+            "question": "Should I use every product in this guide?",
+            "answer": "<p>No. This page is an editable routine framework, not an individualized prescription. Follow product labels and consult a qualified healthcare professional if you need personal advice.</p>"
+          }
+        },
+        "order": {
+          "type": "question",
+          "settings": {
+            "question": "How do I decide which formulas can be combined?",
+            "answer": "<p>Review product-specific directions, ingredient details, and cautions. For questions about your skin or combining active ingredients, ask a qualified healthcare professional.</p>"
+          }
+        }
+      },
+      "block_order": ["directions", "order"],
+      "settings": {
+        "eyebrow": "GOOD TO KNOW",
+        "heading": "Your products, your directions.",
+        "body": "<p>Keep product-specific labels and qualified professional guidance as your source of truth.</p>"
+      }
+    }
+  },
+  "order": ["main", "routine", "faq"]
+}

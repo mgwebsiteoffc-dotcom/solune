@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **65 of 90 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **66 of 91 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Partner Dashboard listing/payout confirmation, name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
 - As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner has confirmed $100, the minimum allowed. The owner has also confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
 
@@ -31,6 +31,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
 - [x] Include Online Store 2.0 JSON templates, header/footer section groups, app blocks, Custom Liquid section/blocks, and a contact template.
 - [x] Implement the required storefront templates: 404, article, blog, cart, collection, home page, collection list, page, contact page, password, product, search, and gift card; the contact page now has responsive editable store-detail cards, an optional help/FAQ link, Shopify form errors/status, and status focus management.
+- [x] Add merchant-editable skin-concern and ingredient-index sections, dedicated concern/ingredient/routine page templates, and a local static design preview; source contracts and all local preview routes pass, but authenticated Shopify Theme Editor and storefront behavior remain unverified.
 - [x] Implement separate product option selectors, image/color swatches, variant deep links, variant-aware media/prices/availability, quantity selection, unit pricing, rich media, accelerated checkout, pickup availability, Shop Pay Installments, selling plans, and product recommendations.
 - [x] Add a variant-aware quantity-selector block to Featured Product and include it in the default homepage setup.
 - [x] Add an original Shop the Look section with editable product blocks, adjustable image hotspots, responsive image/list layouts, accessible product links, eligible quick add, and populated demo placeholders; retain the existing configurable Featured Product section on the homepage.
@@ -45,7 +46,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse all Liquid files with Shopify's Liquid HTML parser; parse standalone JSON and embedded section schemas; audit translation keys.
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
-- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 73 files with no offenses.
+- [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 78 files with no offenses.
 - [x] Validate section range schemas and fix the collection, featured-collection, and product-recommendations mobile-column controls to expose at least three values while keeping the default at two.
 - [x] Review storefront output handling: escape reflected search terms, customer comments, merchant-provided menu/pickup labels, plain-text excerpts, and canonical/social metadata URLs; reject cross-origin cart/search/recommendation endpoints and pickup redirects; add source and DOM security tests. Merchant-authored rich-text bodies remain intentionally rendered as Shopify content.
 - [x] Pin GitHub Actions to verified full commit SHAs, disable unnecessary persisted checkout credentials, pin the CI runner to Ubuntu 24.04, and keep each workflow's `GITHUB_TOKEN` permissions scoped to required tasks.
@@ -106,7 +107,7 @@ This project is a development foundation. A checked implementation item means co
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
 - [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs. `ASSET-PROVENANCE.md` records dimensions, checksums, and known sources while explicitly flagging unverified licenses; it does not close the separate license-clearance item.
 - [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission; `ASSET-PROVENANCE.md` inventories current sources and explicitly flags unresolved clearance, so this item remains open.
-- [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (90 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
+- [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, new skincare templates/sections, theme configuration, the upstream license notice, and exclusion of local preview/docs/tests/package files (95 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements; verify codebase eligibility/originality and confirm the manually curated Instagram story/post/reel modules comply with restrictions on app-dependent or API-dependent app-like features.
 
 Do not describe the theme as approved, submission-ready, compliant, or conversion-lifting until the relevant store tests, performance/accessibility review, and Shopify review are complete.

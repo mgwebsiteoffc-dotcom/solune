@@ -6,6 +6,8 @@ METAFIELDS.md
 SUBMISSION-CHECKLIST.md
 docs/**
 tests/**
+preview/**
+scripts/**
 package.json
 package-lock.json
 .github/**

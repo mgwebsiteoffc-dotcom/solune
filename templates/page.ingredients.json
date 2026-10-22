@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {}
+    },
+    "ingredient_index": {
+      "type": "ingredient-index",
+      "blocks": {
+        "ceramides": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Ceramides"
+          }
+        },
+        "hyaluronic_acid": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hyaluronic acid"
+          }
+        },
+        "niacinamide": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Niacinamide"
+          }
+        },
+        "retinoids": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Retinoids"
+          }
+        },
+        "salicylic_acid": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Salicylic acid"
+          }
+        },
+        "vitamin_c": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C"
+          }
+        }
+      },
+      "block_order": ["ceramides", "hyaluronic_acid", "niacinamide", "retinoids", "salicylic_acid", "vitamin_c"],
+      "settings": {
+        "eyebrow": "A-Z FORMULA INDEX",
+        "heading": "Ingredients, clearly listed.",
+        "body": "<p>Browse the ingredient topics selected by the store. Topic names do not indicate concentration, compatibility, or results. Check the complete ingredient list, directions, and cautions for each product.</p>"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "formula_details": {
+          "type": "question",
+          "settings": {
+            "question": "How can I tell whether an ingredient is in a formula?",
+            "answer": "<p>Use the complete ingredient list on the product page and packaging. Formulas may vary between products and can change over time.</p>"
+          }
+        },
+        "personal_advice": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I get advice about my skin?",
+            "answer": "<p>This ingredient index is educational and is not medical advice. Speak with a qualified healthcare professional for guidance about a skin condition or personal care.</p>"
+          }
+        }
+      },
+      "block_order": ["formula_details", "personal_advice"],
+      "settings": {
+        "eyebrow": "GOOD TO KNOW",
+        "heading": "Read beyond the ingredient name.",
+        "body": "<p>Ingredient information is specific to each product and its full formulation.</p>"
+      }
+    }
+  },
+  "order": ["main", "ingredient_index", "faq"]
+}

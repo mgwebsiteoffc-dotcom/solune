@@ -24,6 +24,16 @@ In the theme editor, use **Theme settings** to choose a theme style and adjust c
 
 Replace demo imagery with licensed, brand-owned product and editorial photography before launch. Set useful alt text and review focal points and crops on desktop and mobile. The bundled `demo-*.jpg` files are visual fallbacks, not real product photography or claims about a product.
 
+### Skin-concern, ingredient, and routine pages
+
+Create a Shopify page, then select its template in the page's **Theme template** setting: `page.concerns`, `page.ingredients`, or `page.routine`. Each is an editable starting point using the store's page title/content plus native Shopify theme sections. The homepage also includes an optional shop-by-concern grid.
+
+- **Shop by concern:** add concern blocks with a title, store-written description, image, and optional Shopify collection. The collection link appears only after a collection is selected. Replace demo content and imagery with accurate, licensed assets.
+- **Ingredient index:** add ingredient-name blocks with optional description, related product, or custom URL. Topic names are not efficacy, concentration, compatibility, or safety claims; point customers back to the full product ingredient list, directions, and cautions.
+- **Routine guide:** reorder the editable steps and optionally add links. Use only product-approved directions and avoid implying that a routine diagnoses, prevents, or treats a condition.
+
+Starter copy is illustrative. Review it for your products and jurisdiction before publication; these educational pages are not medical advice. The repository also includes `npm run preview`, a local static design prototype of the homepage and three page layouts. It does not run Liquid, connect to Shopify, or represent a Theme Editor preview.
+
 ## 3. Product data and the product page
 
 Create products in Shopify Admin and provide accurate titles, prices, inventory, variants, media, descriptions, and policies. Product media is drawn from the product's Shopify media gallery. The separate **Image** product-information block is additional editorial content; it does not replace or configure the gallery.

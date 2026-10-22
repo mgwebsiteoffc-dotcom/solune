@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {}
+    },
+    "concerns": {
+      "type": "shop-by-concern",
+      "blocks": {
+        "dryness": {
+          "type": "concern",
+          "settings": {
+            "title": "Dryness",
+            "body": "<p>Browse store-selected products and guidance for dry-feeling skin. Check each product's full details and directions.</p>"
+          }
+        },
+        "texture": {
+          "type": "concern",
+          "settings": {
+            "title": "Texture",
+            "body": "<p>Explore products and information curated by the store for this topic. Product details vary by formula.</p>"
+          }
+        },
+        "uneven_tone": {
+          "type": "concern",
+          "settings": {
+            "title": "Uneven tone",
+            "body": "<p>Review the product's ingredient list, intended use, and directions before choosing a formula.</p>"
+          }
+        },
+        "sensitive_preferences": {
+          "type": "concern",
+          "settings": {
+            "title": "Sensitive-skin preferences",
+            "body": "<p>Read the complete ingredient list and cautions. If you have a skin condition or need personal advice, consult a qualified healthcare professional.</p>"
+          }
+        }
+      },
+      "block_order": ["dryness", "texture", "uneven_tone", "sensitive_preferences"],
+      "settings": {
+        "eyebrow": "A GUIDE TO STORE-CURATED TOPICS",
+        "heading": "Explore by skin concern.",
+        "body": "<p>Use these topics to discover products and information selected by the store. They are not medical advice. Always read the full product details, ingredients, directions, and cautions.</p>",
+        "image_ratio": "portrait"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "read_details": {
+          "type": "question",
+          "settings": {
+            "question": "What should I review before choosing a product?",
+            "answer": "<p>Check the product's complete ingredient list, intended use, directions, and cautions. Contact the store with questions about its product information.</p>"
+          }
+        },
+        "medical_guidance": {
+          "type": "question",
+          "settings": {
+            "question": "Is this page medical advice?",
+            "answer": "<p>No. This guide organizes store-selected topics and products; it does not diagnose or treat a skin condition. For personal medical advice, speak with a qualified healthcare professional.</p>"
+          }
+        }
+      },
+      "block_order": ["read_details", "medical_guidance"],
+      "settings": {
+        "eyebrow": "GOOD TO KNOW",
+        "heading": "Before you choose.",
+        "body": "<p>Keep product-specific details and professional guidance close at hand.</p>"
+      }
+    }
+  },
+  "order": ["main", "concerns", "faq"]
+}
