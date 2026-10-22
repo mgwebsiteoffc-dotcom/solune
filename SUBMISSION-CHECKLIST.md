@@ -5,8 +5,8 @@ This project is a development foundation. A checked implementation item means co
 ## Progress snapshot — 2026-10-22
 
 - **64 of 89 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
-- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, publishing the merchant docs URL, and implementing/verifying 100+ meaningful CRO controls.
-- The owner supplied the official support email and it is set in Theme Info; no authenticated Shopify store session is available, so the store-dependent tests below remain open and no upload or live storefront QA is claimed.
+- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, owner/Partner-account decisions on a valid listing price and public name, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
+- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner's earlier $50 target is outside that range. The official support email is set in Theme Info, but no authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
 
 ## Current implementation
 
@@ -86,7 +86,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Run JSDOM fixture tests for sticky PDP bar visibility and variant price/availability synchronization; the external form-associated submit path is covered in the mocked cart test.
 - [ ] Verify sticky PDP add-to-cart and form association in a real Shopify storefront.
 - [ ] Test customer account navigation, Follow on Shop, country/language selectors, and payment/social icons on eligible shops.
-- [x] Static code audit confirms app blocks and Custom Liquid are optional extension points and the core theme has no required app dependency; this is not runtime QA.
+- [x] Static code audit confirms app blocks and Custom Liquid are optional extension points, the core theme has no required app dependency, and Instagram stories/posts/reels are manually curated Shopify image/video blocks with a separate profile link and no Instagram API synchronization; this is not runtime QA or Shopify Theme Store approval.
 - [ ] Test app-block and Custom Liquid insertion behavior in Shopify's Theme Editor.
 - [ ] Finish the page-by-page PDP, collection, cart, blog/SEO, contact, and mobile design audit in a real development-store preview.
 - [ ] Complete and verify the requested 100+ meaningful, working CRO controls across relevant theme sections; do not count duplicate or inert settings.
@@ -94,17 +94,17 @@ This project is a development foundation. A checked implementation item means co
 ### Quality and listing readiness
 
 - [x] Record author and company identity supplied by the owner: Sani Kumar / Akestech Infotech Pvt Ltd.
-- [x] Record owner's pricing and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test.
-- [ ] Configure the final listing price and confirm Shopify's then-current listing and payout requirements.
-- [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets.
+- [x] Record owner's previous price target and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test.
+- [ ] Configure the final listing price and confirm Shopify's then-current listing and payout requirements. As checked 2026-10-22, Shopify's published listing guidance allows USD $100–$500 in $10 increments, so the prior $50 target is outside the range; published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees. The valid price and account-specific payout/tax details still need Partner Dashboard confirmation.
+- [ ] Confirm the final public theme name, Shopify Partner account identity, trademark availability, demo-store content, support process, and Theme Store listing assets. Solune remains a working name; author/company identity and support email are recorded, but this is not a trademark or Partner-account verification.
 - [x] Add a pre-release merchant guide and remove development-only README/Issues links from theme metadata.
-- [ ] Replace the provisional branch-specific guide URL with a permanent public docs URL and enable the prepared GitHub Pages workflow if desired; the official support email is now set in Theme Info.
+- [ ] Replace the provisional branch-specific guide URL with a permanent public docs URL. The Pages workflow is present on this branch but is not listed among active repository workflows; it must reach the default branch, Pages must be enabled with GitHub Actions by a repository admin, and deployment must succeed. The official support email is set in Theme Info.
 - [ ] Build an original skincare demo store with licensed imagery, real product data, accurate policies/navigation, and no placeholders or unverified ingredient/clinical claims.
 - [ ] Validate keyboard/screen-reader behavior, focus order, contrast, reduced motion, form labels/errors, all image ratios/focal points, and realistic long/short content.
 - [ ] Test latest supported desktop/mobile browsers and relevant social-app webviews.
 - [ ] Test mobile/desktop Lighthouse performance and accessibility on the home, product, and collection templates with Shopify's benchmark dataset and populated sections.
-- [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs.
-- [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission.
+- [x] Inventory static asset and dependency use: no runtime npm/pip package dependencies or remote third-party UI libraries/icon sets; development smoke tests use `jsdom` and are excluded from the theme package; fonts use Shopify's font picker, the gift-card QR uses Shopify's hosted `qrcode.js` helper, and the theme includes three local demo JPEGs. `ASSET-PROVENANCE.md` records dimensions, checksums, and known sources while explicitly flagging unverified licenses; it does not close the separate license-clearance item.
+- [ ] Verify and retain license/provenance records for selected fonts, the hosted QR helper, demo images, and any final store/listing assets before submission; `ASSET-PROVENANCE.md` inventories current sources and explicitly flags unresolved clearance, so this item remains open.
 - [x] Package with Shopify CLI and inspect `Solune-0.1.0.zip` for standard theme structure, key templates/configuration, the upstream license notice, and exclusion of development-only test/package files (90 theme files); ZIP integrity passes, but this local preflight is not a Theme Store review.
 - [ ] Complete the official Shopify Theme Store review workflow against its then-current requirements; verify codebase eligibility/originality and confirm the manually curated Instagram story/post/reel modules comply with restrictions on app-dependent or API-dependent app-like features.
 
