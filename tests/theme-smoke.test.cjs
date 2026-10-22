@@ -365,10 +365,14 @@ test('Theme Store metadata has a support URL and a listing manifest for every co
   for (const name of presetNames) {
     const presetId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     const manifestPath = path.join(__dirname, `../listings/${presetId}/listing.json`);
+    const templatePath = path.join(__dirname, `../listings/${presetId}/templates/index.json`);
     assert.ok(fs.existsSync(manifestPath), `Missing listing folder for ${name}`);
+    assert.ok(fs.existsSync(templatePath), `Missing homepage template for preset ${name}`);
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    const listingTemplate = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
     assert.equal(manifest.name, name);
     assert.equal(manifest.preset_id, presetId);
+    assert.ok(Object.keys(listingTemplate.sections || {}).length > 0, `Preset ${name} needs a template with sections`);
   }
 });
 
