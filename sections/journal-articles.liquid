@@ -4,6 +4,11 @@
 {% endfor %}
 
 {% if journal_article_count > 0 or request.design_mode %}
+  {% case section.settings.columns %}
+    {% when '2' %}{% assign journal_article_image_sizes = '(max-width: 520px) 92vw, (max-width: 900px) 46vw, 48vw' %}
+    {% when '4' %}{% assign journal_article_image_sizes = '(max-width: 520px) 92vw, (max-width: 900px) 46vw, 24vw' %}
+    {% else %}{% assign journal_article_image_sizes = '(max-width: 520px) 92vw, (max-width: 900px) 46vw, 32vw' %}
+  {% endcase %}
   <section class="page-width section-space journal-articles-section" data-columns="{{ section.settings.columns | escape }}" aria-labelledby="JournalArticlesTitle-{{ section.id }}">
     <div class="section-intro">
       <div class="section-intro__copy">
@@ -26,7 +31,7 @@
           <article class="journal-article-card" role="listitem" {{ block.shopify_attributes }}>
             <a class="journal-article-card__media" href="{{ journal_article.url | escape }}" aria-label="{{ 'general.read_more' | t | append: ': ' | append: journal_article.title | escape }}">
               {% if journal_image != blank %}
-                {{ journal_image | image_url: width: 1200 | image_tag: alt: journal_image_alt, widths: '320, 480, 640, 800, 1000, 1200', sizes: '(min-width: 1200px) 30vw, (min-width: 681px) 45vw, 92vw', loading: 'lazy' }}
+                {{ journal_image | image_url: width: 1200 | image_tag: alt: journal_image_alt, widths: '320, 480, 640, 800, 1000, 1200', sizes: journal_article_image_sizes, loading: 'lazy' }}
               {% else %}
                 <img src="{{ 'demo-ingredient.jpg' | asset_url }}" alt="{{ 'sections.journal_articles.demo_image_alt' | t | escape }}" width="928" height="1152" loading="lazy" decoding="async">
                 <span class="demo-media-label">{{ 'general.demo_image_label' | t }}</span>
