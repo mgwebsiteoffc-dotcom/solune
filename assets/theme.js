@@ -330,6 +330,17 @@
     });
   };
 
+  const initializeContactFeedback = (scope = document) => {
+    const feedback = [];
+    if (scope.matches?.('[data-contact-feedback]')) feedback.push(scope);
+    feedback.push(...scope.querySelectorAll('[data-contact-feedback]'));
+    feedback.forEach((message) => {
+      if (message.dataset.contactFeedbackInitialized === 'true') return;
+      message.dataset.contactFeedbackInitialized = 'true';
+      message.focus();
+    });
+  };
+
   const getVariants = (root) => {
     const json = root.querySelector('[data-product-variants]');
     if (!json) return [];
@@ -1001,6 +1012,7 @@
   initializeProductGalleries();
   initializeShoppableVideoCarousels();
   initializeStoryDialogs();
+  initializeContactFeedback();
   initializeProducts();
   initializeGiftCardRecipients();
   initializePincodeCheckers();
@@ -1053,6 +1065,7 @@
     initializeProductGalleries(event.target);
     initializeShoppableVideoCarousels(event.target);
     initializeStoryDialogs(event.target);
+    initializeContactFeedback(event.target);
     initializeProductInfoBlocks(event.target);
     initializeProducts(event.target);
     initializeGiftCardRecipients(event.target);

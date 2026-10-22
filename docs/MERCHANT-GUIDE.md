@@ -62,6 +62,10 @@ The **Stories, posts & reels** section uses one horizontal 4:5 portrait-card sty
 
 Product and featured-product sections expose optional Shopify app blocks. The theme also includes Custom Liquid insertion points. These are extension points, not dependencies of the core theme. If an app is installed, review its markup, performance, accessibility, privacy behavior, and support requirements separately.
 
+### Contact page
+
+The contact template uses Shopify's native contact form and supports editable email, phone, address, and hours blocks plus an optional help/FAQ page link. The form keeps name and phone optional and requires email and a message. Replace the sample introduction with store-approved copy. Submit test messages and verify delivery to the store's configured contact inbox, validation, keyboard access, and success/error feedback before launch. The theme developer support email in Theme Info is separate from the brand's customer-service contact details; don't expose it on the storefront unless it is also the store's intended public address.
+
 ## 8. SEO, localization, and launch review
 
 Set page titles, descriptions, product data, navigation, domain, policies, and translations in Shopify. Solune outputs canonical/social metadata, product/article structured data, and route-aware breadcrumbs from the available Shopify data. Validate the rendered storefront after content is added; structured data does not replace accurate page content or guarantee search features.

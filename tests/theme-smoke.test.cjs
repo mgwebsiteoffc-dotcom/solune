@@ -563,6 +563,30 @@ test('PIN, FAQ, and story editor schemas expose requested controls in the defaul
   assert.ok(home.sections.faq && home.sections.instagram_stories);
 });
 
+test('contact page exposes editable support details and accessible required form feedback', () => {
+  const liquid = fs.readFileSync(path.join(__dirname, '../sections/contact-form.liquid'), 'utf8');
+  const start = liquid.indexOf('{% schema %}');
+  const end = liquid.indexOf('{% endschema %}');
+  assert.ok(start >= 0 && end > start);
+  const schema = JSON.parse(liquid.slice(start + '{% schema %}'.length, end).trim());
+  const contactTemplate = JSON.parse(fs.readFileSync(path.join(__dirname, '../templates/page.contact.json'), 'utf8'));
+  const contactBlock = schema.blocks.find((block) => block.type === 'contact_detail');
+  const settings = new Map(schema.settings.map((setting) => [setting.id, setting]));
+  const blockSettings = new Map(contactBlock.settings.map((setting) => [setting.id, setting]));
+
+  assert.equal(contactTemplate.sections.main.type, 'contact-form');
+  assert.equal(settings.get('faq_page')?.type, 'page');
+  assert.equal(blockSettings.get('kind')?.type, 'select');
+  assert.deepEqual(blockSettings.get('kind')?.options.map((option) => option.value), ['email', 'phone', 'address', 'hours']);
+  assert.match(liquid, /form 'contact'/);
+  assert.match(liquid, /name="contact\[email\]"[^>]*required/);
+  assert.match(liquid, /name="contact\[body\]" required/);
+  assert.match(liquid, /aria-invalid="true" aria-describedby=/);
+  assert.match(liquid, /data-contact-feedback/);
+  assert.match(liquid, /mailto:/);
+  assert.match(liquid, /tel:/);
+});
+
 test('product recommendations refuse cross-origin markup before injecting HTML', () => {
   const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
   const { window } = dom;
@@ -572,6 +596,27 @@ test('product recommendations refuse cross-origin markup before injecting HTML',
   const recommendations = window.document.getElementById('Recommendations');
   assert.equal(fetchCalls, 0);
   assert.equal(recommendations.dataset.loaded, 'false');
+  dom.window.close();
+});
+
+test('contact form status messages receive focus after a response and section reload', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section id="contact-section"><p id="contact-success" role="status" tabindex="-1" data-contact-feedback>Message sent.</p></section>
+  </body></html>`);
+  const { window } = dom;
+  window.eval(themeScript);
+  const firstMessage = window.document.getElementById('contact-success');
+  assert.equal(window.document.activeElement, firstMessage);
+
+  const secondMessage = window.document.createElement('p');
+  secondMessage.id = 'contact-errors';
+  secondMessage.tabIndex = -1;
+  secondMessage.dataset.contactFeedback = '';
+  secondMessage.textContent = 'Please correct the form.';
+  const section = window.document.getElementById('contact-section');
+  section.append(secondMessage);
+  section.dispatchEvent(new window.Event('shopify:section:load', { bubbles: true }));
+  assert.equal(window.document.activeElement, secondMessage);
   dom.window.close();
 });
 

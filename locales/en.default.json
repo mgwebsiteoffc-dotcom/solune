@@ -156,13 +156,25 @@
     "consent": "By subscribing, you agree to receive marketing emails. You can unsubscribe at any time."
   },
   "contact": {
-    "eyebrow": "WE'RE HERE TO HELP",
-    "name": "Name",
-    "email": "Email",
+    "eyebrow": "CONTACT",
+    "name": "Name (optional)",
+    "email": "Email address",
     "phone": "Phone (optional)",
     "message": "Message",
     "submit": "Send message",
-    "success": "Thanks for reaching out. We’ll be in touch soon."
+    "success": "Thanks for reaching out. Your message was sent.",
+    "error_heading": "We couldn't send your message yet.",
+    "email_error": "Check the email address and try again.",
+    "message_error": "Enter a message to continue.",
+    "privacy_note": "Please don't include payment card details or other sensitive information.",
+    "faq_link": "Browse our help and FAQs.",
+    "details_label": "Contact details",
+    "details": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "hours": "Hours"
+    }
   },
   "search": {
     "title": "Search",

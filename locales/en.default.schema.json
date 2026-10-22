@@ -443,8 +443,28 @@
     },
     "contact": {
       "name": "Contact form",
+      "blocks": {
+        "contact_detail": "Contact detail"
+      },
       "settings": {
         "body": "Introduction",
+        "detail_heading": "Detail heading",
+        "detail_note": "Supporting note",
+        "detail_type": "Contact detail type",
+        "detail_types": {
+          "address": "Address",
+          "email": "Email",
+          "hours": "Hours",
+          "phone": "Phone"
+        },
+        "detail_value": "Contact information",
+        "details_body": "Contact details introduction",
+        "details_heading": "Contact details heading",
+        "eyebrow": "Eyebrow",
+        "faq_link_label": "Help page link label",
+        "faq_page": "Help or FAQ page",
+        "form_heading": "Form heading",
+        "form_note": "Form note",
         "heading": "Heading"
       }
     },
