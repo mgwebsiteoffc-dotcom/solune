@@ -13,7 +13,8 @@
     "carousel_controls": "Carousel controls",
     "play_video": "Play video",
     "close_story": "Close story",
-    "carousel_pagination": "Carousel pages"
+    "carousel_pagination": "Carousel pages",
+    "story_pagination": "Story viewer items"
   },
   "general": {
     "search": "Search",

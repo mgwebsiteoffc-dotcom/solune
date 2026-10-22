@@ -267,6 +267,20 @@
     }
   };
 
+  const openStoryDialog = (dialog, opener) => {
+    if (!dialog) return;
+    dialog._storyOpener = opener || null;
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+    const video = dialog.querySelector('video');
+    if (video) {
+      try { video.currentTime = 0; } catch (error) { /* The browser can seek after metadata loads. */ }
+      const playback = video.play();
+      playback?.catch?.(() => {});
+    }
+    dialog.querySelector('[data-story-close]')?.focus();
+  };
+
   const closeStoryDialog = (dialog) => {
     if (!dialog) return;
     if (typeof dialog.close === 'function' && dialog.open) {
@@ -278,6 +292,23 @@
     const opener = dialog._storyOpener;
     dialog._storyOpener = null;
     opener?.focus?.();
+  };
+
+  const moveStoryDialog = (dialog, direction) => {
+    const section = dialog?.closest('.instagram-stories-section');
+    if (!section || ![-1, 1].includes(direction)) return;
+    const dialogs = [...section.querySelectorAll('[data-story-dialog]')];
+    const nextDialog = dialogs[dialogs.indexOf(dialog) + direction];
+    if (!nextDialog) return;
+
+    const opener = dialog._storyOpener;
+    dialog._storyOpener = null;
+    if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+    else {
+      dialog.removeAttribute('open');
+      stopStoryPlayback(dialog);
+    }
+    openStoryDialog(nextDialog, opener);
   };
 
   const initializeStoryDialogs = (scope = document) => {
@@ -757,20 +788,17 @@
       return;
     }
 
+    const storyStepButton = event.target.closest?.('[data-story-step]');
+    if (storyStepButton) {
+      const dialog = storyStepButton.closest('[data-story-dialog]');
+      moveStoryDialog(dialog, Number(storyStepButton.dataset.storyStep));
+      return;
+    }
+
     const storyTrigger = event.target.closest?.('[data-story-open]');
     if (storyTrigger) {
       const dialog = document.getElementById(storyTrigger.getAttribute('aria-controls'));
-      if (!dialog) return;
-      dialog._storyOpener = storyTrigger;
-      if (typeof dialog.showModal === 'function') dialog.showModal();
-      else dialog.setAttribute('open', '');
-      const video = dialog.querySelector('video');
-      if (video) {
-        try { video.currentTime = 0; } catch (error) { /* The browser can seek after metadata loads. */ }
-        const playback = video.play();
-        playback?.catch?.(() => {});
-      }
-      dialog.querySelector('[data-story-close]')?.focus();
+      if (dialog) openStoryDialog(dialog, storyTrigger);
       return;
     }
 

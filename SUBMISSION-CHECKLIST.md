@@ -25,7 +25,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Add a configurable Indian PIN-code coverage list and PDP checker; the feature is client-side information only, not courier integration or checkout enforcement.
 - [x] Expose Title H1–H4 visual styles and configurable sold-out, selector, swatch, variant-image, and size-chart controls in the product blocks.
 - [x] Add editable Image with text, manually curated Instagram story/post/reel cards in a shared portrait-card style, a shoppable video carousel, and an editable FAQ section to the homepage template.
-- [x] Make selected Shopify-hosted social videos play in the on-site story viewer; story/post/reel tile clicks stay on the storefront, while the external Instagram profile link remains separate.
+- [x] Make selected Shopify-hosted social videos play in the on-site story viewer with previous/next pagination; story/post/reel tile clicks stay on the storefront, while the external Instagram profile link remains separate.
 - [x] Add cart-drawer order-note saving through Shopify Ajax, cart-line unit prices and discount comparisons, and a single cart-page savings total.
 - [x] Add separate tablet and mobile layout rules, responsive gutters, and tablet two-column layouts for key editorial and product sections.
 - [x] Align newsletter submit controls and collection price-range inputs; add compact, responsive filter disclosures.
@@ -72,7 +72,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Verify with JSDOM that collection price-range controls update visible/ARIA values, clamp crossing bounds, and sorting auto-submits; no Shopify-generated facets or server filtering were tested.
 - [x] Exercise predictive-search request parameters, short-query handling, mock result/empty states for product, collection, page, and article items, keyboard selection, Escape/focus return, and live status; requests and result HTML are mocked.
 - [ ] Test collection/search filters, sorting, empty states, pagination, predictive search, and all supported search result types against real Shopify storefront data; verify responsive column controls at real breakpoints and the product-card image, routine-step, unit-price, savings-display, tracked low-stock controls, and PDP price-block savings settings with real products in Theme Editor.
-- [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback controls, video-carousel pagination, reduced-motion behavior, and no story-tile navigation; the same viewer hooks serve the curated story/post/reel card types.
+- [x] Run JSDOM fixture tests for story/modal focus return, mocked in-site playback, story-viewer and video-carousel pagination, reduced-motion carousel behavior, and no story-tile navigation; the same viewer hooks serve the curated story/post/reel card types. Real-browser verification remains open.
 - [x] Test the PIN checker in JSDOM for valid and invalid six-digit Indian PINs, configured-listed/unlisted coverage, and the blank/unconfigured list state; no courier API or Shopify checkout was tested.
 - [x] Extend tests for PIN-checker initialization on Shopify section load and source-contract coverage of secondary-image, routine-step, unit-price, savings, and low-stock product-card settings, compare-at/inventory gates, translations, and CSS.
 - [x] Add source-contract coverage for responsive grid schema defaults, inline settings, translations, and desktop/tablet/mobile CSS.

@@ -554,6 +554,12 @@ test('PIN, FAQ, and story editor schemas expose requested controls in the defaul
   assert.deepEqual(storyBlockSettings.get('content_type')?.options.map((option) => option.value), ['story', 'post', 'reel']);
   assert.equal(storyBlockSettings.get('image')?.type, 'image_picker');
   assert.equal(storyBlockSettings.get('video')?.type, 'video');
+  assert.match(stories.liquid, /class="story-viewer__pagination"/);
+  assert.match(stories.liquid, /data-story-step="-1"/);
+  assert.match(stories.liquid, /data-story-step="1"/);
+  assert.match(stories.liquid, /forloop\.first/);
+  assert.match(stories.liquid, /forloop\.last/);
+  assert.match(stories.liquid, /general\.page_of/);
   assert.ok(home.sections.faq && home.sections.instagram_stories);
 });
 
@@ -605,6 +611,71 @@ test('product modal and story viewer return focus to their openers', () => {
   assert.equal(window.document.getElementById('story-dialog').open, false);
   assert.equal(storyPauseCount, 1);
   assert.equal(window.document.activeElement, storyTrigger);
+  dom.window.close();
+});
+
+test('story viewer paginates in place, stops outgoing media, and restores focus to the original tile', () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <section class="instagram-stories-section">
+      <button id="story-one-trigger" type="button" data-story-open aria-controls="story-one">Open first story</button>
+      <dialog id="story-one" data-story-dialog>
+        <button type="button" data-story-close>Close first story</button>
+        <button type="button" data-story-step="-1" disabled>Previous</button>
+        <button type="button" data-story-step="1">Next</button>
+        <video></video>
+      </dialog>
+      <button id="story-two-trigger" type="button" data-story-open aria-controls="story-two">Open second story</button>
+      <dialog id="story-two" data-story-dialog>
+        <button type="button" data-story-close>Close second story</button>
+        <button type="button" data-story-step="-1">Previous</button>
+        <button type="button" data-story-step="1" disabled>Next</button>
+        <video></video>
+      </dialog>
+    </section>
+  </body></html>`);
+  const { window } = dom;
+  const firstDialog = window.document.getElementById('story-one');
+  const secondDialog = window.document.getElementById('story-two');
+  const firstVideo = firstDialog.querySelector('video');
+  const secondVideo = secondDialog.querySelector('video');
+  let firstPlayCount = 0;
+  let firstPauseCount = 0;
+  let secondPlayCount = 0;
+  let secondPauseCount = 0;
+  firstVideo.play = () => { firstPlayCount += 1; return Promise.resolve(); };
+  firstVideo.pause = () => { firstPauseCount += 1; };
+  secondVideo.play = () => { secondPlayCount += 1; return Promise.resolve(); };
+  secondVideo.pause = () => { secondPauseCount += 1; };
+  window.eval(themeScript);
+
+  const firstTrigger = window.document.getElementById('story-one-trigger');
+  const pageUrl = window.location.href;
+  firstTrigger.focus();
+  firstTrigger.click();
+  assert.equal(firstDialog.open, true);
+  assert.equal(firstPlayCount, 1);
+  assert.equal(window.document.activeElement, firstDialog.querySelector('[data-story-close]'));
+  assert.equal(firstDialog.querySelector('[data-story-step="-1"]').disabled, true);
+
+  firstDialog.querySelector('[data-story-step="1"]').click();
+  assert.equal(firstDialog.open, false);
+  assert.equal(secondDialog.open, true);
+  assert.equal(firstPauseCount, 1);
+  assert.equal(firstVideo.currentTime, 0);
+  assert.equal(secondPlayCount, 1);
+  assert.equal(window.document.activeElement, secondDialog.querySelector('[data-story-close]'));
+  assert.equal(window.location.href, pageUrl);
+  secondDialog.querySelector('[data-story-step="1"]').click();
+  assert.equal(secondDialog.open, true); // the final page has no next item
+
+  secondDialog.querySelector('[data-story-step="-1"]').click();
+  assert.equal(secondDialog.open, false);
+  assert.equal(firstDialog.open, true);
+  assert.equal(secondPauseCount, 1);
+  assert.equal(firstPlayCount, 2);
+  firstDialog.querySelector('[data-story-close]').click();
+  assert.equal(firstDialog.open, false);
+  assert.equal(window.document.activeElement, firstTrigger);
   dom.window.close();
 });
 

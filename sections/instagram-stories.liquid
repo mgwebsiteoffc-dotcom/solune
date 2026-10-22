@@ -69,6 +69,15 @@
                 <img src="{{ story_demo_asset | asset_url }}" alt="{{ 'sections.instagram_stories.demo_image_alt' | t | escape }}" width="928" height="1152" loading="lazy" decoding="async">
               {% endif %}
             </div>
+            <div class="story-viewer__pagination" role="group" aria-label="{{ 'accessibility.story_pagination' | t | escape }}">
+              <button class="story-viewer__step" type="button" data-story-step="-1" aria-label="{{ 'general.previous' | t | escape }}"{% if forloop.first %} disabled{% endif %}>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <span class="story-viewer__position" aria-live="polite">{{ 'general.page_of' | t: current: forloop.index, total: section.blocks.size }}</span>
+              <button class="story-viewer__step" type="button" data-story-step="1" aria-label="{{ 'general.next' | t | escape }}"{% if forloop.last %} disabled{% endif %}>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
             <div class="story-viewer__caption">
               <p class="story-viewer__type">{{ story_type_label | escape }}</p>
               <h3 id="{{ story_title_id }}">{{ story_caption | escape }}</h3>
