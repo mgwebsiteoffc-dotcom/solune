@@ -984,7 +984,9 @@
     element.dataset.loaded = 'true';
 
     try {
-      const response = await fetch(url, { headers: { Accept: 'text/html' } });
+      const recommendationUrl = new URL(url, window.location.origin);
+      if (recommendationUrl.origin !== window.location.origin) throw new Error('Recommendation requests must stay on this storefront.');
+      const response = await fetch(recommendationUrl.toString(), { headers: { Accept: 'text/html' } });
       if (!response.ok) throw new Error(`Recommendations returned ${response.status}`);
       const markup = await response.text();
       const documentFromResponse = new DOMParser().parseFromString(markup, 'text/html');

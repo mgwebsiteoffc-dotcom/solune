@@ -36,6 +36,10 @@ class SolunePredictiveSearch extends HTMLElement {
     this.abortController = new AbortController();
     const requestId = ++this.requestId;
     const url = new URL(this.dataset.endpoint, window.location.origin);
+    if (url.origin !== window.location.origin) {
+      this.close();
+      return;
+    }
     url.searchParams.set('q', term);
     url.searchParams.set('section_id', this.dataset.sectionId || 'predictive-search');
     url.searchParams.set('resources[type]', 'product,collection,page,article');

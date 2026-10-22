@@ -15,7 +15,7 @@
           </a>
           <div class="product-card__content">
             <h2 class="product-card__title"><a href="{{ collection.url }}">{{ collection.title | escape }}</a></h2>
-            {% if collection.description != blank %}<p class="product-card__meta">{{ collection.description | strip_html | truncatewords: 18 }}</p>{% endif %}
+            {% if collection.description != blank %}<p class="product-card__meta">{{ collection.description | strip_html | truncatewords: 18 | escape }}</p>{% endif %}
           </div>
         </article>
       {% endunless %}

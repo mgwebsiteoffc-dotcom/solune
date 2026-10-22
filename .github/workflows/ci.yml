@@ -8,8 +8,10 @@ jobs:
     name: Theme Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - name: Theme Check
-        uses: shopify/theme-check-action@v2
+        uses: shopify/theme-check-action@58fd69afdfc30110f997ba9e212b302671e00d3b # v2.2.0
         with:
           token: ${{ github.token }}

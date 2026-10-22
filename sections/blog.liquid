@@ -27,7 +27,7 @@
             {% endif %}
             <h2 class="editorial-title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
             {% if section.settings.show_excerpt %}
-              <p class="section-intro__body">{{ article.excerpt_or_content | strip_html | truncatewords: section.settings.excerpt_words }}</p>
+              <p class="section-intro__body">{{ article.excerpt_or_content | strip_html | truncatewords: section.settings.excerpt_words | escape }}</p>
               <a class="button button--text" href="{{ article.url }}">{{ 'general.read_more' | t }} <span class="visually-hidden">{{ article.title | escape }}</span></a>
             {% endif %}
           </div>

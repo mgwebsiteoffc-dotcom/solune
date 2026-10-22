@@ -31,7 +31,7 @@
           {% for comment in article.comments %}
             <li class="article-comments__item">
               <p><strong>{{ comment.author | escape }}</strong> <span class="product-card__meta">{{ comment.created_at | time_tag: format: 'date' }}</span></p>
-              <div class="rich-text">{{ comment.content }}</div>
+              <div class="rich-text">{{ comment.content | strip_html | escape }}</div>
             </li>
           {% endfor %}
         </ol>

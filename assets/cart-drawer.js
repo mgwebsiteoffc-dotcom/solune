@@ -3,7 +3,13 @@
   if (!drawer) return;
 
   const state = { lastTrigger: null, isUpdating: false };
-  const getUrl = (attribute) => drawer.dataset[attribute];
+  const getUrl = (attribute) => {
+    const value = drawer.dataset[attribute];
+    if (!value) throw new Error('Cart endpoint is missing.');
+    const url = new URL(value, window.location.origin);
+    if (url.origin !== window.location.origin) throw new Error('Cart requests must stay on this storefront.');
+    return url.toString();
+  };
   const getStatus = () => drawer.querySelector('[data-cart-drawer-status]');
 
   const announce = (message) => {

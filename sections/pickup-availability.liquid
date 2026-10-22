@@ -10,10 +10,10 @@
   <div class="pickup-availability">
     <p class="pickup-availability__summary">
       {% if primary_pickup.available %}
-        <span>{{ 'pickup_availability.available_at' | t: location_name: primary_pickup.location.name }}</span>
+        <span>{{ 'pickup_availability.available_at' | t: location_name: primary_pickup.location.name | escape }}</span>
         <span class="product-card__meta">{{ primary_pickup.pick_up_time | escape }}</span>
       {% else %}
-        <span>{{ 'pickup_availability.unavailable_at' | t: location_name: primary_pickup.location.name }}</span>
+        <span>{{ 'pickup_availability.unavailable_at' | t: location_name: primary_pickup.location.name | escape }}</span>
       {% endif %}
     </p>
     <details class="pickup-availability__details">

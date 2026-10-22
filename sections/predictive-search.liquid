@@ -55,7 +55,7 @@
     {% endif %}
 
     {% unless predictive_has_results %}<p class="predictive-search-results__empty">{{ 'search.no_suggestions' | t }}</p>{% endunless %}
-    <button class="button button--text predictive-search-results__all" type="submit">{{ 'search.view_all' | t: terms: predictive_search.terms }}</button>
+    <button class="button button--text predictive-search-results__all" type="submit">{{ 'search.view_all' | t: terms: predictive_search.terms | escape }}</button>
   </div>
 {% endif %}
 

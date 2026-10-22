@@ -398,6 +398,32 @@ test('product cards offer optional alternate images, accurate savings, and data-
   assert.equal(storefrontLocale.general.save_percent, 'Save {{ percent }}%');
 });
 
+test('user-controlled search, comment, article, collection, pickup, and menu output is escaped', () => {
+  const searchSection = fs.readFileSync(path.join(__dirname, '../sections/search.liquid'), 'utf8');
+  const predictiveSearch = fs.readFileSync(path.join(__dirname, '../sections/predictive-search.liquid'), 'utf8');
+  const articleSection = fs.readFileSync(path.join(__dirname, '../sections/article.liquid'), 'utf8');
+  const blogSection = fs.readFileSync(path.join(__dirname, '../sections/blog.liquid'), 'utf8');
+  const collectionsSection = fs.readFileSync(path.join(__dirname, '../sections/collections.liquid'), 'utf8');
+  const pickupSection = fs.readFileSync(path.join(__dirname, '../sections/pickup-availability.liquid'), 'utf8');
+  const productInfoMerchandising = fs.readFileSync(path.join(__dirname, '../snippets/product-info-merchandising.liquid'), 'utf8');
+  const navigationMenu = fs.readFileSync(path.join(__dirname, '../snippets/navigation-menu.liquid'), 'utf8');
+  const metaTags = fs.readFileSync(path.join(__dirname, '../snippets/meta-tags.liquid'), 'utf8');
+
+  assert.match(searchSection, /'search\.result_count_one' \| t: terms: search\.terms, count: search\.results_count \| escape/);
+  assert.match(searchSection, /'search\.result_count_other' \| t: terms: search\.terms, count: search\.results_count \| escape/);
+  assert.match(predictiveSearch, /'search\.view_all' \| t: terms: predictive_search\.terms \| escape/);
+  assert.match(articleSection, /comment\.content \| strip_html \| escape/);
+  assert.match(blogSection, /article\.excerpt_or_content \| strip_html \| truncatewords: section\.settings\.excerpt_words \| escape/);
+  assert.match(collectionsSection, /collection\.description \| strip_html \| truncatewords: 18 \| escape/);
+  assert.match(pickupSection, /primary_pickup\.location\.name \| escape/);
+  assert.ok(productInfoMerchandising.includes('data-base-url="{{ shop.url | escape }}{{ routes.root_url | escape }}"'));
+  assert.match(navigationMenu, /'accessibility\.open_submenu' \| t: title: link\.title \| escape/);
+  assert.match(navigationMenu, /'accessibility\.open_submenu' \| t: title: child_link\.title \| escape/);
+  assert.match(metaTags, /canonical_url \| escape/);
+  assert.match(metaTags, /meta_url \| escape/);
+  assert.match(metaTags, /page_image \| image_url: width: 1200 \| escape/);
+});
+
 test('PDP price block exposes optional localized savings display controls', () => {
   const productSection = fs.readFileSync(path.join(__dirname, '../sections/product.liquid'), 'utf8');
   const schemaStart = productSection.indexOf('{% schema %}');
@@ -455,6 +481,18 @@ test('collection, featured-collection, and recommendation grids expose responsiv
   assert.ok(localeSchema.labels.grid_columns_desktop);
   assert.ok(localeSchema.labels.grid_columns_tablet);
   assert.ok(localeSchema.labels.grid_columns_mobile);
+});
+
+test('product recommendations refuse cross-origin markup before injecting HTML', () => {
+  const dom = createDom(`<!doctype html><html><body><section id="Recommendations" data-product-recommendations data-url="https://collector.example/recommendations"></section></body></html>`);
+  const { window } = dom;
+  let fetchCalls = 0;
+  window.fetch = () => { fetchCalls += 1; throw new Error('A cross-origin request should not be made.'); };
+  window.eval(themeScript);
+  const recommendations = window.document.getElementById('Recommendations');
+  assert.equal(fetchCalls, 0);
+  assert.equal(recommendations.dataset.loaded, 'false');
+  dom.window.close();
 });
 
 test('product modal and story viewer return focus to their openers', () => {
@@ -611,6 +649,25 @@ test('price filters keep accessible values in sync and sorting auto-submits', ()
   dom.window.close();
 });
 
+test('predictive search refuses cross-origin endpoints before sending shopper queries', async () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <predictive-search data-endpoint="https://collector.example/search/suggest" data-section-id="predictive-search">
+      <form><input type="search"><div data-predictive-results hidden></div><p data-predictive-status data-suggestion-one="One" data-suggestions-many="[count] suggestions" data-no-suggestions="None"></p></form>
+    </predictive-search>
+  </body></html>`);
+  const { window } = dom;
+  let fetchCalls = 0;
+  window.fetch = () => { fetchCalls += 1; throw new Error('A cross-origin request should not be made.'); };
+  window.eval(predictiveSearchScript);
+  const component = window.document.querySelector('predictive-search');
+  component.input.value = 'private search';
+  await component.search();
+  assert.equal(fetchCalls, 0);
+  assert.equal(component.results.hidden, true);
+  assert.equal(component.input.getAttribute('aria-expanded'), 'false');
+  dom.window.close();
+});
+
 test('mock predictive search requests supported resource types and exposes keyboard-accessible results', async () => {
   const dom = createDom(`<!doctype html><html><body>
     <details open>
@@ -762,7 +819,7 @@ test('subscription selectors update optional discounts and required-plan availab
   dom.window.close();
 });
 
-test('pickup availability ignores stale variant responses and hides unavailable block content', async () => {
+test('pickup availability ignores stale variants, rejects cross-origin redirects, and hides unavailable content', async () => {
   const dom = createDom(`<!doctype html><html><body>
     <div class="product-block">
       <div data-store-availability-container data-base-url="https://shop.example/" data-variant-id="101" hidden aria-live="polite"></div>
@@ -786,25 +843,41 @@ test('pickup availability ignores stale variant responses and hides unavailable 
   assert.equal(pending.length, 2);
   assert.equal(container.dataset.variantId, '202');
   assert.equal(container.getAttribute('aria-busy'), 'true');
-  pending[1].resolve({ ok: true, text: async () => '<div class="shopify-section"><p>Pickup available for 60 ml</p></div>' });
+  pending[1].resolve({ ok: true, text: async () => '<div id="shopify-section-pickup-availability" class="shopify-section"><p>Pickup available for 60 ml</p></div>' });
   await updatedRequest;
   assert.equal(container.hidden, false);
   assert.equal(block.hidden, false);
   assert.match(container.textContent, /Pickup available for 60 ml/);
   assert.equal(container.hasAttribute('aria-busy'), false);
 
-  pending[0].resolve({ ok: true, text: async () => '<div class="shopify-section"><p>Stale pickup data for 30 ml</p></div>' });
+  pending[0].resolve({ ok: true, text: async () => '<div id="shopify-section-pickup-availability" class="shopify-section"><p>Stale pickup data for 30 ml</p></div>' });
   await new Promise((resolve) => setTimeout(resolve, 0));
   assert.match(container.textContent, /Pickup available for 60 ml/);
   assert.doesNotMatch(container.textContent, /Stale pickup data/);
 
   const unavailableRequest = window.SolunePickupAvailability.load(container, '303');
   assert.equal(pending.length, 3);
-  pending[2].resolve({ ok: true, text: async () => '<div class="shopify-section"></div>' });
+  pending[2].resolve({ ok: true, text: async () => '<div id="shopify-section-pickup-availability" class="shopify-section"></div>' });
   await unavailableRequest;
   assert.equal(container.hidden, true);
   assert.equal(block.hidden, true);
   assert.equal(container.hasAttribute('aria-busy'), false);
+
+  const redirectedRequest = window.SolunePickupAvailability.load(container, '404');
+  assert.equal(pending.length, 4);
+  let redirectedMarkupRead = false;
+  pending[3].resolve({
+    ok: true,
+    url: 'https://collector.example/pickup',
+    text: async () => {
+      redirectedMarkupRead = true;
+      return '<div id="shopify-section-pickup-availability"><img src=x onerror=alert(1)></div>';
+    }
+  });
+  await redirectedRequest;
+  assert.equal(redirectedMarkupRead, false);
+  assert.equal(container.innerHTML, '');
+  assert.equal(container.hidden, true);
   dom.window.close();
 });
 
@@ -861,6 +934,23 @@ test('gift-card recipient toggle enforces email, form properties, and local 90-d
   assert.equal(disabledProperties.has('properties[Recipient email]'), false);
   assert.equal(disabledProperties.has('properties[Send on]'), false);
   assert.equal(disabledProperties.has('properties[__shopify_offset]'), false);
+  dom.window.close();
+});
+
+test('cart Ajax rejects cross-origin endpoints before sending shopper or cart data', async () => {
+  const dom = createDom(`<!doctype html><html><body>
+    <dialog data-cart-drawer data-add-url="https://collector.example/cart/add.js" data-change-url="/cart/change.js" data-update-url="/cart/update.js" data-cart-url="/cart.js" data-section-url="/cart?section_id=cart-drawer"></dialog>
+    <form id="ProductForm" action="/cart/add.js" method="post"><input name="id" value="variant-1"><input name="quantity" value="1"><button type="submit" name="add">Add</button></form>
+  </body></html>`);
+  const { window } = dom;
+  let fetchCalls = 0;
+  window.fetch = () => { fetchCalls += 1; throw new Error('A cross-origin request should not be made.'); };
+  window.eval(cartScript);
+  const form = window.document.getElementById('ProductForm');
+  form.requestSubmit(form.querySelector('[name="add"]'));
+  await waitFor(() => Boolean(form.querySelector('[data-cart-form-error]')));
+  assert.equal(fetchCalls, 0);
+  assert.equal(form.querySelector('[data-cart-form-error]').textContent, 'Cart requests must stay on this storefront.');
   dom.window.close();
 });
 

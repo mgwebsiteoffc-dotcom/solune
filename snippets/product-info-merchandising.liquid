@@ -51,6 +51,6 @@
                 </p>
               {% when 'pickup_availability' %}
                 {% if show_pickup_availability %}
-                  <div id="{{ pickup_container_id }}-{{ block.id }}" class="pickup-availability-container" hidden data-store-availability-container data-variant-id="{{ current_variant.id }}" data-product-title="{{ product.title | escape }}" data-has-only-default-variant="{{ product.has_only_default_variant }}" data-base-url="{{ shop.url }}{{ routes.root_url }}" aria-live="polite"></div>
+                  <div id="{{ pickup_container_id }}-{{ block.id }}" class="pickup-availability-container" hidden data-store-availability-container data-variant-id="{{ current_variant.id }}" data-product-title="{{ product.title | escape }}" data-has-only-default-variant="{{ product.has_only_default_variant }}" data-base-url="{{ shop.url | escape }}{{ routes.root_url | escape }}" aria-live="polite"></div>
                 {% endif %}
               {% endcase %}

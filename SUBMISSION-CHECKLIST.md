@@ -4,7 +4,7 @@ This project is a development foundation. A checked implementation item means co
 
 ## Progress snapshot — 2026-10-22
 
-- **58 of 83 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
+- **61 of 86 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
 - The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Theme Store preparation, publishing the merchant docs URL, and implementing/verifying 100+ meaningful CRO controls.
 - The owner supplied the official support email and it is set in Theme Info; no authenticated Shopify store session is available, so the store-dependent tests below remain open and no upload or live storefront QA is claimed.
 
@@ -44,7 +44,10 @@ This project is a development foundation. A checked implementation item means co
 - [x] Parse the theme stylesheets with PostCSS.
 - [x] Run Shopify Theme Check with Shopify CLI via `npx`; the earlier pre-metadata-edit run inspected 66 files with no offenses (the latest result is recorded below).
 - [x] Run Shopify Theme Check on the latest working tree (`npx --yes @shopify/cli@latest theme check`); the 2026-10-22 run inspected 72 files with no offenses.
-- [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior.
+- [x] Review storefront output handling: escape reflected search terms, customer comments, merchant-provided menu/pickup labels, plain-text excerpts, and canonical/social metadata URLs; reject cross-origin cart/search/recommendation endpoints and pickup redirects; add source and DOM security tests. Merchant-authored rich-text bodies remain intentionally rendered as Shopify content.
+- [x] Pin GitHub Actions to verified full commit SHAs, disable unnecessary persisted checkout credentials, and keep each workflow's `GITHUB_TOKEN` permissions scoped to required tasks.
+- [x] Run `npm audit`; no known vulnerabilities were reported across the dependency tree on 2026-10-22 (the only direct dependency is development-only `jsdom`).
+- [ ] Run the theme on an authenticated Shopify development store and verify Theme Editor behavior, app-injected content, and live storefront security-sensitive flows.
 - [ ] Verify the PIN-code setting/block, FAQ question blocks, and story/post/reel content-type/media/profile-link controls in Theme Editor; then test their populated storefront output on desktop and mobile.
 - [ ] Test the theme against Shopify's benchmark store and record Lighthouse performance/accessibility scores.
 

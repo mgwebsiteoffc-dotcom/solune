@@ -8,14 +8,21 @@
     container.setAttribute('aria-busy', 'true');
 
     try {
-      const url = new URL(`variants/${encodeURIComponent(variantId)}/?section_id=pickup-availability`, container.dataset.baseUrl);
+      const baseUrl = new URL(container.dataset.baseUrl, window.location.origin);
+      if (!['http:', 'https:'].includes(baseUrl.protocol) || baseUrl.username || baseUrl.password) {
+        throw new Error('Pickup availability requires a valid storefront URL.');
+      }
+      const url = new URL(`variants/${encodeURIComponent(variantId)}/?section_id=pickup-availability`, baseUrl);
+      if (url.origin !== baseUrl.origin) throw new Error('Pickup availability must stay on the storefront origin.');
       const response = await fetch(url, { headers: { Accept: 'text/html' } });
       if (!response.ok) throw new Error(`Pickup availability returned ${response.status}`);
+      const responseUrl = response.url ? new URL(response.url, url) : url;
+      if (responseUrl.origin !== baseUrl.origin) throw new Error('Pickup availability redirected to another origin.');
       const markup = await response.text();
       if (container.dataset.requestId !== String(requestId)) return;
 
       const documentFromResponse = new DOMParser().parseFromString(markup, 'text/html');
-      const section = documentFromResponse.querySelector('.shopify-section');
+      const section = documentFromResponse.querySelector('#shopify-section-pickup-availability');
       if (!section) throw new Error('Pickup availability section was not returned');
       container.innerHTML = section.innerHTML;
       container.hidden = !container.innerHTML.trim();

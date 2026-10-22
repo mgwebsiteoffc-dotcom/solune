@@ -13,9 +13,9 @@
   {% if search.performed %}
     <p class="search-page__count">
       {% if search.results_count == 1 %}
-        {{ 'search.result_count_one' | t: terms: search.terms, count: search.results_count }}
+        {{ 'search.result_count_one' | t: terms: search.terms, count: search.results_count | escape }}
       {% else %}
-        {{ 'search.result_count_other' | t: terms: search.terms, count: search.results_count }}
+        {{ 'search.result_count_other' | t: terms: search.terms, count: search.results_count | escape }}
       {% endif %}
     </p>
     {% if search.filters.size > 0 %}
