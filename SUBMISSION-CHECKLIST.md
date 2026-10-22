@@ -5,8 +5,8 @@ This project is a development foundation. A checked implementation item means co
 ## Progress snapshot — 2026-10-22
 
 - **65 of 90 tracked checklist items are marked implemented/prepared; 25 remain open.** This is a checklist count, not a theme-readiness percentage.
-- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, resolving the listing-price conflict and name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
-- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner's confirmed $50 target is outside that range. The owner has confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
+- The largest pending work is authenticated Shopify development-store QA, storefront accessibility/performance testing, Partner Dashboard listing/payout confirmation, name/trademark clearance, publishing the merchant docs URL, clearing asset licenses, and implementing/verifying 100+ meaningful CRO controls.
+- As checked on 2026-10-22, Shopify's published listing range is USD $100–$500 in $10 increments; the owner has confirmed $100, the minimum allowed. The owner has also confirmed the theme name and Partner account identity; the official support email is set in Theme Info. No authenticated Shopify store or Partner Dashboard session is available, so account-specific payout details and store tests remain unverified; no upload or live storefront QA is claimed.
 
 ## Current implementation
 
@@ -94,8 +94,8 @@ This project is a development foundation. A checked implementation item means co
 ### Quality and listing readiness
 
 - [x] Record author and company identity supplied by the owner: Sani Kumar / Akestech Infotech Pvt Ltd.
-- [x] Record owner's confirmed desired price and test-access intent: USD $50 for the paid Theme Store listing; unpublished developer preview is free to test. The price is outside Shopify's currently published listing range and remains unconfigured.
-- [ ] Configure an eligible final listing price and confirm Shopify's then-current listing and payout requirements. As checked 2026-10-22, Shopify's published listing guidance allows USD $100–$500 in $10 increments, so the owner-confirmed $50 target is outside the range; published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees. The valid price and account-specific payout/tax details still need Partner Dashboard confirmation.
+- [x] Record owner's confirmed desired price and test-access intent: USD $100 for the paid Theme Store listing; unpublished developer preview is free to test.
+- [ ] Configure the confirmed USD $100 listing price in the Partner Dashboard and verify Shopify's then-current payout requirements. As checked 2026-10-22, $100 is the minimum of Shopify's published USD $100–$500 range in $10 increments. Published revenue-share guidance lists 15% of gross theme sales, a 2.9% billing processing fee, applicable sales tax, and possible regional operating fees; account-specific payout/tax details still need Partner Dashboard confirmation.
 - [x] Record owner confirmation of public theme name **Solune** and Shopify Partner account identity **Akestech Infotech Pvt Ltd**; the theme metadata uses Solune. This confirms the owner's selection only, not name-conflict or trademark clearance.
 - [ ] Verify trademark/name-conflict clearance for Solune and complete demo-store content, support process, and Theme Store listing assets. The author and support email are recorded; the legal and operational checks remain open.
 - [x] Add a pre-release merchant guide and remove development-only README/Issues links from theme metadata.
