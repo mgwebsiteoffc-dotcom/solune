@@ -361,7 +361,8 @@ test('Theme Store metadata has a support URL and a listing manifest for every co
 
   assert.match(themeInfo?.theme_support_url || '', /^https:\/\//);
   assert.equal(themeInfo?.theme_support_email, undefined); // Theme Check's Theme Info schema allows exactly one of URL or email.
-  assert.ok(presetNames.length > 0);
+  assert.deepEqual(presetNames, ['Skincare', 'Wellness']);
+  assert.deepEqual(fs.readdirSync(path.join(__dirname, '../listings')).sort(), ['skincare', 'wellness']);
   for (const name of presetNames) {
     const presetId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     const manifestPath = path.join(__dirname, `../listings/${presetId}/listing.json`);

@@ -3,9 +3,9 @@
     "hero": {
       "type": "hero-editorial",
       "settings": {
-        "eyebrow": "SKINCARE, IN ITS ELEMENT",
-        "heading": "Your skin, met with care.",
-        "body": "<p>Thoughtful formulas and small rituals for the skin you live in.</p>",
+        "eyebrow": "WELLNESS, AT YOUR PACE",
+        "heading": "Make space for everyday care.",
+        "body": "<p>Explore thoughtfully selected products and small rituals, with clear details to help you choose.</p>",
         "button_label": "Explore the ritual",
         "button_link": "/collections/all"
       }
@@ -13,8 +13,8 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "THE FORMULA EDIT",
-        "heading": "The daily essentials",
+        "eyebrow": "THE DAILY EDIT",
+        "heading": "Wellness, chosen with intention.",
         "collection": "all",
         "products_to_show": 4,
         "show_vendor": false,
@@ -28,22 +28,22 @@
         "hydration": {
           "type": "concern",
           "settings": {
-            "title": "Hydration",
-            "body": "<p>Browse store-selected products and formula information for this topic.</p>"
+            "title": "Rest & recovery",
+            "body": "<p>Explore products selected by the store and read their full details.</p>"
           }
         },
         "texture": {
           "type": "concern",
           "settings": {
-            "title": "Texture",
-            "body": "<p>Review product details and follow the directions listed for each formula.</p>"
+            "title": "Everyday movement",
+            "body": "<p>Review the product information and directions provided by the store.</p>"
           }
         },
         "uneven_tone": {
           "type": "concern",
           "settings": {
-            "title": "Uneven tone",
-            "body": "<p>Explore products curated by the store and read their full ingredient information.</p>"
+            "title": "Mindful moments",
+            "body": "<p>Browse store-selected products and check their ingredients and intended use.</p>"
           }
         }
       },
@@ -53,9 +53,9 @@
         "uneven_tone"
       ],
       "settings": {
-        "eyebrow": "EXPLORE BY TOPIC",
+        "eyebrow": "EXPLORE BY INTEREST",
         "heading": "Find a place to begin.",
-        "body": "<p>Explore store-curated topics, then review each product's formula and directions before choosing.</p>",
+        "body": "<p>Browse store-curated categories, then review product details and directions before choosing.</p>",
         "image_ratio": "portrait"
       }
     },
@@ -136,9 +136,9 @@
         "look_moisture"
       ],
       "settings": {
-        "eyebrow": "RITUAL, IN CONTEXT",
-        "heading": "Shop the ritual",
-        "body": "<p>Explore the products selected for this everyday routine.</p>",
+        "eyebrow": "CARE, IN CONTEXT",
+        "heading": "Shop the daily edit.",
+        "body": "<p>Explore products selected for an everyday routine.</p>",
         "image_position": "left",
         "image_ratio": "landscape",
         "show_vendor": false,
@@ -148,10 +148,10 @@
     "ingredient": {
       "type": "ingredient-story",
       "settings": {
-        "eyebrow": "FORMULA NOTES",
+        "eyebrow": "PRODUCT NOTES",
         "ingredient_name": "A closer look",
-        "heading": "Thoughtful ingredients, clearly explained.",
-        "body": "<p>Use this space to share verified sourcing, formulation, or ingredient information in your brand's own words.</p>",
+        "heading": "Product details, clearly explained.",
+        "body": "<p>Use this space to share verified ingredient, sourcing, formulation, or use information in your brand's own words.</p>",
         "button_label": "Shop the formulas",
         "button_link": "/collections/all"
       }
@@ -162,22 +162,22 @@
         "cleanse": {
           "type": "step",
           "settings": {
-            "title": "Cleanse",
-            "body": "Begin with a gentle cleanse."
+            "title": "Pause",
+            "body": "Start with a moment to reset."
           }
         },
         "treat": {
           "type": "step",
           "settings": {
-            "title": "Treat",
-            "body": "Layer the formula that fits your routine."
+            "title": "Choose",
+            "body": "Follow the directions provided with your selected product."
           }
         },
         "moisturize": {
           "type": "step",
           "settings": {
-            "title": "Moisturize",
-            "body": "Finish with a moisturizer selected for your preferences."
+            "title": "Continue",
+            "body": "Keep the steps simple and product-specific."
           }
         }
       },
@@ -187,24 +187,24 @@
         "moisturize"
       ],
       "settings": {
-        "eyebrow": "BUILD YOUR ROUTINE",
-        "heading": "A few mindful steps.",
-        "body": "<p>Make room for the simple rituals that feel right for you.</p>"
+        "eyebrow": "A DAILY RITUAL",
+        "heading": "A few considered steps.",
+        "body": "<p>Share a routine that feels right for your store and products.</p>"
       }
     },
     "newsletter": {
       "type": "newsletter",
       "settings": {
-        "heading": "Notes for your ritual",
-        "body": "<p>Thoughtful skincare, product notes, and occasional studio updates.</p>"
+        "heading": "Notes for everyday care",
+        "body": "<p>Product notes, new arrivals, and occasional studio updates.</p>"
       }
     },
     "image_with_text": {
       "type": "image-with-text",
       "settings": {
         "eyebrow": "A CLOSER LOOK",
-        "heading": "A little care, built into your day.",
-        "body": "<p>Thoughtful skincare begins with clear information. Share the ingredients, sourcing, and rituals that make your formulas distinct.</p>",
+        "heading": "Everyday care, made personal.",
+        "body": "<p>Share clear product information and the details that make your collection distinct.</p>",
         "image_position": "left",
         "image_ratio": "portrait",
         "image_width": 50,
@@ -219,7 +219,7 @@
         "story_cleanse": {
           "type": "story",
           "settings": {
-            "caption": "The daily cleanse"
+            "caption": "A moment for yourself"
           }
         },
         "story_treatment": {
@@ -250,7 +250,7 @@
       ],
       "settings": {
         "eyebrow": "FROM THE STUDIO",
-        "heading": "Stories, posts & reels",
+        "heading": "Moments from the studio",
         "profile_handle": "@yourbrand",
         "cards_per_row": "4"
       }
@@ -261,8 +261,8 @@
         "routine_question": {
           "type": "question",
           "settings": {
-            "question": "How do I choose products for my routine?",
-            "answer": "<p>Review each product's ingredients, intended use, and directions before adding it to your routine. If you have individual skin concerns or a condition, speak with a qualified healthcare professional.</p>"
+            "question": "How do I choose products?",
+            "answer": "<p>Review each product's ingredients, intended use, and directions. For personal health concerns or medical guidance, speak with a qualified healthcare professional.</p>"
           }
         },
         "delivery_question": {
@@ -275,8 +275,8 @@
         "ingredient_question": {
           "type": "question",
           "settings": {
-            "question": "Where can I find ingredient information?",
-            "answer": "<p>Review the ingredient details and packaging information provided by the store. Contact the store if you need clarification about a specific formula.</p>"
+            "question": "Where can I find product details?",
+            "answer": "<p>Review the ingredient and packaging information provided by the store. Contact the store if you need clarification about a specific product.</p>"
           }
         }
       },
@@ -288,7 +288,7 @@
       "settings": {
         "eyebrow": "GOOD TO KNOW",
         "heading": "Questions, answered.",
-        "body": "<p>Clear information for your skincare routine and delivery.</p>"
+        "body": "<p>Clear information about products, orders, and delivery.</p>"
       }
     },
     "shoppable_videos": {
@@ -305,7 +305,7 @@
           "type": "video_product",
           "settings": {
             "title": "Layer by layer",
-            "caption": "See how to build your skincare routine."
+            "caption": "A closer look at everyday care."
           }
         },
         "video_evening": {
@@ -338,8 +338,8 @@
           "type": "highlight",
           "settings": {
             "icon": "leaf",
-            "heading": "Ingredient details",
-            "body": "<p>Link to the complete ingredient list and formula notes for each product.</p>"
+            "heading": "Product details",
+            "body": "<p>Link to complete ingredient and use information for each product.</p>"
           }
         },
         "directions": {
@@ -366,7 +366,7 @@
       ],
       "settings": {
         "eyebrow": "THE DETAILS MATTER",
-        "heading": "Helpful details, made easy to find.",
+        "heading": "Helpful details, easy to find.",
         "body": "<p>Use these cards for accurate product information and store support details.</p>",
         "columns": "3"
       }
@@ -376,7 +376,7 @@
       "settings": {
         "eyebrow": "STORY IN MOTION",
         "heading": "A closer look, in motion.",
-        "body": "<p>Add a Shopify-hosted video and share product or brand information alongside it.</p>",
+        "body": "<p>Add a Shopify-hosted video and share accurate product or brand information alongside it.</p>",
         "video_position": "left",
         "video_ratio": "landscape",
         "media_width": 50,
@@ -405,7 +405,7 @@
         "moment_three": {
           "type": "image",
           "settings": {
-            "caption": "A slower routine"
+            "caption": "A quieter moment"
           }
         },
         "moment_four": {
@@ -423,7 +423,7 @@
       ],
       "settings": {
         "eyebrow": "THE RITUAL, IN MOMENTS",
-        "heading": "A gallery of everyday care.",
+        "heading": "Moments of everyday care.",
         "body": "<p>Curate brand-approved photography with optional captions and links.</p>",
         "columns": "4",
         "image_ratio": "square",
@@ -437,19 +437,19 @@
         "cleanse": {
           "type": "routine_product",
           "settings": {
-            "step_label": "01 · Cleanse"
+            "step_label": "01 · Begin"
           }
         },
         "apply": {
           "type": "routine_product",
           "settings": {
-            "step_label": "02 · Apply"
+            "step_label": "02 · Choose"
           }
         },
         "moisturize": {
           "type": "routine_product",
           "settings": {
-            "step_label": "03 · Moisturize"
+            "step_label": "03 · Continue"
           }
         }
       },
@@ -459,9 +459,9 @@
         "moisturize"
       ],
       "settings": {
-        "eyebrow": "SHOP THE ROUTINE",
-        "heading": "Products, step by step.",
-        "body": "<p>Choose a product for each step, then share formula-specific directions approved for your store.</p>",
+        "eyebrow": "SHOP THE DAILY EDIT",
+        "heading": "Wellness products, step by step.",
+        "body": "<p>Choose products for each step and share information approved for those specific products.</p>",
         "columns": "3",
         "disclaimer": "<p>Use each product only as directed. This guide is not medical advice.</p>"
       }
