@@ -13,7 +13,7 @@ This project is a development foundation. A checked implementation item means co
 - [x] Start from the official Shopify Skeleton Theme v1.0.0, preserve its license, and document provenance.
 - [x] Build an original, responsive skincare visual system with a curated section library and merchant-facing settings.
 - [x] Add a development-only JSDOM smoke suite for selected storefront interactions; fixtures and mocked Shopify requests are not live-store or real-browser QA.
-- [x] Add the two owner-requested Shopify presets—Skincare and Wellness—alongside the 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
+- [x] Add the two Shopify presets—Solune (skincare) and Wellness—alongside the 15-color role palette, modal/input/sale/rating color controls, editable radii, and product-card image proportions.
 - [x] Expose Appearance, Colors, Typography, Currency format, Animation, Color swatch, Product card, Cart, Delivery availability, Social media, Favicon, Custom CSS, and Theme style settings with working storefront behavior.
 - [x] Add standard Shopify review-metafield ratings, sale badges, currency-code formatting, configurable swatch styles, and cart display controls.
 - [x] Add optional product-card secondary-image hover/focus, routine-step and unit-price visibility, and data-gated low-stock badges using Shopify-tracked inventory with a merchant-set threshold.
