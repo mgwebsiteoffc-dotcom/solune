@@ -373,6 +373,10 @@ test('Theme Store metadata has a support URL and a listing manifest for every co
     const listingTemplate = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
     assert.equal(manifest.name, name);
     assert.equal(manifest.preset_id, presetId);
+    assert.ok(manifest.industry_categories?.length, `Preset ${name} needs an industry category`);
+    assert.ok(manifest.tagline, `Preset ${name} needs a tagline draft`);
+    assert.ok(manifest.description, `Preset ${name} needs a description draft`);
+    assert.ok(manifest.features?.length, `Preset ${name} needs feature copy`);
     assert.ok(Object.keys(listingTemplate.sections || {}).length > 0, `Preset ${name} needs a template with sections`);
   }
 });

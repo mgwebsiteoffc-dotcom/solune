@@ -1,4 +1,15 @@
 {
   "name": "Solune",
-  "preset_id": "solune"
+  "preset_id": "solune",
+  "industry_categories": [
+    "Beauty"
+  ],
+  "tagline": "Editorial discovery for skincare brands.",
+  "description": "Solune is a skincare-focused Shopify theme with store-curated concern and ingredient discovery, product-linked routines, responsive product pages, and a native cart drawer. Merchants provide their own product information, imagery, and substantiated claims.",
+  "features": [
+    "Skincare concern and ingredient discovery",
+    "Product-linked routine merchandising",
+    "Responsive product and collection layouts",
+    "Variant-aware shopping and cart drawer"
+  ]
 }
